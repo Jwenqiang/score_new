@@ -1,7 +1,6 @@
 <template>
 	<div class="shareCenter">
 		<div class="shareC">
-			<div class="nineTop">
 				<div class="scBaner">
 				</div>
 				<div class="scBody">
@@ -19,7 +18,6 @@
 					</div>
 					<p class="scTip">温馨提示：【节日海报】当日当天更新</p>
 				</div>
-			</div>
 		</div>
 	</div>
 </template>
@@ -107,7 +105,6 @@
 
 <style>
 	.shareCenter{background: linear-gradient(360deg, #DEF0FF 0%, #A1D4F8 100%);min-height: 100vh;}
-	.nineTop{margin-bottom: 0.2rem;}
 	.scBaner{width: 100%;height: 3.2rem;background: url(../../public/img/scBan.png) center no-repeat;background-size: 7.5rem;}
 	.scBody{padding: 0.3rem;}
 	.scBody .nineC{display: flex;flex-wrap: wrap;box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);background: #fff;border-radius: 0.08rem;}

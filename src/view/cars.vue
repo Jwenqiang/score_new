@@ -67,7 +67,7 @@
 				  <div class="showMsg">
 				    <label class="modelClose" @click="showCode=false"></label>
 					<h3>请输入验证码</h3>
-					<p class="inCode clear"><input type="text" placeholder="请输入图片中验证码" v-model="pCode"/><span @click="getImgCode"><img :src="codeSrc"/></span></p>
+					<p class="inCode clear"><input type="text" placeholder="请输入图片中验证码" v-model="pCode"/><span @click="getImgCode()"><img :src="codeSrc"/></span></p>
 							<p class="codeTip">提示：图片有效期一分钟,点击图片会更新</p>
 					<mt-button type="primary" class="houseBtn" @click="payNum">确定</mt-button>
 				  </div>
@@ -112,7 +112,8 @@
 				loadOver:false,
 				load:false,
 				empNo:"",
-				isWeek:false
+				isWeek:false,
+				num:Math.random()
 			}
 		},
 		mounted(){
@@ -229,18 +230,25 @@
 				// this.showCode=true;
 			},
 			getImgCode(){
-				this.$axios({
-					method:"get",
-					url:"/My/GetVerifyCodeBase64",
-					headers:this.header_token,
-				})
-				.then(res=>{
-					console.log(res);
-					this.codeSrc='data:image/jpg;base64,'+res.data.data.replace(/=+$/,'');
-				})
-				.catch(error=>{
-					Toast("图片获取失败");
-				})
+				let n=Math.random();
+				this.codeSrc="https://sz.centanet.com/partner/jifenverifycode/Home/GetVerifyCode?token="+uToken()+"&n="+n;
+				// this.$axios({
+				// 	method:"get",
+				// 	// url:"/My/GetVerifyCodeBase64",
+				// 	url:"https://sz.centanet.com/partner/jifenverifycode/Home/GetVerifyCode",
+				// 	params:{
+				// 		token:this.header_token
+				// 	}
+				// 	// headers:this.header_token,
+				// })
+				// .then(res=>{
+				// 	console.log(res);
+				// 	// this.codeSrc='data:image/jpg;base64,'+res.data.data.replace(/=+$/,'');
+				// 	// this.codeSrc=res.data;
+				// })
+				// .catch(error=>{
+				// 	Toast("图片获取失败");
+				// })
 			},
 			payNum(){
 			  return new Promise((resolve)=>{
