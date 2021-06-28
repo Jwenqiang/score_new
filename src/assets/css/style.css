@@ -1,0 +1,110 @@
+/*所有元素默认字体大小*/
+/* 字体图标 */
+@import url("//at.alicdn.com/t/font_1746649_e9zd9odyhri.css");
+* {
+	box-sizing: border-box;
+	-webkit-overflow-scrolling: touch;
+	font-family: "microsoft yahei", "helvetica", "heiti SC", "droid", "sans","PingFangSC-Regular","PingFang SC";
+	margin: 0;
+	padding: 0;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;	
+}
+input,textarea{
+	-webkit-user-select:auto; /*webkit浏览器*/
+	outline: none;
+	resize: none;
+	-webkit-appearance: none; 
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+select{
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+}
+a {
+	text-decoration: none;
+	color: #666;
+}
+ul li{
+	list-style: none;
+}
+input::-webkit-input-placeholder { /* WebKit browsers */ 
+
+color: #999; 
+
+} 
+
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */ 
+
+color: #999;
+
+} 
+
+input::-moz-placeholder { /* Mozilla Firefox 19+ */ 
+
+color: #999;
+
+} 
+
+input:-ms-input-placeholder { /* Internet Explorer 10+ */ 
+
+color: #999; 
+
+}
+
+button {
+	outline: medium;
+	background: none;
+	border: none;
+	font-size: 0.28rem;
+}
+button[disabled]{background: #D0CDCD;}
+.h10{
+	width: 100%;
+	clear: both;
+	height: 0.2rem;
+	background: #F3F6F8;
+}
+.clear::after {
+	content: '';
+	display: block;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+	height: 0;
+}
+.overHide{
+	overflow: hidden !important;
+}
+html {
+	font-size: 100px;
+	font-size: calc(100vw / 7.5);
+	height: 100vh;
+}
+
+@media only screen and (min-width: 751px) {
+	html {
+		font-size: 100px;
+	}
+}
+
+body {
+	background-color: #fff;
+	transition: transform 1s ease-in-out;
+	color: #333;
+	overflow-x: hidden;
+	font-family: "microsoft yahei", "helvetica", "heiti SC", "droid", "sans","PingFangSC-Regular","PingFang SC";
+	font-size: 0.28rem;
+	width: 100%;
+}
+.warp{max-width: 7.5rem;margin: 0 auto;/* background: #Fff; */}
+.mint-toast-text{line-height: 1.6;min-width: 3.6rem;}
+.mint-toast{max-width: 90%;height: ;}
+.top .nut-swiper .nut-swiper-pagination .swiper-pagination-bullet.active{
+		background: #fff;
+}
