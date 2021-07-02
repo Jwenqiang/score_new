@@ -25,7 +25,7 @@
 					    <a @click="$router.push({name:'houseList'})"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'rules',query:{id:'20210622'}})"><img src="img/bzj0622.jpg"/></a>
+					    <a @click="$router.push({name:'rules',query:{id:'20210629'}})"><img src="img/bzj0629.jpg"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
 						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0607.jpg"/></a>
@@ -175,12 +175,12 @@
 		  <div class="bRead" @click="setCook()">
 		  </div>
 		</div> -->
-		<div class="sModel mMsg" v-if="readMsg">
+<!-- 		<div class="sModel mMsg" v-if="readMsg">
 		  <div class="bj" @click="readMsg=false"></div>
-		  <!-- <label class="sclose" @click="readMsg=false"></label> -->
+		  <label class="sclose" @click="readMsg=false"></label>
 		  <div class="bRead" @click="setCook()">
 		  </div>
-		</div>
+		</div> -->
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
 			<img src="../assets/static/icon-week.png"/>
 		</div> -->

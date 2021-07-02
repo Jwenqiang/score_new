@@ -2,9 +2,9 @@
 
 ## References
 
-线上部署地址：<https://sz.centanet.com/partner/house/test/aplus/>
+线上地址：<https://sz.centanet.com/partner/house/aplus/>
 
-测试原生分享：<https://zygj.centanet.com/ydaj/share.html>
+测试地址：<https://sz.centanet.com/partner/house/test/aplus>
 
 
 

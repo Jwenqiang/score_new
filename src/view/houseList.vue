@@ -19,9 +19,9 @@
 								<h4 class="jrt" @click="shareHouse(item.ZyHouseOutputDto.AdsNo,jjrNum)">{{item.ZyHouseOutputDto.Title}}</h4>
 								<p @click="shareHouse(item.ZyHouseOutputDto.AdsNo,jjrNum)">{{item.ZyHouseOutputDto.EstateName}}·{{item.ZyHouseOutputDto.RoomCount}}室{{item.ZyHouseOutputDto.HallCount}}厅·{{item.ZyHouseOutputDto.Garea}}㎡</p>
 								<p class="jrbtn">
-									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf)" v-if="item.IsAuctionBtnClick">竞拍</mt-button>
+									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,false)" v-if="item.IsAuctionBtnClick">竞拍</mt-button>
 									<mt-button type="primary" style="border-color: #999;color: #999;" v-else>竞拍</mt-button>
-									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'1',item.IsSelf)" v-if="item.IsPreAuctionBtnClick&&item.IsSelf">收藏</mt-button>
+									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'1',item.IsSelf,false)" v-if="item.IsPreAuctionBtnClick&&item.IsSelf">收藏</mt-button>
 									<mt-button type="primary" style="border-color: #999;color: #999;" v-else>收藏</mt-button>
 									<template v-if="canWeek">
 										<mt-button type="primary" class="animateWeek" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-if="item.IsAuctionBtnClick&&item.IsSelf&&index==0"></mt-button>
