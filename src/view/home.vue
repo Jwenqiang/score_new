@@ -25,10 +25,10 @@
 					    <a @click="$router.push({name:'houseList'})"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'rules',query:{id:'20210629'}})"><img src="img/bzj0629.jpg"/></a>
+					    <a @click="$router.push({name:'rules',query:{id:'20210706'}})"><img src="img/zj0706.jpg"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
-						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0607.jpg"/></a>
+						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0707.jpg"/></a>
 					</div>
 				    <div  class="nut-swiper-slide gray" >
 				        <a @click="goCj"><img src="@/assets/static/banner-cj.jpg"/></a>
@@ -61,7 +61,7 @@
 				<p>竞拍学校</p>
 			</div>
 			<div class="htL" @click="$router.push({name:'shareCenter'})">
-				<p><img src="../assets/img/h-hb1.png"/></p>
+				<p><img src="../assets/img/h-hb.png"/></p>
 				<p>分享中心</p>
 			</div>
 			<div class="htL" @click="$router.push({'name':'record'})">

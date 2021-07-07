@@ -41,7 +41,7 @@
 						<p>{{item.TemplateName}}</p>
 						<button>生成专属海报</button>
 					</div>
-					<div @click="goBigHb(item.MyTemplateId,item.TemplateName)" v-else>
+					<div @click="goBigHb(item.MyTemplateId,item.TemplateName,item.TemplateId)" v-else>
 						<div class="hbImg">
 						  <img v-lazy="item" width="100%"/>
 						</div>
@@ -99,7 +99,7 @@
       <!-- 商城 -->
       <div class="hbShop" v-if="hbType==2">
         <ul class="clist" v-if="shopList.length>0">
-          <li v-for="item in shopList" :key="item.Name">
+          <li v-for="item in shopList" :key="item.DisplaySmallImagePath">
             <div class="hbImg">
               <img v-lazy="item" width="100%" preview="0" :preview-text="item.Name"/>
             </div>
@@ -126,10 +126,21 @@
 	  <div class="selectC">
 		 <label class="close" @click="showImg=false"></label>
 	    <div class="clear tagLx">
-	    	<span :class="newCurrentPage<=imgArrDy.length?'on':''" @click="changeIdx(0)" v-if="$route.query.id==1&&imgArrDy.length>0">室内图({{imgArrDy.length}}) <strong></strong></span>
-	    	<span :class="newCurrentPage<=imgArrDy.length?'on':''" @click="changeIdx(0)" v-else-if="$route.query.id==6&&imgArrDy.length>0">效果图({{imgArrDy.length}}) <strong></strong></span>
-	    	<span v-if="imgArrHx.length>0" :class="newCurrentPage>imgArrDy.length?'on':''" @click="changeIdx(imgArrDy.length)">户型图({{imgArrHx.length}})<strong></strong></span>
+	    	<span :class="newCurrentPage<=imgArrDy.length?'on':''" @click="changeIdx(0)" v-if="$route.query.id==1&&imgArrDy.length>0">室内图({{imgArrDy.length}})</span>
+	    	<span :class="newCurrentPage<=imgArrDy.length?'on':''" @click="changeIdx(0)" v-else-if="$route.query.id==6&&imgArrDy.length>0">效果图({{imgArrDy.length}})</span>
+	    	<span v-if="imgArrHx.length>0" :class="newCurrentPage>imgArrDy.length?'on':''" @click="changeIdx(imgArrDy.length)">户型图({{imgArrHx.length}})</span>
 	    </div>
+			<template v-if="showTag">
+				<div class="diyAll">
+					<div class="diyTag" v-if="hbId==1">
+						<span v-for="item in tagList" :key="item.id" @click="bigHb(esTmpId,esTmpName,item.val)">{{item.val}}</span>
+					</div>
+					<div class="diyTag" v-else>
+						<span v-for="item in tagListNew" :key="item.id" @click="bigHb(esTmpId,esTmpName,item.val)">{{item.val}}</span>
+					</div>
+					<p>点击对应的标签按钮生成海报</p>
+				</div>
+			</template>
 		<div class="sImg" v-if="imgArr.length>0">
 	      <nut-swiper
 			ref="swipe"
@@ -155,9 +166,22 @@
 			  <span @click="add"></span>
 		  </div>
 	    </div>
-		<button class="setBtn" @click="bigHb(esTmpId,esTmpName)">生成专属海报</button>
+		<button class="setBtn" @click="bigHb(esTmpId,esTmpName)" v-if="!showTag">生成专属海报</button>
 	  </div>
 	</nut-popup>
+	<!-- 选择标签 -->
+<!-- 	<nut-popup style="border-radius: 0.12rem;" v-model="showTag">
+		<div class="myIntr" style="height: 4.6rem;">
+			<div class="miContent">
+				<h4>请选择海报标签</h4>
+				<div class="micM mdM"><label :class="md==1?'on':''" @click="md=1">满五唯一</label><label :class="md==2?'on':''" @click="md=2">带精装修</label><label :class="md==3?'on':''" @click="md=3">近地铁口</label><label :class="md==4?'on':''" @click="md=4">交通便利</label></div>
+				<div class="miBtn">
+					<label @click="">确定</label>
+				</div>
+			</div>
+		</div>
+	</nut-popup> -->
+	
     <nut-popup v-model="show" style="border-radius: 0.1rem;">
       <div class="bigHb">
         <p class="bigF">{{ bigName }}</p>
@@ -363,7 +387,25 @@
 	  zxId:"",
 	  empNo:"",
 	  showZp:true,
-	  showJr:true
+	  showJr:true,
+		md:1,
+		showTag:false,
+		tagList:[
+			{id:1,val:"优质学府"},
+			{id:2,val:"业主急售"},
+			{id:3,val:"南北通透"},
+			{id:4,val:"红本在手"},
+			{id:5,val:"精美装修"},
+			{id:6,val:"低价笋盘"},
+			{id:7,val:"地铁好房"},
+			{id:8,val:"满五好房"},
+		],
+		tagListNew:[
+			{id:1,val:"优质学府"},
+			{id:2,val:"配套醇熟"},
+			{id:3,val:"地铁物业"},
+			{id:4,val:"精美装修"}
+		]
       }
     },
 
@@ -464,7 +506,14 @@
     },
 
     methods: {
-		goBigHb(MyTemplateId,TemplateName){
+		goBigHb(MyTemplateId,TemplateName,TemplateId){
+			console.log(TemplateId)
+			if(TemplateId==110||TemplateId==111){
+				this.showTag=true;
+			}else{
+				this.showTag=false;
+			}
+			
 			this.showImg=true;
 			this.esTmpId=MyTemplateId;
 			this.esTmpName=TemplateName;
@@ -852,7 +901,8 @@
 		 this.infoId=id;
 		 this.infoName=name;
 	 },
-      bigHb(id,name){
+      bigHb(id,name,tag){
+				console.log(tag);
         // this.shareText=shareAplus;
 		if(this.$route.query.id==7){
 			if(!this.cjName){
@@ -895,7 +945,8 @@
 				estName:this.cjXq,
 				tradeType:this.cjWy,
 				DisplayImagePath:this.ershouImg,
-				articlesId:Number(this.zxId) || 0
+				articlesId:Number(this.zxId) || 0,
+				FeatureName:tag
               }
             })
             .then(res=>{
@@ -1138,10 +1189,10 @@
 	.sucHb .close{display: block;width: 0.69rem;height: 0.69rem;background: url(../assets/static/close.png) center no-repeat;background-size: 100%;position: absolute;bottom: -1rem;left: 2.85rem;}
 	.selectImg .selectC{background: #000;padding-top: 0.6rem;height: 100vh;width: 7.5rem;position: relative;}
 	.selectC label{width: 0.8rem;height: 0.8rem;background: url(../assets/img/nClose.png) center no-repeat;background-size: 0.3rem;position: absolute;right: 0;top: 0;}
-	.sImg{position:absolute;top: 50%;left: 0;margin-top: -2.5rem;width: 7.5rem;}
-	.hb .tagLx{width: 100%;background: none;text-align: center;}
-	.hb .tagLx span{display: block;width: 2rem;float: left;font-size: 0.3rem;color: #999;}
-	.hb .tagLx span.on{color: #fff;}
+	.sImg{position:absolute;top: 50%;left: 0;margin-top: -3.2rem;width: 7.5rem;}
+	.hb .tagLx{width: 100%;background: none;text-align: center;padding-left: 0.3rem;}
+	.hb .tagLx span{display: block;width: 2rem;height: 0.6rem; line-height: 0.6rem;float: left;font-size: 0.3rem;color: #fff;}
+	.hb .tagLx span.on{background-color: #3b3b3b;border-radius: 0.3rem;}
 	.hb .nut-swiper{height: 5rem;}
 	.hb .nut-swiper .nut-swiper-slide{width: 7.5rem;height: 5rem;}
 	.hb .nut-swiper img{width: 100%;}
@@ -1151,7 +1202,27 @@
 	.nBtn span{display: block;width: 0.64rem;height: 0.64rem;background: url(../assets/static/icon-l.png) center no-repeat;background-size: 100%;position: absolute;top:0;}
 	.nBtn span:first-child{left: 0.4rem;}
 	.nBtn span:last-child{right: 0.4rem;background: url(../assets/static/icon-r.png) center no-repeat;background-size: 100%;}
-	.setBtn{width: 4rem;height: 0.8rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;display: block;border-radius: 0.12rem;font-size: 0.32rem;position: fixed;bottom: 0.4rem;left: 1.75rem;}
+	.setBtn{width: 4rem;height: 0.8rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;display: block;border-radius: 0.12rem;font-size: 0.32rem;position: fixed;bottom: 1.4rem;left: 1.75rem;}
 	.overJr{position: relative;}
 	.op5{width: 100%;height: 100%;background-color: #000;opacity: 0.3;position: absolute;left: 0;top: 0;z-index: 3;}
+	
+	.diyAll{position: absolute;bottom: 1rem;left: 0.15rem;width: 7.2rem;padding: 0.4rem 0.2rem;background-color: #1c1c1c;border-radius: 0.2rem;}
+	.diyTag{color: #fff;display: flex;justify-content: space-between;border-radius: 0.12rem;flex-wrap: wrap;}
+	.diyTag span{display: inline-block;width: 22.5%;text-align: center;padding: 0.15rem 0.1rem;border-radius: 0.3rem;margin-bottom: 0.4rem;/* border: 1px solid #F3240A;color: #add2e2; */background: #404040;color: #fff;}
+	/* .diyTag span.on{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;} */
+	.diyAll p{color: #989898;font-size: 0.28rem;background: url(../assets/img/i-tip.png) left center no-repeat;background-size: 0.28rem;height: 0.4rem;line-height: 0.4rem;width: 4.1rem;padding-left: 0.4rem;margin: 0 auto;text-align: center;}
+	
+	/* 选择标签 */
+	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;border-radius: 0.1rem;}
+	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
+	.miContent{padding: 0.3rem;}
+	.miContent textarea{width: 100%;height: 2rem;background-color: #eee;border: 1px solid #ddd;padding: 0.2rem;}
+	.miBtn{margin-top: 0.8rem;text-align: center;}
+	.miBtn label{display: inline-block;width: 2.4rem;height: 0.8rem;border-radius: 0.4rem;margin: 0 0.2rem;background-color: #ccc;line-height: 0.8rem;font-size: 0.36rem;color: #fff;}
+	.miBtn label:last-child{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);}
+	.micM{font-size: 0.36rem;margin: 0.8rem 0 0.4rem;line-height: 1.6;}
+	.miContent h4{font-size: 0.36rem;text-align: center;font-weight: 550;padding-top: 0.2rem;}
+	.micM label{display: inline-block;width: 1.2rem;height: 0.6rem;line-height: 0.6rem;text-align: center;background-color: #F3F6F8;font-size: 0.24rem;border-radius: 0.05rem;}
+	.micM label.on{background-color: #FF2D19;color: #fff;}
+	.mdM{text-align: center;display: flex;justify-content: space-between;}
 </style>
