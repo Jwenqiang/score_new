@@ -70,10 +70,10 @@
 			<img src="../assets/img/days27.png" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="$route.params.id==24" @click="$router.replace({name:'days',params:{id:'26'}})">
-			<img src="../assets/static/days24.jpg?v=3" width="100%"/>
+			<img src="../assets/img/days24.jpg?v=6" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg2':''" v-else-if="$route.params.id==26">
-			<img src="../assets/static/days26.png?v=4" width="100%"/>
+			<img src="../assets/img/days26.png?v=6" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==25">
 			<img src="../assets/img/days25.jpg" width="100%"/>

@@ -108,7 +108,7 @@
 					//+-5是为了保证一定的弹性，并非要刚好相等才出发，
 					if(sTop>0){
 						if(height-100<sTop+clientHeight&&this.load){
-						  if(this.pSize<this.count){
+						  if(this.pSize<this.countNew){
 							this.pSize=Number(this.pSize)+10; 
 						  }
 						 }

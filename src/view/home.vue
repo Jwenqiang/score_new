@@ -34,7 +34,7 @@
 				        <a @click="goCj"><img src="@/assets/static/banner-cj.jpg"/></a>
 				    </div>
 					<div  class="nut-swiper-slide gray" >
-					    <a href="https://mp.weixin.qq.com/s/Dt-7kBAkbuFQxx6Vuyq9LQ"><img src="@/assets/img/banner0609.jpg"/></a>
+					    <a href="https://mp.weixin.qq.com/s/_J1LfZyIcVJ_TKAZpqPPhQ"><img src="@/assets/static/banner0712.jpg"/></a>
 					</div>
 				    <div  class="nut-swiper-slide gray" >
 				        <a @click="$router.push({name:'days',params:{id:'31'}})"><img src="@/assets/static/banner0531.png"/></a>

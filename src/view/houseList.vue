@@ -22,10 +22,11 @@
 									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,false)" v-if="item.IsAuctionBtnClick">竞拍</mt-button>
 									<mt-button type="primary" style="border-color: #999;color: #999;" v-else>竞拍</mt-button>
 									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'1',item.IsSelf,false)" v-if="item.IsPreAuctionBtnClick&&item.IsSelf">收藏</mt-button>
-									<mt-button type="primary" style="border-color: #999;color: #999;" v-else>收藏</mt-button>
+									<mt-button type="primary" style="border: 1px solid #999;color: #999;background: none;" v-else>收藏</mt-button>
 									<template v-if="canWeek">
 										<mt-button type="primary" class="animateWeek" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-if="item.IsAuctionBtnClick&&item.IsSelf&&index==0"></mt-button>
 										<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-else-if="item.IsAuctionBtnClick&&item.IsSelf&&index>0">包周</mt-button>
+										<mt-button type="primary" style="background: #999;color: #fff;border: 1px solid #999;" v-else>包周</mt-button>
 									</template>
 									<mt-button type="primary" style="background: #999;color: #fff;border: 1px solid #999;" @click="weekTip" v-else>包周</mt-button>
 								</p>

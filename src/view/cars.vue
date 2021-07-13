@@ -4,6 +4,7 @@
 			:leftIcon="imgSrc"
 		     text="竞拍前请确认房源是否有效，一旦成功扣费概不退还。成功竞拍的房源将于第二天在中原找房进行展示。"
 		    ></nut-noticebar>
+		<mt-loadmore :top-method="loadTop" ref="loadmore">
 			<div class="carts">
 					<div v-if="car.length>0">
 					  <div class="clear newList" :class="item.AdPositionCompetePre.Status=='2'?'old':''" v-for="item in car">
@@ -51,7 +52,7 @@
 						<mt-button type="primary" class="go" @click="$router.push({name:'houseList'})">去收藏<img src="../assets/img/icon-dr.png"/></mt-button>
 					</div>
 			</div>
-				 
+		</mt-loadmore>	 
 				<div class="showModel modelMsg" v-if="suc">
 				  <div class="bj"></div>
 				  <div class="showMsg">
@@ -113,7 +114,8 @@
 				load:false,
 				empNo:"",
 				isWeek:false,
-				num:Math.random()
+				num:Math.random(),
+				allLoaded:false
 			}
 		},
 		mounted(){
@@ -147,6 +149,10 @@
 			},
 		},
 		methods: {
+			loadTop(){
+				this.pSize=10;
+				this.getCars();
+			},
 			getDayOrWeek(v){
 				console.log(this.header_token)
 				return new Promise((resolve)=>{
@@ -333,9 +339,15 @@
 				  			}else{
 									Toast(res.data.msg);
 				  			}
-							Indicator.close();
-				  		})
+								Indicator.close();
+									setTimeout(()=>{
+										this.$refs.loadmore.onTopLoaded();
+									},500)
+								})
 				  		.catch(error=>{
+								setTimeout(()=>{
+									this.$refs.loadmore.onTopLoaded();
+								},500)
 				  			Indicator.close();
 				  			Toast("网络错误，请稍后再试");
 				  		})
@@ -347,7 +359,7 @@
 
 <style>
 	.car{background: #F5F5F5;min-height: 100vh;padding-bottom: 1.4rem;}
-	.carts{padding: 0 0.32rem 0;}
+	.carts{padding: 0 0.32rem 0;min-height: calc(100vh - 2.4rem);}
 	.nlT{width: 0.7rem;float: left;/* margin-top: 0.1rem; */}
 	.car .newList{padding: 0;background-color: #fff;position: relative;box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);border-radius: 0.1rem;margin-bottom: 0.3rem;height: 1.78rem;}
 	.car .old{background-color: #f5f5f5;}
