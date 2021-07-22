@@ -508,7 +508,7 @@
     methods: {
 		goBigHb(MyTemplateId,TemplateName,TemplateId){
 			console.log(TemplateId)
-			if(TemplateId==110||TemplateId==111){
+			if(TemplateId==110||TemplateId==111||TemplateId==118||TemplateId==114){
 				this.showTag=true;
 			}else{
 				this.showTag=false;

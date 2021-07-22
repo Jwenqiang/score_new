@@ -25,7 +25,7 @@
 					    <a @click="$router.push({name:'houseList'})"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'rules',query:{id:'20210706'}})"><img src="img/zj0706.jpg"/></a>
+					    <a @click="$router.push({name:'rules',query:{id:'20210720'}})"><img src="img/zj0720.jpg"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
 						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0707.jpg"/></a>
