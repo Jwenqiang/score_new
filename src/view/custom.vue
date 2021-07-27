@@ -73,12 +73,18 @@
 						<div class="tMsg"></div>
 					</div> -->
 					<div class="ccList ccMy" v-for="item in myList">
+						<div class="i-yhc" v-if="item.IsRelease==1">
+							<label></label>
+							<p class="yhc">该商机兑换后超半小时未进行电话跟进，已放入商机池进行重新分配</p>
+						</div>
 						<i class="cTag" v-if="item.IsNew"></i>
 						<div class="ccTop">
-							<span style="background: #FF0000;" @click="change(item.MobileCompeteId)" v-if="item.CusLevel=='高意向'">{{item.CusLevel}}</span>
-							<span style="background: #ff584c;" @click="change(item.MobileCompeteId)" v-else-if="item.CusLevel=='中意向'">{{item.CusLevel}}</span>
-							<span style="background: #ccc;" @click="change(item.MobileCompeteId)" v-else-if="item.CusLevel=='低质量'">{{item.CusLevel}}</span>
-							<span v-else>待跟进</span>
+							<template v-if="item.IsRelease!=1">
+								<span style="background: #FF0000;" @click="change(item.MobileCompeteId)" v-if="item.CusLevel=='高意向'">{{item.CusLevel}}</span>
+								<span style="background: #ff584c;" @click="change(item.MobileCompeteId)" v-else-if="item.CusLevel=='中意向'">{{item.CusLevel}}</span>
+								<span style="background: #ccc;" @click="change(item.MobileCompeteId)" v-else-if="item.CusLevel=='低质量'">{{item.CusLevel}}</span>
+								<span v-else>待跟进</span>
+							</template>
 							<label>商机：{{item.CallerNumberDisplay}}</label>
 							<span class="cHouseTag">{{item.ChannelType}}</span>
 						</div>
@@ -118,7 +124,7 @@
 							<label>分发时间：</label>
 							<span>{{item.CreateTime}}</span>
 						</div>
-						<div class="ccBtn">
+						<div class="ccBtn" v-if="item.IsRelease!=1">
 							<button class="callCommt" @click="change(item.MobileCompeteId)">商机跟进</button>
 							<button @click="getMobile(item.MobileCompeteId)" v-if="item.IsMobile==1">拨打电话</button>
 							<button v-else><a :href="'tel:'+item.CallerNumberDisplay">拨打电话</a></button>
@@ -733,6 +739,9 @@
 	}
 	.infoNone{text-align: center;margin-top: 0.4rem;color: #999;}
 
+	.i-yhc{width: 100%;height: 100%;display: block;position: absolute;left: 0;top: 0;color: #fff;}
+	.i-yhc label{background: #000;position: absolute;left: 0;top: 0;opacity: 0.6;z-index: 3;display: block;width: 100%;height: 100%;border-radius: 0.1rem;}
+	p.yhc{position: absolute;top: 50%;margin-top: -1rem;left: 0;z-index: 4;padding: 0.4rem;font-size: 0.36rem;line-height: 1.8;}
 	/** 商机列表为空 */
 	.empty-shang-ji-wrap { margin: auto; display: flex; flex-direction: column; color: #999; font-size: 0.28rem; text-align: center; }
 	.empty-shang-ji { display: block; margin-bottom: 0.49rem; width: 4.2rem; }

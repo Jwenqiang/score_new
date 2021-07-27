@@ -278,7 +278,7 @@
 			},
 			getUser(){
 				Indicator.open();
-				return new Promise((resolve)=>{
+				return new Promise((resolve,err)=>{
 						this.$axios({
 							method:"get",
 							url:"/My/GetUserInfoV2?v="+Math.random()*10,
@@ -286,7 +286,6 @@
 						})
 						.then(res=>{
 							console.log(res);
-							resolve(res);
 							if(res.data.code==0){
 								this.userInfo=res.data.data;
 								this.jjrNum=res.data.data.EmpNo;

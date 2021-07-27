@@ -16,8 +16,8 @@
 					<div class="hbImg">
 						<img v-lazy="item" width="100%"/>
 					</div>
-					<p>{{item.TemplateName}}</p>
-					<button>生成专属海报</button>
+<!-- 					<p>{{item.TemplateName}}</p>
+					<button>生成专属海报</button> -->
 				</template>
 				<div class="overJr" v-else>
 					<div class="op5"></div>
@@ -25,8 +25,8 @@
 					  <img  v-lazy="item" width="100%"/>
 					  <span class="oldHb">已过期</span>
 					</div>
-					<p>{{item.TemplateName}}</p>
-					<button class="overOld">生成专属海报</button>
+<!-- 					<p>{{item.TemplateName}}</p>
+					<button class="overOld">生成专属海报</button> -->
 				</div>
 			  </li>
 		  </template>
@@ -38,15 +38,15 @@
 						<div class="hbImg">
 						  <img v-lazy="item" width="100%"/>
 						</div>
-						<p>{{item.TemplateName}}</p>
-						<button>生成专属海报</button>
+<!-- 						<p>{{item.TemplateName}}</p>
+						<button>生成专属海报</button> -->
 					</div>
 					<div @click="goBigHb(item.MyTemplateId,item.TemplateName,item.TemplateId)" v-else>
 						<div class="hbImg">
 						  <img v-lazy="item" width="100%"/>
 						</div>
-						<p>{{item.TemplateName}}</p>
-						<button>生成专属海报</button>
+<!-- 						<p>{{item.TemplateName}}</p>
+						<button>生成专属海报</button> -->
 					</div>
 				</template>
 				<div class="overJr" v-else>
@@ -55,8 +55,8 @@
 					  <img  v-lazy="item" width="100%"/>
 					  <span class="oldHb">已过期</span>
 					</div>
-					<p>{{item.TemplateName}}</p>
-					<button class="overOld">生成专属海报</button>
+<!-- 					<p>{{item.TemplateName}}</p>
+					<button class="overOld">生成专属海报</button> -->
 				</div>
 			  </li>
 		  </template>
@@ -66,8 +66,8 @@
 					<div class="hbImg">
 					  <img  v-lazy="item" width="100%"/>
 					</div>
-					<p>{{item.TemplateName}}</p>
-					<button>生成专属海报</button>
+<!-- 					<p>{{item.TemplateName}}</p>
+					<button>生成专属海报</button> -->
 				</div>
 				<div class="overJr" v-else>
 					<div class="op5"></div>
@@ -75,8 +75,8 @@
 					  <img  v-lazy="item" width="100%"/>
 					  <span class="oldHb">已过期</span>
 					</div>
-					<p>{{item.TemplateName}}</p>
-					<button class="overOld">生成专属海报</button>
+<!-- 					<p>{{item.TemplateName}}</p>
+					<button class="overOld">生成专属海报</button> -->
 				</div>
 			  </li>
 		  </template>
@@ -100,13 +100,15 @@
       <div class="hbShop" v-if="hbType==2">
         <ul class="clist" v-if="shopList.length>0">
           <li v-for="item in shopList" :key="item.DisplaySmallImagePath">
-            <div class="hbImg">
-              <img v-lazy="item" width="100%" preview="0" :preview-text="item.Name"/>
-            </div>
-            <i class="hbTip">{{item.AllBuyCount}}人购买</i>
-            <p>{{item.Name}}</p>
-            <p class="sp">折后价:<span>{{item.Price}}<i>元宝</i></span><a>{{item.OriginalPrice}}<i>元宝</i></a></p>
-            <div>
+						<div style="position: relative;">
+							<div class="hbImg" style="border-radius: 0.06rem 0.06rem 0 0;">
+								<img v-lazy="item" width="100%" preview="0" :preview-text="item.Name"/>
+							</div>
+							<i class="hbTip">{{item.AllBuyCount}}人购买</i>
+							<!-- <p>{{item.Name}}</p> -->
+							<p class="sp" style="bottom: 0;"><span>{{item.Price}}<i>元宝</i></span><a>{{item.OriginalPrice}}<i>元宝</i></a></p>
+           </div>
+					 <div>
               <button @click="buy(item)" v-if="item.IsBuy==false">我要兑换</button>
               <button class="hasBuy" v-else>我已购买</button>
             </div>
@@ -188,8 +190,8 @@
         <p class="bigS">{{ inApp ? '点击图片分享' : '长按图片保存' }}{{testCall}}</p>
         <div class="bigHc">
           <template v-if="bigImg">
-			<img :src="bigImg + '&fmt=jpg'" width="100%" :key="bigImg" @click="share(bigImg)" v-if="inApp"/>
-			<img :src="bigImg + '&fmt=jpg'" width="100%" :key="bigImg" v-else/>
+						<img :src="bigImg + '&fmt=jpg'" width="100%" :key="bigImg" @click="share(bigImg)" v-if="inApp"/>
+						<img :src="bigImg + '&fmt=jpg'" width="100%" :key="bigImg" v-else/>
           </template>
         </div>
         <label @click="show=false"></label>
@@ -1074,8 +1076,8 @@
   .hbTab label.on{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;border-radius: 0.35rem;}
   .hbTab label span{width: 0.12rem;height: 0.12rem;display: block;background-color: #FF0000;position: absolute;top: 0.2rem;right: 0.45rem;border-radius: 50%;}
   .hbList{ padding-top: 1.8rem; }
-  .clist{display: flex;justify-content: space-between;flex-wrap: wrap;padding: 0 0.4rem;}
-  .clist li{width: 3.2rem;text-align: center;position: relative;margin-bottom: 0.4rem;
+  .clist{display: flex;justify-content: space-between;flex-wrap: wrap;padding: 0 0.3rem;}
+  .clist li{width: 2.16rem;text-align: center;position: relative;margin-bottom: 0.3rem;
     box-shadow: 0 2px 3px #ccc;
     border-radius: 0.1rem;
     /* padding-bottom: 0.3rem; */
@@ -1083,15 +1085,21 @@
     overflow: hidden;
   }
   .clist li p{font-size: 0.32rem;color: #333;padding: 0 0.04rem;margin: 0.06rem 0 0.15rem;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: center;font-weight: 540;}
-  .clist li p.sp{font-size: 0.24rem;color: #333;}
-  .clist li p span{color: #EB2C30;font-size: 0.36rem;font-weight: 550;margin-right: 0.2rem;}
+  .clist li p.sp{font-size: 0.24rem;color: #333;position: absolute;bottom: 0.6rem;left: 0;background-color: #000;opacity: 0.7;width: 100%;margin-bottom: 0;height: 0.8rem;padding-top: 0.12rem;}
+  .clist li p span{color: #fff;font-size: 0.36rem;font-weight: 550;margin-right: 0.2rem;}
   .clist li p span i{font-style: normal;font-size: 0.24rem;font-weight: 400;}
   .clist li p a{text-decoration: line-through;color: #999;font-size: 0.28rem;}
   .clist li p a i{font-size: 0.2rem;font-style: normal;}
-  .clist li button{width: 2.4rem;height: 0.52rem;line-height: 0.48rem;background: linear-gradient(180deg, #7BACEE 0%, #6089D9 100%);color: #fff;border-radius: 0.35rem;}
-  .clist li button{margin-bottom: 0.3rem;}
+  .clist li button{width: 2.16rem;height: 0.6rem;line-height: 0.58rem;background: linear-gradient(180deg, #7BACEE 0%, #6089D9 100%);color: #fff;}
+  /* .clist li button{margin-bottom: 0.3rem;} */
   .clist li button.hasBuy{background: #ccc;}
     .clist li button.overOld{background: #ccc;color: #fff;}
+		.clist::after{
+			content: "";
+			width: 2.16rem;
+			height: 0;
+			display: block;
+		}
   .bigHb{ width: 6rem;min-height: 11.2rem; position: relative;background: #fff url(../assets/img/pNone.png) center no-repeat;background-size: 4rem;padding: 0.3rem; overflow: hidden;}
 
   /** 海报大图预取 */
@@ -1114,7 +1122,7 @@
   .nhbR p{font-size: 0.28rem;font-weight: 400;color: #666;margin-top: 0.2rem;width: 2.9rem;overflow: hidden;}
   .nhb button{position: absolute;right: 0.28rem;bottom: 0.26rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;border-radius: 0.35rem;width: 2.2rem;height: 0.65rem;}
   .nhbClose{display: block;width: 0.6rem;height: 0.6rem;background: url(../assets/img/r-close.png) right top no-repeat;background-size: 0.44rem;right: 0.2rem;top: 0.2rem;position: absolute;}
-  .hbTip{font-style: normal;font-size: 0.24rem;color: #fff;display: inline-block;padding: 0.05rem 0.2rem;background-color: #CBA96E;position: absolute;top: 0;right: 0;}
+  .hbTip{font-style: normal;font-size: 0.24rem;color: #fff;display: inline-block;padding: 0.05rem 0.2rem;background-color: #000;opacity: 0.66;position: absolute;top: 0;left: 0;}
 .myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;}
   .miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
   .miContent{padding: 0.3rem;}
@@ -1126,8 +1134,8 @@
   .bigF{font-size: 0.32rem;font-weight: 500;text-align: center;margin-bottom: 0.1rem;}
   .bigS{font-size: 0.24rem;font-weight: 400;text-align: center;color: #999;margin-bottom: 0.15rem;}
   .bigHc{overflow-y: auto;height: 9.61rem;}
-  .hbImg{width: 3.2rem;height: 5.7rem;overflow: hidden;border-radius: 0.06rem;position: relative;}
-  .hbImg img{display: block;}
+  .hbImg{width: 2.16rem;height: 4.68rem;overflow: hidden;border-radius: 0.06rem;position: relative;}
+  .hbImg img{display: block;height: 100%;}
   .oldHb{position: absolute;padding: 2px 0.2rem;z-index: 4;background-color: #ccc;color: #fff;position: absolute;left: 0;top: 0;font-size: 0.24rem;border-bottom-right-radius: 0.3rem;}
   /* 全面屏 */
   @media screen and (min-device-height : 812px){
