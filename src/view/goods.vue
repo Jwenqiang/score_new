@@ -19,7 +19,7 @@
 			<img src="../assets/img/good6.png?v=3" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==7">
-			<img src="../assets/img/good7.png?v=2" width="100%"/>
+			<img src="../assets/img/good7.png?v=3" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==8">
 			<img src="../assets/img/good8.png" width="100%"/>

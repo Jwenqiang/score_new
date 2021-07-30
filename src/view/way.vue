@@ -40,7 +40,7 @@
 					<img src="../assets/img/mr4.png" class="nlT"/>
 					<div class="newM">
 						<h4>开盘<span>+10</span></h4>
-						<label>每日x3次</label>
+						<label>每日x3次</label><label>每月x15次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'4'}})">如何完成</mt-button>
 				</div>
@@ -80,7 +80,7 @@
 					<img src="../assets/img/mr1.png" class="nlT"/>
 					<div class="newM">
 						<h4>成功录入客源<span>+10</span></h4>
-						<label>每日x3次</label>
+						<label>每日x3次</label><label>每月x15次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'1'}})">如何完成</mt-button>
 				</div>
@@ -88,7 +88,7 @@
 					<img src="../assets/img/mr2.png" class="nlT"/>
 					<div class="newM">
 						<h4>成功带客户看房<span>+10</span></h4>
-						<label>每日x3次</label>
+						<label>每日x3次</label><label>每月x15次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'2'}})">如何完成</mt-button>
 				</div>

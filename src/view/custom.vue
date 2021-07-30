@@ -126,10 +126,10 @@
 						</div>
 						<div class="ccBtn" v-if="item.IsRelease!=1">
 							<button class="callCommt" @click="change(item.MobileCompeteId)">商机跟进</button>
-							<button @click="getMobile(item.MobileCompeteId)" v-if="item.IsMobile==1">拨打电话</button>
+							<button @click="getMobile(item.Id)" v-if="item.IsMobile==1">拨打电话</button>
 							<button v-else><a :href="'tel:'+item.CallerNumberDisplay">拨打电话</a></button>
 						</div>
-						<div class="ccBtn" style="color: #666;" @click="getRecord(item.MobileCompeteId)">
+						<div class="ccBtn" style="color: #666;" @click="getRecord(item.Id)">
 							查看拨打和跟进记录
 						</div>
 					</div>
@@ -504,20 +504,23 @@
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"get",
-							url:"/MobileCompete/GetXiaoHao",
+							url:"/MobileCompete/GetXiaoHaoNew",
 							headers:this.header_token,
 							params:{
-								"MobileCompeteId": id,
+								"detailId": id,
 							}
 						})
 						.then(res=>{
 							console.log(res);
 							if(res.data.code==0){
-								this.call=res.data.data.Reamark;
-								setTimeout(()=>{
-									this.$refs.cphone.click();
-								},100)
-
+								if(res.data.data.IsSuccess){
+									this.call=res.data.data.Reamark;
+									setTimeout(()=>{
+										this.$refs.cphone.click();
+									},100)
+								}else{
+									this.$toast.text(res.data.data.Reamark);
+								}
 							}else{
 								this.$toast.text(res.data.msg);
 							}
@@ -536,10 +539,10 @@
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"get",
-							url:"/mobilecompete/callAndReviewRecords",
+							url:"/mobilecompete/callAndReviewRecordsNew",
 							headers:this.header_token,
 							params:{
-								"MobileCompeteId": id,
+								"detailId": id,
 								"PageSize":100
 							}
 						})
