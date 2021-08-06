@@ -49,4 +49,5 @@ export default {
 
 <style>
 @import '~@/assets/css/style.css';
+@import '~@/assets/css/animate.min.css';
 </style>

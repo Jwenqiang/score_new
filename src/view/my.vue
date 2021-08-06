@@ -285,6 +285,7 @@
 							headers:this.header_token
 						})
 						.then(res=>{
+							resolve(res);
 							console.log(res);
 							if(res.data.code==0){
 								this.userInfo=res.data.data;

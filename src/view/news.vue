@@ -29,11 +29,15 @@
 
 <script>
 	import { Toast,Indicator } from 'mint-ui';
+	import {
+	  uToken,
+	} from "@/global/token.js";
 	export default{
 		name: 'news',
 		data(){
 			return{
-				id:""
+				id:"",
+				header_token:{"token": uToken()}
 			}
 		},
 		mounted(){
@@ -42,7 +46,26 @@
 			setTimeout(()=>{
 				Indicator.close();
 			},500)
-		},		
+			this.setLog();
+		},
+		methods:{
+			setLog(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Task/FinishDayTaskAsync",
+							headers:this.header_token,
+							data:{
+								ViewTarget:"ViewTaskXinShou",
+								ViewValue:""
+							}
+						})
+						.then(res=>{
+							resolve(res);
+						})
+				})
+			},
+		}
 	}
 </script>
 

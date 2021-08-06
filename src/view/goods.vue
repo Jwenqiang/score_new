@@ -19,7 +19,7 @@
 			<img src="../assets/img/good6.png?v=3" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==7">
-			<img src="../assets/img/good7.png?v=3" width="100%"/>
+			<img src="../assets/img/good7.png?v=4" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==8">
 			<img src="../assets/img/good8.png" width="100%"/>
@@ -35,11 +35,15 @@
 
 <script>
 	import { Toast,Indicator } from 'mint-ui';
+	import {
+	  uToken,
+	} from "@/global/token.js";
 	export default{
 		name: 'goods',
 		data(){
 			return{
-				id:""
+				id:"",
+				header_token:{"token": uToken()}
 			}
 		},
 		created() {
@@ -51,7 +55,26 @@
 			setTimeout(()=>{
 				Indicator.close();
 			},500)
-		},		
+			this.setLog();
+		},
+		methods:{
+			setLog(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Task/FinishDayTaskAsync",
+							headers:this.header_token,
+							data:{
+								ViewTarget:"ViewTaskFuLi",
+								ViewValue:""
+							}
+						})
+						.then(res=>{
+							resolve(res);
+						})
+				})
+			},
+		}		
 	}
 </script>
 

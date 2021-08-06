@@ -182,6 +182,7 @@
 			this.getNowDate();
 			this.getDay(0);//当天时间
 			this.getYb();
+			this.setLog();
 		},
 		components: {
 			
@@ -206,6 +207,22 @@
 			}
 		},
 		methods:{
+			setLog(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Task/FinishDayTaskAsync",
+							headers:this.header_token,
+							data:{
+								ViewTarget:"CompeteRecord",
+								 ViewValue:""
+							}
+						})
+						.then(res=>{
+							resolve(res);
+						})
+				})
+			},
 			getNowDate(){//获取当前时间
 				var value=new Date();
 				var year = value.getFullYear(); 

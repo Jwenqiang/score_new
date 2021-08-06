@@ -59,11 +59,28 @@
 		mounted(){
 			document.title="消息中心";
 			this.getData();
+			this.setLog();
 		},
 		components: {
 			
 		},
 		methods:{
+			setLog(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Task/FinishDayTaskAsync",
+							headers:this.header_token,
+							data:{
+								ViewTarget:"MessageCenter",
+								ViewValue:""
+							}
+						})
+						.then(res=>{
+							resolve(res);
+						})
+				})
+			},
 			getData(){
 				Indicator.open();
 				return new Promise((resolve)=>{

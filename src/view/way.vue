@@ -79,7 +79,7 @@
 				<div class="clear newList">
 					<img src="../assets/img/mr1.png" class="nlT"/>
 					<div class="newM">
-						<h4>成功录入客源<span>+10</span></h4>
+						<h4>成功录入新客源<span>+10</span></h4>
 						<label>每日x3次</label><label>每月x15次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'1'}})">如何完成</mt-button>

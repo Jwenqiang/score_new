@@ -124,9 +124,9 @@
 			</div>
 
 		</div>
-		<div class="fixR" @click="$router.push({name:'uploadCj'})" v-if="$route.query.id=='7'">
+<!-- 		<div class="fixR" @click="$router.push({name:'uploadCj'})" v-if="$route.query.id=='7'">
 			<img src="../assets/static/icon-cj.png" />
-		</div>
+		</div> -->
 		<!-- 海报图片选取 -->
 		<nut-popup v-model="showImg" style="border-radius: 0.1rem;" class="selectImg">
 			<div class="selectC">

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="imgMsg" v-if="id==1">
-			<img src="../assets/img/day1.png" width="100%"/>
+			<img src="../assets/img/day1.png?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==2">
 			<img src="../assets/img/day2.png" width="100%"/>
@@ -89,11 +89,15 @@
 
 <script>
 	import { Toast,Indicator } from 'mint-ui';
+	import {
+	  uToken,
+	} from "@/global/token.js";
 	export default{
 		name: 'days',
 		data(){
 			return{
-				id:""
+				id:"",
+				header_token:{"token": uToken()}
 			}
 		},
 		created() {
@@ -105,7 +109,26 @@
 			setTimeout(()=>{
 				Indicator.close();
 			},500)
-		},		
+			this.setLog();
+		},
+		methods:{
+			setLog(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Task/FinishDayTaskAsync",
+							headers:this.header_token,
+							data:{
+								ViewTarget:"ViewTaskMeiRi",
+								ViewValue:""
+							}
+						})
+						.then(res=>{
+							resolve(res);
+						})
+				})
+			},
+		}
 	}
 </script>
 

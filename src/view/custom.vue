@@ -72,18 +72,18 @@
 						<div class="tBj"></div>
 						<div class="tMsg"></div>
 					</div> -->
-					<div class="ccList ccMy" v-for="item in myList">
-						<div class="i-yhc" v-if="item.IsRelease==1">
+					<div class="ccList ccMy" v-for="item in myList" :key="item.Id" :class="item.IsRelease==1?'overAll':''">
+<!-- 						<div class="i-yhc" v-if="item.IsRelease==1">
 							<label></label>
-							<p class="yhc">该商机兑换后超半小时未进行电话跟进，已放入商机池进行重新分配</p>
-						</div>
+							<p class="yhc">该商机兑换后超半小时未进行电话反馈，已放入商机池进行重新分配</p>
+						</div> -->
 						<i class="cTag" v-if="item.IsNew"></i>
 						<div class="ccTop">
 							<template v-if="item.IsRelease!=1">
 								<span style="background: #FF0000;" @click="change(item.MobileCompeteId)" v-if="item.CusLevel=='高意向'">{{item.CusLevel}}</span>
 								<span style="background: #ff584c;" @click="change(item.MobileCompeteId)" v-else-if="item.CusLevel=='中意向'">{{item.CusLevel}}</span>
 								<span style="background: #ccc;" @click="change(item.MobileCompeteId)" v-else-if="item.CusLevel=='低质量'">{{item.CusLevel}}</span>
-								<span v-else>待跟进</span>
+								<span v-else>待反馈</span>
 							</template>
 							<label>商机：{{item.CallerNumberDisplay}}</label>
 							<span class="cHouseTag">{{item.ChannelType}}</span>
@@ -125,12 +125,15 @@
 							<span>{{item.CreateTime}}</span>
 						</div>
 						<div class="ccBtn" v-if="item.IsRelease!=1">
-							<button class="callCommt" @click="change(item.MobileCompeteId)">商机跟进</button>
+							<button class="callCommt" @click="change(item.MobileCompeteId)">商机反馈</button>
 							<button @click="getMobile(item.Id)" v-if="item.IsMobile==1">拨打电话</button>
 							<button v-else><a :href="'tel:'+item.CallerNumberDisplay">拨打电话</a></button>
 						</div>
-						<div class="ccBtn" style="color: #666;" @click="getRecord(item.Id)">
-							查看拨打和跟进记录
+						<div class="ccBtn" style="color: #666;" @click="getRecord(item.Id)" v-if="item.IsRelease!=1">
+							查看拨打和反馈记录
+						</div>
+						<div class="ccBtn" style="color: #999;" v-else>
+							该商机超半小时未电话跟进，已重新分配
 						</div>
 					</div>
 					<p class="noList" @click="pSizeMy+=10" v-if="countMy>pSizeMy">正在加载</p>
@@ -146,7 +149,7 @@
 			<div class="myIntr" style="min-height: 6.58rem;">
 				<div class="ccRecord">
 					<h4>记录</h4>
-					<div class="ccrTag"><label :class="jl==1?'on':''" @click="jl=1">拨打记录<i></i></label><label :class="jl==2?'on':''" @click="jl=2">商机跟进<i></i></label></div>
+					<div class="ccrTag"><label :class="jl==1?'on':''" @click="jl=1">拨打记录<i></i></label><label :class="jl==2?'on':''" @click="jl=2">商机反馈<i></i></label></div>
 					<!--  v-if="record.length==0" -->
 					<div class="ccMr">
 <!-- 						<div class="ccrInfo" v-for="item in record">
@@ -154,8 +157,8 @@
 						</div> -->
 						<template v-if="jl==1">
 							<template v-if="record.length>0">
-							<div class="ccrInfo" style="text-align: center;" v-for="item in record" :key="item.Id">
-								<span>{{item.CreateTime}}</span>  <span>拨打客户电话</span>
+							<div class="ccrInfo ccrInfoS" style="text-align: center;" v-for="item in record" :key="item.Id">
+								<span>{{item.CreateTime}}</span>  <span>拨打客户电话</span> <span v-if="item.Result=='ANSWERED'" style="color: #00CC66;">已接听</span><span style="color: #F06431;" v-else>未接听</span>
 							</div>
 							</template>
 							<div class="infoNone" v-else>
@@ -169,7 +172,7 @@
 							</div>
 							</template>
 							<div class="infoNone" style="text-align: center;" v-else>
-								暂无跟进记录
+								暂无反馈记录
 							</div>
 						</template>
 					</div>
@@ -200,13 +203,13 @@
 		<nut-popup style="border-radius: 0.12rem;" closeable v-model="showMd">
 			<div class="myIntr">
 				<div class="miContent">
-					<h4>商机跟进</h4>
+					<h4>商机反馈</h4>
 					<div class="micM mdM">
 						<label :class="md==item.CusLevelId?'on':''" @click="md=item.CusLevelId" v-for="item in intention" :key="item.CusLevelId">{{item.CusLevelName}}<i></i></label>
 <!-- 						<label :class="md==1?'on':''" @click="md=1">强意向<i></i></label>
 						<label :class="md==2?'on':''" @click="md=2">中意向<i></i></label>
 						<label :class="md==3?'on':''" @click="md=3">低意向<i></i></label>
-						<label :class="md==4?'on':''" @click="md=4">待跟进<i></i></label> -->
+						<label :class="md==4?'on':''" @click="md=4">待反馈<i></i></label> -->
 					</div>
 					<div class="micMsg">
 						<div v-for="item in intention" :key="item.CusLevelName">
@@ -225,7 +228,7 @@
 							<label :class="uTag.id==8?'on':''" @click="setCommt(8,'号码有误、关机、无法接通、欠费、不愿意被打扰')">号码有误、关机、无法接通、欠费、不愿意被打扰</label>
 						</template>
 						<template v-if="md==4">
-							<label :class="uTag.id==9?'on':''" @click="setCommt(9,'有事在忙/没时间/无人接听，待跟进')">有事在忙/没时间/无人接听，待跟进</label>
+							<label :class="uTag.id==9?'on':''" @click="setCommt(9,'有事在忙/没时间/无人接听，待反馈')">有事在忙/没时间/无人接听，待反馈</label>
 						</template> -->
 					</div>
 					<div class="miBtn">
@@ -390,7 +393,7 @@
 			},
 			commitC(){
 				if(this.cmd<1){
-					this.$toast.text("请选择跟进类型");
+					this.$toast.text("请选择反馈类型");
 					return;
 				}
 				return new Promise((resolve)=>{
@@ -709,6 +712,7 @@
 	.ccMr{max-height: 4.5rem;overflow: hidden;padding: 0.2rem;overflow-y: auto;text-align: left;margin-top: 0.2rem;}
 	.ccrInfo span:first-child{flex: 1;}
 	.ccrInfo span:last-child{flex: 1.2;}
+	.ccrInfoS span:last-child{flex: 0.6;}
 	.miContent h4{font-size: 0.36rem;text-align: center;font-weight: 550;padding-top: 0.2rem;}
 	.micM,.ccrTag{display: flex;justify-content: space-between;}
 	.micM label,.ccrTag label{font-weight: 500;display: inline-block;position: relative;flex: 1;height: 0.6rem;line-height: 0.6rem;text-align: center;font-size: 0.3rem;border-radius: 0.05rem;color: #666;}
@@ -748,4 +752,7 @@
 	/** 商机列表为空 */
 	.empty-shang-ji-wrap { margin: auto; display: flex; flex-direction: column; color: #999; font-size: 0.28rem; text-align: center; }
 	.empty-shang-ji { display: block; margin-bottom: 0.49rem; width: 4.2rem; }
+	
+	.overAll,.overAll label,.overAll a{color: #999 !important;}
+	.overAll{background-color: #f5f5f5 !important;}
 </style>

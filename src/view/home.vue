@@ -18,6 +18,9 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
+					<div  class="nut-swiper-slide gray_1" >
+						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0803.jpg"/></a>
+					</div>
 					<div  class="nut-swiper-slide gray" >
 					    <a @click="$router.push({name:'shareCenter'})"><img src="img/banner0623.png?v=1"/></a>
 					</div>
@@ -25,14 +28,8 @@
 					    <a @click="$router.push({name:'houseList'})"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'rules',query:{id:'20210727'}})"><img src="img/bzj0727.jpg"/></a>
+					    <a @click="$router.push({name:'rules',query:{id:'20210803'}})"><img src="img/zj0803.jpg"/></a>
 					</div>
-					<div  class="nut-swiper-slide gray_1" >
-						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0707.jpg"/></a>
-					</div>
-				    <div  class="nut-swiper-slide gray" >
-				        <a @click="goCj"><img src="@/assets/static/banner-cj.jpg"/></a>
-				    </div>
 					<div  class="nut-swiper-slide gray" >
 					    <a href="https://mp.weixin.qq.com/s/_J1LfZyIcVJ_TKAZpqPPhQ"><img src="@/assets/static/banner0712.jpg"/></a>
 					</div>
@@ -70,6 +67,9 @@
 			</div>
 		</div>
 		<div class="hBox">
+			<button @click="setModule(1)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框1</button>
+			<button @click="setModule(2)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框2</button>
+			<button @click="setModule(3)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框3</button>
 			<div class="clear h-tip" @click="$router.push({'name':'message'})">
 				<label>消息<i v-if="msg.totalUnRead>0&&msg.totalUnRead<100">{{msg.totalUnRead}}</i><i v-else-if="msg.totalUnRead>99">99+</i></label>
 				<span v-if="msg.firstUnReadTitle">{{msg.firstUnReadTitle}}</span>
@@ -184,21 +184,55 @@
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
 			<img src="../assets/static/icon-week.png"/>
 		</div> -->
-		<div class="fixR1" @click="$router.push({name:'vcj'})" v-if="inApp">
+<!-- 		<div class="fixR1" @click="$router.push({name:'vcj'})" v-if="inApp==false">
 			<img src="../assets/static/icon-rcj.png"/>
-		</div>
+		</div> -->
+		<!-- 回馈活动弹窗 -->
+			<div class="hkShow" :class="addCar?'animationCar':''">
+				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
+				<Module :showOn="moduleNum" @changeNum="changeModule"></Module>
+				<!-- 信封 -->
+<!-- 				<div class="hkBody" :class="showOn==1?'hk':''">
+					<div class="hkG"></div>
+						<div class="hkB"></div>
+						<div class="hkMain">
+						</div>
+						<nut-luckycard
+										content="1000万" 
+										:coverImg="coverImage"
+										backgroundColor="#FF3848"
+										height="73"
+										width="166"
+										ratio="0.2"
+										@open="addMy"
+										style="color: #FFEB8B !important;font-weight: bold !important;16px"></nut-luckycard>
+				</div> -->
+				<!-- 红包 -->
+<!-- 				<div class="hkBody" :class="showOn==2?'hk':''">
+					<div class="hkG"></div>
+						<div class="hkHb"></div>
+						<div class="hkHbM">
+						</div>
+						<div class="hkHbBtn" @click="addMy"></div>
+				</div> -->
+			</div>
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue';
-	import NoticeBar from '@nutui/nutui/dist/packages/noticebar/noticebar.js';  // 加载构建后的JS
-	import Swiper from '@nutui/nutui/dist/packages/swiper/swiper.js';  // 加载构建后的JS
-	import '@nutui/nutui/dist/packages/noticebar/noticebar.css';  //加载构建后的CSS
-	import '@nutui/nutui/dist/packages/swiper/swiper.css';  //加载构建后的CSS
-	NoticeBar.install(Vue);
-	Swiper.install(Vue);
+	// import NoticeBar from '@nutui/nutui/dist/packages/noticebar/noticebar.js';  // 加载构建后的JS
+	// import Swiper from '@nutui/nutui/dist/packages/swiper/swiper.js';  // 加载构建后的JS
+	// import '@nutui/nutui/dist/packages/noticebar/noticebar.css';  //加载构建后的CSS
+	// import '@nutui/nutui/dist/packages/swiper/swiper.css';  //加载构建后的CSS
+	// NoticeBar.install(Vue);
+	// Swiper.install(Vue);
+	// 京东框架2.X
+	import nutUI from '@nutui/nutui/dist/nutui.min.js';  // 加载构建后的JS
+	import '@nutui/nutui/dist/nutui.min.css';  //加载构建后的CSS
+	nutUI.install(Vue);
 	import Foot from '@/components/foot.vue'
+	import Module from '@/components/module.vue'
 	import { Toast,Indicator } from 'mint-ui';
 	import {mapState, mapMutations, mapActions, mapGetters} from 'vuex'
 	import {
@@ -223,7 +257,11 @@
 				shareCode:"",
 				readMsg: true,
 				msg:"",
-				inApp:false
+				inApp:false,
+				// showOn:-1,
+				// coverImage:require("../../public/model/xfImg.png"),
+				addCar:false,
+				moduleNum:-1
 				// showNew:false
 			}
 		},
@@ -263,7 +301,8 @@
 			 // },500)
 		},
 		components: {
-		  Foot
+		  Foot,
+			Module
 		},
 		watch:{
 			'$route' (to, from) {
@@ -275,12 +314,43 @@
 
 		},
 		methods:{
-			goCj(){
-				if(this.inApp){
-					this.$router.push({'name':'vcj'})
+			setModule(n){
+				this.moduleNum=n
+			},
+			changeModule(n){
+				if(n==1){
+					setTimeout(()=>{
+						this.addCar=true;
+						setTimeout(()=>{
+							this.$toast.text("奖品领取成功");
+							setTimeout(()=>{
+								this.moduleNum=-1;
+								this.addCar=false;
+							},500)
+						},500)
+					},1000)
+				}else if(n==3){
+					setTimeout(()=>{
+						this.addCar=true;
+						setTimeout(()=>{
+							this.$toast.text("奖品领取成功");
+							setTimeout(()=>{
+								this.moduleNum=-1;
+								this.addCar=false;
+							},500)
+						},500)
+					},1500)
 				}else{
-					this.$router.push({'name':'days',params:{id:'28'}})
+					this.addCar=true;
+					setTimeout(()=>{
+						this.$toast.text("奖品领取成功");
+						setTimeout(()=>{
+							this.moduleNum=-1;
+							this.addCar=false;
+						},500)
+					},500)
 				}
+				
 			},
 			handleChange(n){
 			},
@@ -684,4 +754,91 @@ box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 .h-tip span{display: inline-block;width: 5rem;color: #999;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;border-left: 1px solid #999;height: 0.3rem;line-height: 0.3rem;margin-left: 0.3rem;padding-left: 0.2rem;float: left;font-size: 0.26rem;}
 .sclose{display: block;width: 0.64rem;height: 0.64rem;position: fixed;bottom: 22%;left: 3.4rem;background: url(../assets/img/nClose.png) center no-repeat;background-size: 60%;z-index: 96;border: 1px solid #fff;border-radius: 50%;animation: bh 0.5s 1 forwards;}
 .hsTip{font-size: 0.24rem;color: #F4472D;font-style: normal;position: absolute;right: 5px;top: -0.15rem;font-weight: bold;}
+
+/* 回馈活动弹框 */
+.popup-box{background: none;}
+.hkShow{z-index: 99;}
+.hkBody{width: 362px;height: 363.5px;position: fixed;left: 50%;top: -100%;margin-top: -180px;margin-left: -181px;}
+.hkG{width: 100%;height: 100%;background: url(../../public/model/xfg.png) center no-repeat;background-size: 100%;}
+/* x信封 */
+.hkMain{position: absolute;top:30px;left: 63px;width: 236.5px;height:264px;padding: 96px 33px 50px;background: url(../../public/model/xf.png) center no-repeat;background-size: 100%;}
+.hkB{width: 347.5px;height: 327px;background: url(../../public/model/xfb.png) center no-repeat;background-size: 100%;position: absolute;top: 55px;left:0;}
+.nut-luckycard{z-index: 9;position: absolute;
+		top: 126px;
+    left: 96px;
+}
+	.nut-content{color: #FFEB8B !important;font-weight: bold !important;}
+
+.hkbj{width: 100%;height: 100vh;background-color: #000;opacity: 0.5;position: fixed;left: 0;top: 0;z-index: 10;}
+.hk{opacity: 1;top: 50%;}
+.hk .hkMain,.hk .nut-luckycard{animation: big 0.3s ease-in 1 forwards,swing 2s 0.5s ease-in infinite alternate;}
+.hk .hkG,.hk .hkB{ opacity: 0;animation: fadeInBig 0.5s 0.3s ease-in 1 forwards;}
+.hk .hkB{z-index: 8;}
+.hk .hkG{animation: fadeInBig 1.5s 0.3s ease-in 1 forwards,rotateR 10s  0.1s linear infinite;}
+@keyframes big{
+	0%{transform: scale(0);}
+	80%{transform: scale(1.01);}
+	100%{transform: scale(1);}
+}
+@keyframes fadeInBig{
+	0%{transform: scale(0);}
+	20%{transform: scale(1.05);opacity: 0.5;}
+	70%{transform: scale(0.95);opacity: 1;}
+	100%{transform: scale(1);opacity: 1;}
+}
+@keyframes rotateR{
+	from{transform: rotate(0);}
+	to{transform: rotate(360deg);}
+}
+@keyframes swing {
+	20% {
+		-webkit-transform: rotate(5deg);
+		transform: rotate(5deg)
+	}
+
+	40% {
+		-webkit-transform: rotate(-5deg);
+		transform: rotate(-5deg)
+	}
+
+	60% {
+		-webkit-transform: rotate(5deg);
+		transform: rotate(5deg)
+	}
+
+	80% {
+		-webkit-transform: rotate(-5deg);
+		transform: rotate(-5deg)
+	}
+
+	to {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg)
+	}
+}
+/* 红包 */
+.hkHb{
+	width: 318.5px;height: 326px;background: url(../../public/model/hbB.png) center no-repeat;background-size: 100%;position: absolute;
+	top: 23px;
+	Z-INDEX: 8;
+	left: 19px;
+}
+.hkHbM{
+	position: absolute;top:60px;left: 79px;width: 210px;height:247px;padding: 96px 33px 50px;background: url(../../public/model/hb.png) center no-repeat;background-size: 100%;
+}
+.hkHbBtn{
+	position: absolute;bottom:10px;left: 104px;width: 153px;height:113px;background: url(../../public/model/hbBtn.png) center no-repeat;background-size: 130px;
+}
+.hk .hkHbM{animation: slideInDown 0.3s ease-in 1 forwards,swing 2s 0.5s ease-in infinite alternate;}
+.hk .hkHbBtn{opacity: 0;animation: fadeIn 0.5s 0.5s linear 1 forwards;z-index: 9;}
+.hk .hkHb{opacity: 0;animation: fadeInBig 0.5s 0.2s ease-in 1 forwards;}
+/*  */
+.animationCar .hk{
+	animation: over 0.5s ease-in-out 1 forwards;
+}
+.animationCar .hkbj{display: none;}
+@keyframes over{
+	from{transform: scale(1);}
+	to{transform: scale(0);right: -375px;bottom: -400px;}
+}
 </style>
