@@ -1,46 +1,59 @@
 <template>
 	<div>
 				<!-- 信封 -->
-				<div class="hkBody" :class="showOn==1?'hk':''">
-					<div class="hkG"></div>
-						<div class="hkB"></div>
+				<div class="hkBody" :class="showOn==2?'hk':''">
+					<div class="xfG"></div>
+						<!-- <div class="hkB"></div> -->
 						<div class="hkMain">
 						</div>
 						<nut-luckycard
-										content="1000万" 
+										:content="prizeName" 
 										:coverImg="coverImage"
 										backgroundColor="#FF3848"
-										height="92"
-										width="204"
-										ratio="0.4"
+										height="80"
+										width="176"
+										ratio="0.3"
 										@open="changeNum"
 										style="color: #FFEB8B !important;font-weight: bold !important;16px"></nut-luckycard>
 				</div>
 				<!-- 红包 -->
-				<div class="hkBody" :class="showOn==2?'hk':''">
+				<div class="hkBody" :class="showOn==4?'hk':''">
 					<div class="hkG"></div>
 						<div class="hkHb"></div>
 						<div class="hkHbM">
 						</div>
 						<div class="hkHbBtn" @click="changeNum"></div>
 				</div>
+				<!-- 礼盒 -->
+				<div class="hkBody" :class="showOn==1?'hk':''">
+					<div class="hkG"></div>
+						<div class="hkLh" :class="clickBox?'cbox':''" v-show="!open" @click="openBox"></div>
+						<div class="op0" :class="open?'op1':''">
+							<div class="hkLhB">
+							</div>
+							<div class="hkLhG">
+							</div>
+						</div>
+						<!-- <div class="hkHbBtn" @click="changeNum"></div> -->
+				</div>
 				<!-- 砸金蛋 -->
 				<div class="hkBody" :class="showOn==3?'hk':''">
 					<section class="stage" @click="zaEgg">
 						<div class="jdJg" v-show="eggAll"></div>
-						<img src="model/jdBj.png" />
+						<img src="model/jdBj.png" v-show="eggAll"/>
 						<!--金蛋-->
 						<div class="goldenEgg Egg1">
 								<img src="model/egg.png" alt="" id="egg1" v-show="eggAll" :class="za?'zd':''">
 								<div class="eggLf" :class="za?'lf':''" v-show="eggAll"></div>
-								<div v-show="eggAll==false">
-									<img src="model/egg2.png" alt="" id="egg2">
-									<img src="model/jdLh.png" alt="" id="boom1" :class="eggAll==false?'show':''">
-									<div class="jdG"></div>
-								</div>
 								<img src="model/cz.png" id="czi1" class="czi main_jb2" :class="za?'za':''"/>
 						</div>
-						<div class="jdYb"></div>
+						<div v-show="eggAll==false" @click="changeNum">
+							<!-- <img src="model/egg2.png" alt="" id="egg2">
+							<img src="model/jdLh.png" alt="" id="boom1" :class="eggAll==false?'show':''"> -->
+							<img src="model/eggOver.png" class="eggOver"/>
+							<div class="jdG"></div>
+						</div>
+						<div class="jdYb" v-show="eggAll"></div>
 						<!--锤子-->
 						<!-- <div class="hit" id="J_Hit"><img src="images/1.png" /></div> -->
 					</section>
@@ -56,24 +69,37 @@
 		name: 'module',
 		props: {
 		  showOn: {
-		    type: Number,
 		    default: '-1'
 		  },
+			prizeName:{
+				type: String,
+				default: ''
+			}
 		},
 		data() {
 			return{
 				coverImage:require("../../public/model/xfImg.png"),
 				addCar:false,
 				eggAll:true,
-				za:false
+				za:false,
+				open:false,
+				clickBox:false
 			}
 		},
 		methods:{
+			openBox(){
+				this.clickBox=true;
+				setTimeout(()=>{
+					this.open=true;
+					setTimeout(()=>{
+						this.changeNum();
+					},1000)
+				},1000)
+			},
 			zaEgg(){
 				this.za=true;
 				setTimeout(()=>{
 					this.eggAll=false
-					this.changeNum();
 				},500)//3500
 			},
 			// addMy(){
@@ -102,26 +128,34 @@
 
 <style scoped>
 /* 回馈活动弹框 */
-.popup-box{background: none;}
-.hkShow{z-index: 99;}
 .hkBody{width: 7.5rem;height: 7.5rem;position: fixed;left: 50%;top: -100%;margin-top: -4rem;z-index: 11;margin-left: -3.75rem;}
-.hkG{width: 100%;height: 100%;background: url(../../public/model/xfg.png) center no-repeat;background-size: 100%;}
+.hkG,.xfG{width: 100%;height: 100%;background: url(../../public/model/xfg.png) center no-repeat;background-size: 100%;}
+.hkbj{width: 100%;height: 100vh;background-color: #000;opacity: 0.5;position: fixed;left: 0;top: 0;}
 /* x信封 */
-.hkMain{position: absolute;top:0.8rem;left: 50%;width:279px;height:288px;padding: 96px 33px 50px;background: url(../../public/model/xf.png) center no-repeat;background-size: 100%;margin-left: -140px;}
+.hkMain{position: absolute;top:1.2rem;left: 50%;width:350px;height:290px;padding: 96px 33px 50px;background: url(../../public/model/xf.png) center no-repeat;background-size: 100%;margin-left: -175px;}
 .hkB{width: 7.1rem;height: 7.1rem;background: url(../../public/model/xfb.png) center no-repeat;background-size: 100%;position: absolute;top: -14px;left:0.2rem;}
 .nut-luckycard{z-index: 9;position: absolute;
-		top: 143px;
+		top: 157.5px;
     left: 50%;
-		margin-left: -104px;
+		margin-left: -84.5px;
+		opacity: 0;
+}
+@media screen and (min-width:414px) {
+	.nut-luckycard{z-index: 9;position: absolute;
+			top: 162.5px;
+	    left: 50%;
+			margin-left: -85.5px;
+	}
 }
 	.nut-content{color: #FFEB8B !important;font-weight: bold !important;}
 
-.hkbj{width: 100%;height: 100vh;background-color: #000;opacity: 0.5;position: fixed;left: 0;top: 0;}
 .hk{opacity: 1;top: 50%;}
-.hk .hkMain,.hk .nut-luckycard{animation: flipInX 2s  ease-in 1 alternate;}/* /big 0.3s ease-in 1 forwards, */
+.hk .hkMain{animation: flipInX 2s ease-in 1 alternate;z-index: 9999;}/* /big 0.3s ease-in 1 forwards, */
+.hk .nut-luckycard{animation: fadeIn 1s 2s ease-in 1 forwards;z-index: 9999;}
 .hk .hkG,.hk .hkB{ opacity: 0;animation: fadeInBig 0.5s 1s ease-in 1 forwards;}
 .hk .hkB{z-index: 8;}
-.hk .hkG{animation: fadeInBig 3s 0.3s ease 1 forwards,rotateR 10s  0.1s linear infinite;}
+.hk .hkG{animation: fadeInBig 3s 1s ease 1 forwards,rotateR 10s  0.1s linear infinite;z-index: 9998;}
+.hk .xfG{ opacity: 0;animation: fadeInBig 3s 2s ease 1 forwards,rotateR 10s  2.1s linear infinite;z-index: 9998;}
 @keyframes big{
 	0%{transform: scale(0);}
 	80%{transform: scale(1.01);}
@@ -177,17 +211,79 @@
 .hkHbBtn{
 	position: absolute;bottom:-0.4rem;left: 2.5rem;width: 2.5rem;height:2.3rem;background: url(../../public/model/hbBtn.png) center no-repeat;background-size: 2.5rem;
 }
-.hk .hkHbM{animation: slideInDown 0.3s ease-in 1 forwards,pulse 2s 0.5s ease-in infinite alternate;}
+.hk .hkHbM{animation: slideInDown 0.3s ease-in 1 forwards,swingD 2s 0.5s ease-in infinite alternate;}
 .hk .hkHbBtn{opacity: 0;animation: fadeIn 0.5s 0.5s linear 1 forwards;z-index: 9;}
 .hk .hkHb{opacity: 0;animation: fadeInBig 0.5s 0.2s ease-in 1 forwards;}
 /*  */
-.animationCar .hk{
+/* .animationCar .hk{
 	animation: over 0.5s ease-in-out 1 forwards;
+} */
+@keyframes swingD {
+	0%{
+		-webkit-transform: rotate(0deg);
+			transform: rotate(0deg)
+	}
+	10% {
+		-webkit-transform: rotate(3deg);
+		transform: rotate(3deg)
+	}
+
+	30% {
+		-webkit-transform: rotate(-3deg);
+		transform: rotate(-3deg)
+	}
+
+	50% {
+		-webkit-transform: rotate(3deg);
+		transform: rotate(3deg)
+	}
+
+	70% {
+		-webkit-transform: rotate(-3deg);
+		transform: rotate(-3deg)
+	}
+
+	100%{
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg)
+	}
 }
-@keyframes over{
+/* @keyframes over{
 	from{transform: translate(0,0);}
 	to{transform: translate(300px,500px) scale(0);}
+} */
+/* 礼盒 */
+.hkLh{
+	width: 5.58rem;height: 4.54rem;background: url(../../public/model/lh.png) center no-repeat;background-size: 100%;
+	position: absolute;
+	top: 1.5rem;
+	Z-INDEX: 8;
+	left: 1rem;
 }
+.hk .hkLh{
+	animation: bounceInDown 1s ease-in 1 forwards,bounce 2s 1s ease-in infinite alternate;
+}
+.hkLhB{
+	width: 5.36rem;height: 5.96rem;background: url(../../public/model/lhb.png) center no-repeat;background-size: 100%;
+	position: absolute;
+	top: 0;
+	Z-INDEX: 8;
+	left: 1rem;
+}
+.hkLhG{
+	width: 5.25rem;height: 1.75rem;background: url(../../public/model/lhg.png) center no-repeat;background-size: 100%;
+	position: absolute;
+	top: 1.3rem;
+	Z-INDEX: 8;
+	left: 1.2rem;
+	transform: skew(10deg, -7deg);
+	animation: bounceOutUp 1s 0.2s ease-in 1 forwards;
+	display: none;
+}
+.hk  .cbox{animation: none;animation: shakeX 1s 0.2s ease-in 1 forwards;}
+.op0{opacity: 0;}
+.op1{opacity: 1;}
+.op1 .hkLhG{display: block;}
 /* 砸金蛋 */
 	.stage {
 	    width: 100%;
@@ -331,7 +427,7 @@
 }
 .jdG{
 	animation: fadeIn 1s linear infinite alternate;
-	width: 3.26rem;height: 3.14rem;background: url(../../public/model/jdG.png) center no-repeat;background-size: 2.73rem;position: absolute;bottom: 1rem;left: -0.8rem;
+	width: 3.26rem;height: 3.14rem;background: url(../../public/model/jdG.png) center no-repeat;background-size: 2.73rem;position: absolute;bottom: 2.4rem;left: 2.2rem;
 }
 .jdJg{width: 5.44rem;height: 5.46rem;background: url(../../public/model/jdJg.png) center no-repeat;background-size: 5.44rem;
 	position: absolute;
@@ -343,7 +439,7 @@
 .goldenEgg .za{
 	transition: all 0.5s ease-in;
 	/* transform: translate(-20px,0) rotate(-20deg); */
-	animation: zaEgg 0.5s ease-in 1 forwards;/* //fadeOut 0.5s 0.5s linear 1 forwards */
+	animation: zaEgg 0.5s ease-in 1 forwards,fadeOut 0.5s 0.5s linear 1 forwards;/* //fadeOut 0.5s 0.5s linear 1 forwards */
 	left: 2rem;
 	bottom: 2rem;
 }
@@ -386,4 +482,5 @@
 	20%,40%,60%,80%{transform: rotate(10deg);}
 	to{transform: rotate(0);}
 } */
+.eggOver{width: 6.13rem;height: 4.38rem;position: absolute;left: 0.7rem;top: 2rem;animation: fadeInBig 1s linear 1 forwards;}
 </style>

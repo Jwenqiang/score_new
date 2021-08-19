@@ -7,11 +7,18 @@
 			</a>
 		</div>
 		<div class="hSearch">
-			<i class="mintui mintui-search"></i>
-			<span class="iclear" v-if="content" @click="content=''"></span>
-			<input type="text" placeholder="请输入中原编码或小区名称" v-model="content" @keyup.enter="search(content)" @input="getTags()" v-if="hType=='S'"/>
-			<input type="text" placeholder="请输入楼盘名/地址/地铁站" v-model="content" @keyup.enter="search(content)" @input="getTags()" v-else/>
-			<button @click="search(content)">搜索</button>
+			<div v-if="hType=='S'">
+				<i class="mintui mintui-search"></i>
+				<span class="iclear" v-if="content" @click="content=''"></span>
+				<input type="text" placeholder="请输入中原编码或小区名称" v-model="content" @keyup.enter="search(content)" @input="getTags()"/>
+				<button @click="search(content)">搜索</button>
+			</div>
+			<div class="otherCity" v-else>
+				<span class="hblAddr" @click="showCity=true">{{cityName}}</span>
+				<i class="mintui mintui-search"></i>
+				<input type="text" class="newInput" placeholder="请输入楼盘名/地址/地铁站" v-model="content" @keyup.enter="search(content)" @input="getTags()"/>
+				<button @click="search(content)">搜索</button>
+			</div>
 			<div class="searchResult" v-show="tagList">
 				<ul>
 					<li v-for="(item,index) in tagList" :key="index" @click="search(item.Tag)"><label>{{item.Tag}}</label><span v-if="hType=='S'">约{{item.SNum}}套</span><span v-else><i>{{item.AvgPrice}}</i></span></li>
@@ -67,6 +74,14 @@
 				<div class="none" v-if="houseNew.length==0&&ready">暂无新房搜索结果~</div>
 			</div>
 		</div>
+		
+		<nut-picker
+		  :is-visible="showCity"
+		  :list-data="cityData"
+		  @close="showCity=false"
+		  @confirm="choseCity"
+		></nut-picker>
+		
 	</div>
 </template>
 
@@ -77,9 +92,10 @@
 	} from "@/global/token.js";
 	import { Toast,Indicator } from 'mint-ui';
 	import { Search } from 'mint-ui';
-	import nToast from '@nutui/nutui/dist/packages/toast/toast.js';  // 加载构建后的JS
-	import '@nutui/nutui/dist/packages/toast/toast.css';  //加载构建后的CSS
-	nToast.install(Vue);
+	// 京东框架2.X
+	import nutUI from '@nutui/nutui/dist/nutui.js';  // 加载构建后的JS
+	import '@nutui/nutui/dist/nutui.css';  //加载构建后的CSS
+	nutUI.install(Vue);
 	import i from "@/assets/img/noYb.png";
 	export default{
 		name: 'hbHouse',
@@ -103,7 +119,30 @@
 				loadImg:require('@/assets/img/loading.jpg'),
 				loadOver:false,
 				scrollTop: 0,
-				load:false
+				load:false,
+				cityName:"深圳",
+				cityen:'sz',
+				showCity:false,
+				cityData:[
+        [
+          {
+            label: 'sz',
+            value: '深圳',
+          },
+          {
+            label: 'zs',
+            value: '中山',
+          },
+          {
+            label: 'zh',
+            value: '珠海',
+          },
+          {
+            label: 'dg',
+            value: '东莞',
+          }
+        ],
+      ]
 			}
 		},
 		created() {
@@ -114,14 +153,25 @@
 			if(this.$route.query.jjr){
 				this.jjrNum=this.$route.query.jjr
 			}
+			if(this.$route.query.cityName){
+				this.cityName=this.$route.query.cityName
+				if(this.$route.query.cityName!='深圳'){
+					this.hType="N";
+					if(this.$route.query.cityName=='中山'){
+						this.cityen="zs";
+					}else if(this.$route.query.cityName=='珠海'){
+						this.cityen="zh";
+					}
+				}
+			}
 			// this.getHouse();
 		},
 		// 注意：只有当组件在 <keep-alive> 内被切换，才会有activated 和 deactivated 这两个钩子函数
 		 activated() {//在vue对象存活的情况下，进入当前存在activated()函数的页面时，一进入页面就触发；可用于初始化页面数据等
 		    // 全局绑定滚动事件，
 		    window.addEventListener("scroll", this.scrollT);
-			if(this.hType=='S'&&!this.content)
-			this.getHouse();
+				if(this.hType=='S'&&!this.content)
+				this.getHouse();
 		  },
 		  deactivated() {
 		    // 组件消失，解绑scroll事件
@@ -210,6 +260,14 @@
 		mounted() {
 		},
 		methods:{
+			closeCity(){
+				
+			},
+			choseCity(n){
+				console.log(n);
+				this.cityName=n[0].value;
+				this.cityen=n[0].label;
+			},
 			scrollT(){
 				this.scrollTop = window.scrollY;
 			},
@@ -245,7 +303,8 @@
 							headers:this.header_token,
 							params:{
 								tag:this.content,
-								category:this.hType
+								category:this.hType,
+								cityen:this.cityen
 							}
 						})
 						.then(res=>{
@@ -363,7 +422,8 @@
 								headers:this.header_token,
 								params:{
 									keyword :this.content,
-									pageSize:this.pSize
+									pageSize:this.pSize,
+									cityen:this.cityen
 								}
 							})
 							.then(res=>{
@@ -482,4 +542,9 @@
 	.jrr h4 i{font-style: normal;font-weight: 500;color: #f53218;position: absolute;right: 0;top: 0.04rem;font-size: 0.28rem;}
 	.noList{color: #ccc;font-size: 0.26rem;text-align: center;margin-top: 0.8rem;}
 	.noList span{display: inline-block;height: 1px;width: 2rem;background-color: #eee;position: relative;top: -3px;}
+	
+	.hSearch .newInput{width: 5.3rem;}
+	.hblAddr{width: 0.9rem;display: inline-block;background: url(../assets/img/s-down.png) 90% center no-repeat;background-size: 0.2rem;font-weight: 600;}
+	.otherCity{width: inline-block;}
+	.hSearch .otherCity .mintui-search{left: 1.24rem;}
 </style>

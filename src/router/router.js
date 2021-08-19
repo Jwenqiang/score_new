@@ -406,6 +406,32 @@ var router = new Router({
 				keepAlive:false
 			}			
 		},
+		{
+			path:'/myPrize',
+			name:"myPrize",
+			component:() =>import ('@/view/myPrize'),
+			meta:{
+				title:'我的奖品',
+				keepAlive:false
+			}			
+		},
+		{
+			path:'/dayLog',
+			name:"dayLog",
+			component:() =>import ('@/view/dayLog'),
+			meta:{
+				title:'管理日报',
+				keepAlive:false
+			}			
+		},		{
+			path:'/dayLogMsg',
+			name:"dayLogMsg",
+			component:() =>import ('@/view/dayLogMsg'),
+			meta:{
+				title:'管理日报',
+				keepAlive:false
+			}			
+		},			
 		// {
 		// 	path:'/User',
 		// 	name:"user",

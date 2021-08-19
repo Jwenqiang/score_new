@@ -108,3 +108,36 @@ body {
 .top .nut-swiper .nut-swiper-pagination .swiper-pagination-bullet.active{
 		background: #fff;
 }
+
+
+/* 回馈活动弹框 */
+.popup-box{background: none;}
+.hkShow{z-index: 9999;position: absolute;}
+.hkBody{width: 7.5rem;height: 7.5rem;position: fixed;left: 50%;top: -100%;margin-top: -4rem;z-index: 11;margin-left: -3.75rem;}
+.hkG{width: 100%;height: 100%;background: url(../../../public/model/xfg.png) center no-repeat;background-size: 100%;}
+.hkbj{width: 100%;height: 100vh;background-color: #000;opacity: 0.5;position: fixed;left: 0;top: 0;}
+/* 领取动画 */
+.animationCar .hk{
+	animation: over 1s 0.1s ease-in-out 1;
+}
+/* .animationCar .hkbj{display: none;} */
+@keyframes over{
+	0%{transform: scale(1);}
+	50%{transform: scale(0) translate(100%,100%);left: 100%;top: 100%;}
+	100%{transform:scale(0) translate(200%,200%);left: 200%;top: 200%;}
+}
+.giveMsg{
+	width: 7.5rem;
+	height: 8.64rem;
+	background: url(../../../public/model/giveSuc.png) center no-repeat;background-size: 5.88rem;
+	position: fixed;
+	    left: 50%;
+	    top: -100%;
+	    margin-top: -5.6rem;
+	    z-index: 99999;
+	    margin-left: -3.75rem;
+}
+.animationCar .giveMsg{
+	transition: all 0.3s ease-in-out;
+	 top: 50%;
+}

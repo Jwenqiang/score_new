@@ -81,9 +81,12 @@
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==28">
 			<img src="../assets/img/days-cj.jpg" width="100%"/>
 		</div>
-		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==31">
+		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==30">
 			<img src="../assets/static/day30.jpg" width="100%"/>
 		</div>
+		<div class="imgMsg" v-else-if="id==31">
+			<img src="../assets/img/days31.png" width="100%"/>
+		</div>		
 	</div>
 </template>
 

@@ -10,6 +10,7 @@
     "@nutui/nutui": "^2.2.15",
     "axios": "^0.21.1",
     "core-js": "^3.12.1",
+    "echarts": "^5.1.2",
     "mint-ui": "^2.2.13",
     "npm-check": "^5.9.2",
     "vconsole": "^3.5.2",

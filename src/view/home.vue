@@ -18,6 +18,15 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
+				<div  class="nut-swiper-slide gray_1" >
+					<a @click="$router.push({name:'days',params:{id:'31'}})"><img src="@/assets/img/banner1.jpg"/></a>
+				</div>
+				<div  class="nut-swiper-slide gray" >
+				    <a href="https://mp.weixin.qq.com/s/_6MjrH007sRxo8QyCuk32A"><img src="@/assets/static/banner0812.jpg"/></a>
+				</div>
+					<div  class="nut-swiper-slide gray_1" >
+					    <a @click="$router.push({name:'rules',query:{id:'20210817'}})"><img src="img/zj0817.jpg"/></a>
+					</div>
 					<div  class="nut-swiper-slide gray_1" >
 						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0803.jpg"/></a>
 					</div>
@@ -27,14 +36,8 @@
 					<div  class="nut-swiper-slide gray" >
 					    <a @click="$router.push({name:'houseList'})"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
-					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'rules',query:{id:'20210803'}})"><img src="img/zj0803.jpg"/></a>
-					</div>
-					<div  class="nut-swiper-slide gray" >
-					    <a href="https://mp.weixin.qq.com/s/_J1LfZyIcVJ_TKAZpqPPhQ"><img src="@/assets/static/banner0712.jpg"/></a>
-					</div>
 				    <div  class="nut-swiper-slide gray" >
-				        <a @click="$router.push({name:'days',params:{id:'31'}})"><img src="@/assets/static/banner0531.png"/></a>
+				        <a @click="$router.push({name:'days',params:{id:'30'}})"><img src="@/assets/static/banner0531.png"/></a>
 				    </div>
 				    <div  class="nut-swiper-slide gray_1" >
 				        <a @click="$router.push({name:'days',params:{id:'27'}})"><img src="@/assets/img/banner0222.jpg?v=1"/></a>
@@ -67,9 +70,10 @@
 			</div>
 		</div>
 		<div class="hBox">
-			<button @click="setModule(1)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框1</button>
-			<button @click="setModule(2)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框2</button>
+<!-- 			<button @click="setModule(2)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框2</button>
+			<button @click="setModule(4)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框4</button>
 			<button @click="setModule(3)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框3</button>
+			<button @click="setModule(1)" style="border: 1px solid #000;margin: 20px auto;display: block;padding: 5px 20px;">测试弹框1</button> -->
 			<div class="clear h-tip" @click="$router.push({'name':'message'})">
 				<label>消息<i v-if="msg.totalUnRead>0&&msg.totalUnRead<100">{{msg.totalUnRead}}</i><i v-else-if="msg.totalUnRead>99">99+</i></label>
 				<span v-if="msg.firstUnReadTitle">{{msg.firstUnReadTitle}}</span>
@@ -187,34 +191,16 @@
 <!-- 		<div class="fixR1" @click="$router.push({name:'vcj'})" v-if="inApp==false">
 			<img src="../assets/static/icon-rcj.png"/>
 		</div> -->
-		<!-- 回馈活动弹窗 -->
-			<div class="hkShow" :class="addCar?'animationCar':''">
+		<!-- 回馈活动弹窗 :class="addCar?'animationCar':''"-->
+			<div class="hkShow">
 				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
-				<Module :showOn="moduleNum" @changeNum="changeModule"></Module>
-				<!-- 信封 -->
-<!-- 				<div class="hkBody" :class="showOn==1?'hk':''">
-					<div class="hkG"></div>
-						<div class="hkB"></div>
-						<div class="hkMain">
-						</div>
-						<nut-luckycard
-										content="1000万" 
-										:coverImg="coverImage"
-										backgroundColor="#FF3848"
-										height="73"
-										width="166"
-										ratio="0.2"
-										@open="addMy"
-										style="color: #FFEB8B !important;font-weight: bold !important;16px"></nut-luckycard>
-				</div> -->
-				<!-- 红包 -->
-<!-- 				<div class="hkBody" :class="showOn==2?'hk':''">
-					<div class="hkG"></div>
-						<div class="hkHb"></div>
-						<div class="hkHbM">
-						</div>
-						<div class="hkHbBtn" @click="addMy"></div>
-				</div> -->
+				<Module :showOn="moduleNum" :prizeName="prizeName" @changeNum="changeModule"></Module>
+			</div>
+			<!-- 领取成功弹窗 -->
+			<div class="hkShow" :class="addCar?'animationCar':''">
+				<div class="hkbj" v-if="addCar" @click="addCar=false"></div>
+				<div class="giveMsg" @click="$router.push({'name':'myPrize'})">
+				</div>
 			</div>
 	</div>
 </template>
@@ -261,7 +247,11 @@
 				// showOn:-1,
 				// coverImage:require("../../public/model/xfImg.png"),
 				addCar:false,
-				moduleNum:-1
+				moduleNum:-1,
+				prize:"",
+				prizeName:"45元礼包",
+				runNum:Math.random(),
+				prizeId:""
 				// showNew:false
 			}
 		},
@@ -272,6 +262,7 @@
 			if(localStorage.getItem("readHome")){
 				this.readMsg=false;
 			}
+			console.log(this.runNum)
 		},
 		mounted(){
 			if(navigator.userAgent.indexOf('aplus') > -1){
@@ -299,6 +290,10 @@
 			 // setTimeout(()=>{
 				//  this.getShareCode();
 			 // },500)
+			 // 中奖查询
+			 if(this.runNum<0.45){
+				 this.getPrize()
+			 }
 		},
 		components: {
 		  Foot,
@@ -314,41 +309,76 @@
 
 		},
 		methods:{
+			// 经纪人回馈活动中奖查询
+			getPrize(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/Activity/ShowPrize?v="+Math.random()*10,
+							headers:this.header_token,
+						})
+						.then(res=>{
+							console.log(res);
+							resolve(res);
+							if(res.data.code==0&&res.data.data.code==0){
+								this.prize=res.data.data.data;
+								this.prizeId=res.data.data.data.Id;
+								if(res.data.data.data.Type==2){
+									this.prizeName=res.data.data.data.PrizeName;
+								}
+								this.setModule(res.data.data.data.Type);
+							}
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+						})
+				})
+			},
+			givePrize(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Activity/ReceivePrize",
+							headers:this.header_token,
+							data:{
+								id:this.prizeId
+							}
+						})
+						.then(res=>{
+							console.log(res);
+							if(res.data.data.code==0){
+								resolve(res);
+							}else{
+								this.$toast.text(res.data.data.msg);
+								// 新增未成功关闭弹窗
+								this.moduleNum=-1;
+							}
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+							// 新增未成功关闭弹窗
+							this.moduleNum=-1;
+						})
+				})
+			},
 			setModule(n){
 				this.moduleNum=n
 			},
-			changeModule(n){
-				if(n==1){
+			async changeModule(n){
+				await this.givePrize();
+				if(n==2){
 					setTimeout(()=>{
+						this.moduleNum=-1;
 						this.addCar=true;
-						setTimeout(()=>{
-							this.$toast.text("奖品领取成功");
-							setTimeout(()=>{
-								this.moduleNum=-1;
-								this.addCar=false;
-							},500)
-						},500)
-					},1000)
+					},1200)
 				}else if(n==3){
 					setTimeout(()=>{
+						this.moduleNum=-1;
 						this.addCar=true;
-						setTimeout(()=>{
-							this.$toast.text("奖品领取成功");
-							setTimeout(()=>{
-								this.moduleNum=-1;
-								this.addCar=false;
-							},500)
-						},500)
-					},1500)
-				}else{
-					this.addCar=true;
-					setTimeout(()=>{
-						this.$toast.text("奖品领取成功");
-						setTimeout(()=>{
-							this.moduleNum=-1;
-							this.addCar=false;
-						},500)
 					},500)
+				}else{
+					this.moduleNum=-1;
+					this.addCar=true;
 				}
 				
 			},
@@ -494,6 +524,10 @@
 				})
 			},
 			setSign(){
+				let rNum=Math.random();
+				if(rNum<0.4){
+						this.getPrize()
+				}
 				this.isShowTip=false;
 				return new Promise((resolve)=>{
 						this.$axios({
@@ -757,7 +791,7 @@ box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 
 /* 回馈活动弹框 */
 .popup-box{background: none;}
-.hkShow{z-index: 99;}
+/* .hkShow{z-index: 99;} */
 .hkBody{width: 362px;height: 363.5px;position: fixed;left: 50%;top: -100%;margin-top: -180px;margin-left: -181px;}
 .hkG{width: 100%;height: 100%;background: url(../../public/model/xfg.png) center no-repeat;background-size: 100%;}
 /* x信封 */
@@ -833,12 +867,12 @@ box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 .hk .hkHbBtn{opacity: 0;animation: fadeIn 0.5s 0.5s linear 1 forwards;z-index: 9;}
 .hk .hkHb{opacity: 0;animation: fadeInBig 0.5s 0.2s ease-in 1 forwards;}
 /*  */
-.animationCar .hk{
+/* .animationCar .hk{
 	animation: over 0.5s ease-in-out 1 forwards;
 }
 .animationCar .hkbj{display: none;}
 @keyframes over{
 	from{transform: scale(1);}
 	to{transform: scale(0);right: -375px;bottom: -400px;}
-}
+} */
 </style>

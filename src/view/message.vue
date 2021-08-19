@@ -31,10 +31,29 @@
 				<p>暂时没有消息记录哦~</p>
 			</div>			
 		</div>
+		
+		<!-- 回馈活动弹窗-->
+			<div class="hkShow">
+				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
+				<Module :showOn="moduleNum" :prizeName="prizeName" @changeNum="changeModule"></Module>
+			</div>
+			<!-- 领取成功弹窗 -->
+			<div class="hkShow" :class="addCar?'animationCar':''">
+				<div class="hkbj" v-if="addCar" @click="addCar=false"></div>
+				<div class="giveMsg" @click="$router.push({'name':'myPrize'})">
+				</div>
+			</div>
+		
 	</div>		
 </template>
 
 <script>
+	import Vue from 'vue';
+	// 京东框架2.X
+	import nutUI from '@nutui/nutui/dist/nutui.min.js';  // 加载构建后的JS
+	import '@nutui/nutui/dist/nutui.min.css';  //加载构建后的CSS
+	nutUI.install(Vue);
+	import Module from '@/components/module.vue'
 	import { Toast,Indicator } from 'mint-ui';
 	import {
 	  uToken,
@@ -48,7 +67,14 @@
 				msg:"",
 				msgTitle:"",
 				pSize:10,
-				count:0
+				count:0,
+				
+				addCar:false,
+				moduleNum:-1,
+				prize:"",
+				prizeName:"45元礼包",
+				runNum:Math.random(),
+				prizeId:""
 			}
 		},
 		watch:{
@@ -60,11 +86,89 @@
 			document.title="消息中心";
 			this.getData();
 			this.setLog();
+			
+			if(this.runNum<0.3){
+				this.getPrize()
+			}
 		},
 		components: {
-			
+			Module
 		},
 		methods:{
+			// 经纪人回馈活动中奖查询
+			getPrize(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/Activity/ShowPrize?v="+Math.random()*10,
+							headers:this.header_token,
+						})
+						.then(res=>{
+							console.log(res);
+							resolve(res);
+							if(res.data.code==0&&res.data.data.code==0){
+								this.prize=res.data.data.data;
+								this.prizeId=res.data.data.data.Id;
+								if(res.data.data.data.Type==2){
+									this.prizeName=res.data.data.data.PrizeName;
+								}
+								this.setModule(res.data.data.data.Type);
+							}
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+						})
+				})
+			},
+			givePrize(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Activity/ReceivePrize",
+							headers:this.header_token,
+							data:{
+								id:this.prizeId
+							}
+						})
+						.then(res=>{
+							console.log(res);
+							if(res.data.data.code==0){
+								resolve(res);
+							}else{
+								this.$toast.text(res.data.data.msg);
+								// 新增未成功关闭弹窗
+								this.moduleNum=-1;
+							}
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+							// 新增未成功关闭弹窗
+							this.moduleNum=-1;
+						})
+				})
+			},
+			setModule(n){
+				this.moduleNum=n
+			},
+			async changeModule(n){
+				await this.givePrize();
+				if(n==2){
+					setTimeout(()=>{
+						this.moduleNum=-1;
+						this.addCar=true;
+					},1200)
+				}else if(n==3){
+					setTimeout(()=>{
+						this.moduleNum=-1;
+						this.addCar=true;
+					},500)
+				}else{
+					this.moduleNum=-1;
+					this.addCar=true;
+				}
+				
+			},
+			
 			setLog(){
 				return new Promise((resolve)=>{
 						this.$axios({

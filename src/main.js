@@ -11,6 +11,7 @@ import store from './vuex/store'
 // 懒加载
 import VueLazyload from 'vue-lazyload'
 
+
 Vue.use(VueLazyload, {
 	 preLoad: 4,
      loading: require('./assets/img/loading.jpg'),//加载中图片，一定要有，不然会一直重复加载占位图
@@ -35,6 +36,7 @@ Vue.config.productionTip = false
 Vue.use(Mint)
 Vue.prototype.$axios=axios
 
+Vue.prototype.$bus = new Vue();
 new Vue({
 	store,
 	router,

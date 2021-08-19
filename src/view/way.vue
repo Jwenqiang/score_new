@@ -144,7 +144,7 @@
 					<div class="newM">
 						<h4>开单成交<span style="width: 1.5rem;margin-right: 0;">最高+600</span></h4>
 						<p>租房二手房成交都可获得</p>
-						<label>月任务</label><label>不限次数</label>
+						<label>月x5次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'1'}})">如何完成</mt-button>
 				</div>
@@ -172,7 +172,7 @@
 					<div class="newM">
 						<h4>获得中原好房推荐<span>+50</span></h4>
 						<p>房源被推荐为中原好房</p>
-						<label>不限次数</label>
+						<label>每日x1次</label><label>每月x3次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'1'}})">如何完成</mt-button>
 				</div>
@@ -272,10 +272,32 @@
 			
 		</div>
 		<foot tab3='1'></foot>
+		
+		<!-- 回馈活动弹窗-->
+			<div class="hkShow">
+				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
+				<Module :showOn="moduleNum" :prizeName="prizeName" @changeNum="changeModule"></Module>
+			</div>
+			<!-- 领取成功弹窗 -->
+			<div class="hkShow" :class="addCar?'animationCar':''">
+				<div class="hkbj" v-if="addCar" @click="addCar=false"></div>
+				<div class="giveMsg" @click="$router.push({'name':'myPrize'})">
+				</div>
+			</div>
+		
 	</div>
 </template>
 
 <script>
+	import Vue from 'vue';
+
+	// 京东框架2.X
+	import nutUI from '@nutui/nutui/dist/nutui.min.js';  // 加载构建后的JS
+	import '@nutui/nutui/dist/nutui.min.css';  //加载构建后的CSS
+	nutUI.install(Vue);
+	import Module from '@/components/module.vue'
+	
+	
 	import { Toast,Indicator } from 'mint-ui';
 	import {
 	  uToken,
@@ -297,7 +319,14 @@
 				task6:"",
 				task7:"",
 				task8:"",
-				nowSign:false
+				nowSign:false,
+				
+				addCar:false,
+				moduleNum:-1,
+				prize:"",
+				prizeName:"45元礼包",
+				runNum:Math.random(),
+				prizeId:""
 			}
 		},
 		mounted(){
@@ -307,11 +336,89 @@
 			if(this.$route.params.tab){
 				this.select=this.$route.params.tab;
 			}
+			if(this.runNum<0.3){
+				this.getPrize()
+			}
 		},
 		components: {
-		  Foot
+		  Foot,
+			Module
 		},
 		methods:{
+			// 经纪人回馈活动中奖查询
+			getPrize(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/Activity/ShowPrize?v="+Math.random()*10,
+							headers:this.header_token,
+						})
+						.then(res=>{
+							console.log(res);
+							resolve(res);
+							if(res.data.code==0&&res.data.data.code==0){
+								this.prize=res.data.data.data;
+								this.prizeId=res.data.data.data.Id;
+								if(res.data.data.data.Type==2){
+									this.prizeName=res.data.data.data.PrizeName;
+								}
+								this.setModule(res.data.data.data.Type);
+							}
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+						})
+				})
+			},
+			givePrize(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Activity/ReceivePrize",
+							headers:this.header_token,
+							data:{
+								id:this.prizeId
+							}
+						})
+						.then(res=>{
+							console.log(res);
+							if(res.data.data.code==0){
+								resolve(res);
+							}else{
+								this.$toast.text(res.data.data.msg);
+								// 新增未成功关闭弹窗
+								this.moduleNum=-1;
+							}
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+							// 新增未成功关闭弹窗
+							this.moduleNum=-1;
+						})
+				})
+			},
+			setModule(n){
+				this.moduleNum=n
+			},
+			async changeModule(n){
+				await this.givePrize();
+				if(n==2){
+					setTimeout(()=>{
+						this.moduleNum=-1;
+						this.addCar=true;
+					},1200)
+				}else if(n==3){
+					setTimeout(()=>{
+						this.moduleNum=-1;
+						this.addCar=true;
+					},500)
+				}else{
+					this.moduleNum=-1;
+					this.addCar=true;
+				}
+				
+			},
+			
 			getSign(){
 				return new Promise((resolve)=>{
 						this.$axios({
