@@ -53,14 +53,15 @@
 				<p>用户中心</p>
 				<div class="nineC">
 					<label @click="$router.push({name:'record'})">竞拍记录</label>
-					<label @click="$router.push({name:'cars'})">收藏夹</label>
-					<!-- <label @click="$router.push({name:'myPrize'})">我的奖品</label> -->
+					<!-- <label @click="$router.push({name:'cars'})">收藏夹</label> -->
+					<label @click="$router.push({name:'myPrize'})">我的奖品</label>
 					<label @click="$router.push({name:'message'})">消息中心</label>
+					<label @click="goDay">管理日报</label>
 				</div>
 			</div>
 			<div class="nineTop">
 				<p>分享中心</p>
-				<div class="nineC ninesC">
+				<div class="ninesC">
 					<label @click="$router.push({name:'hb',query:{id:'0'}})">名片海报</label>
 					<label @click="$router.push({name:'hbHouse',query:{jjr:jjrNum,cityName:cityName}})">房源海报</label>
 					<label @click="$router.push({name:'hb',query:{id:'2'}})">招聘海报<!-- <span v-if="showZp"></span> --><!-- <i>new</i> --></label>
@@ -280,6 +281,13 @@
 				arrVip.push('115486');
 				arrVip.push('84840');
 			},
+			goDay(){
+				if(this.userInfo.RoleName=='大战区合伙人'||'小战区合伙人'||'店董'){
+					this.$router.push({name:'dayLog'});
+				}else{
+					Toast("您没有该权限~");
+				}
+			},
 			getUser(){
 				Indicator.open();
 				return new Promise((resolve,err)=>{
@@ -406,25 +414,27 @@
 	.logOut{width: 100%;height: 1rem;line-height: 1rem;text-align: center;background-color: #fff;margin-top: 0.2rem;font-size: 0.32rem;color: #F45048;}
 	.logOut a{color: #F45048;display: block;width: 100%;font-weight: 550;}
 	.nineTop{background-color: #fff;margin-bottom: 0.2rem;}
-	.nineTop p{line-height: 0.6rem;padding-left: 0.3rem;font-size: 0.26rem;color: #999;border-bottom: 1px solid #eee;}
-	.nineC{display: flex;flex-wrap: wrap;}
-	.nineC label{height: 2.1rem;width: 2.5rem;text-align: center;padding-top: 1.2rem;font-size: 0.3rem;color: #666;position: relative;}
-	.nineC label span{width: 0.12rem;height: 0.12rem;display: block;background-color: #FF0000;position: absolute;top: 1.3rem;right: 0.45rem;border-radius: 50%;}
-	.nineC label i{position: absolute;top: 0.2rem;right: 0.35rem;color: #FF0000;font-size: 0.24rem;font-style: normal;font-weight: bold;}
-	.nineC label:first-child{background: url(../assets/img/nine-jp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.nineC label:nth-of-type(2){background: url(../assets/img/nine-sc.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;}
-	/* .nineC label:nth-of-type(2){background: url(../assets/img/nine-prize.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;} */
-	.nineC label:nth-of-type(3){background: url(../assets/img/nine-xx.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.ninesC label:first-child{background: url(../assets/img/hb-mp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.ninesC label:nth-of-type(2){background: url(../assets/img/hb-fy.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;}
-	.ninesC label:nth-of-type(3){background: url(../assets/img/hb-zp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.ninesC label:nth-of-type(4){background: url(../assets/img/hb-jr.png) center 0.4rem no-repeat;background-size: 0.65rem;border-top: 1px solid #eee;}
-	.ninesC label:nth-of-type(5){background: url(../assets/img/hb-lz.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-bottom: 0;}
-	.ninesC label:nth-of-type(6){background: url(../assets/img/hb-app.png) center 0.4rem no-repeat;background-size: 0.44rem;border-top: 1px solid #eee;}
-	.ninesC label:nth-of-type(7){background: url(../assets/img/hb-cj.png) center 0.4rem no-repeat;background-size: 0.54rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;}
-	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.64rem;border: 1px solid #eee;/* border-bottom: 0; */}
-	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.64rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;}
-	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.64rem;border-right: 1px solid #eee;width: 2.51rem;}
+	.nineTop p{line-height: 0.6rem;padding-left: 0.3rem;font-size: 0.26rem;color: #333;border-bottom: 1px solid #eee;}
+	.nineC,.ninesC{display: flex;flex-wrap: wrap;}
+	.nineC label,.ninesC label{height: 1.88rem;width: 25%;text-align: center;padding-top: 1.1rem;font-size: 0.26rem;color: #666;position: relative;}
+	.nineC label span,.ninesC label span{width: 0.12rem;height: 0.12rem;display: block;background-color: #FF0000;position: absolute;top: 1.3rem;right: 0.45rem;border-radius: 50%;}
+	.nineC label i,.ninesC label i{position: absolute;top: 0.2rem;right: 0.35rem;color: #FF0000;font-size: 0.24rem;font-style: normal;font-weight: bold;}
+	.nineC label:first-child{background: url(../assets/img/nine-jp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	/* .nineC label:nth-of-type(2){background: url(../assets/img/nine-sc.png) center 0.4rem no-repeat;background-size: 0.48rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;} */
+	.nineC label:nth-of-type(2){background: url(../assets/img/nine-prize.png) center 0.4rem no-repeat;background-size: 0.48rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;}
+	.nineC label:nth-of-type(3){background: url(../assets/img/nine-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;border-right: 1px solid #eee;}
+	.nineC label:nth-of-type(4){background: url(../assets/img/nine-rb.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label{border:  1px solid #eee;border-top: 0;border-left: 0;}
+	.ninesC label:first-child{background: url(../assets/img/hb-mp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(2){background: url(../assets/img/hb-fy.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(3){background: url(../assets/img/hb-zp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(4){background: url(../assets/img/hb-jr.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(5){background: url(../assets/img/hb-lz.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(6){background: url(../assets/img/hb-app.png) center 0.4rem no-repeat;background-size: 0.34rem;}
+	.ninesC label:nth-of-type(7){background: url(../assets/img/hb-cj.png) center 0.4rem no-repeat;background-size: 0.44rem;}
+	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;}
 	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
 	.miContent{padding: 0.3rem;}

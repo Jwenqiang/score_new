@@ -1,43 +1,22 @@
 <template>
 	<div class="dayLog">
-		<div class="dayList" :class="item.show?'all':'aa'" v-for="item in listArr">
-			<div @click="item.show=true">
-				<h4>2021年08月11日管理日报<label>09:29</label></h4>
-				<p class="dayMsg">早晨1网络管理日报已生成，点击查看哦</p>
+		<template v-if=""></template>
+		<div class="dayList" :class="item.show?'all':'aa'" v-for="item in listArr" :key="item.DailyDate">
+			<div @click="showChild(item)">
+				<h4>【{{item.DailyDate}}】管理日报<!-- <label>09:29</label> --></h4>
+				<p class="dayMsg">早晨！网络管理日报已生成，点击查看哦</p>
 			</div>
 			<div class="sday" v-if="item.show">
-				<div class="dayChild" @click="$router.push({name:'dayLogMsg',query:{id:1}})">
-					<label>星海名城店</label>
-				</div>
-				<div class="dayChild">
-					<label>前海公馆店</label>
-				</div>
-				<div class="dayChild">
-					<label>国贸前进店</label>
+				<div class="listBox" v-for="citem in item.EmpDeptments">
+					<div class="dayChild" @click="$router.push({name:'dayLogMsg',params:{date:item.DailyDate,id:citem.DeptId}})">
+						<label>{{citem.DeptName}}</label>
+					</div>
 				</div>
 				<div class="sUp" @click="item.show=false"> —— 收起 —— </div>
 			</div>
 		</div>
-<!-- 		<div class="dayList" :class="showAll?'all':'aa'">
-			<div @click="showAll=true">
-				<h4>2021年08月11日管理日报<label>09:29</label></h4>
-				<p class="dayMsg">早晨1网络管理日报已生成，点击查看哦</p>
-			</div>
-			<div class="sday" v-if="showAll">
-				<div class="dayChild">
-					<label>星海名城店</label>
-				</div>
-				<div class="dayChild">
-					<label>前海公馆店</label>
-				</div>
-				<div class="dayChild">
-					<label>国贸前进店</label>
-				</div>
-				<div class="sUp" @click="showAll=false"> —— 收起 —— </div>
-			</div>
-		</div> -->
-		
-		
+		<p class="noList" @click="pSize+=10" v-if="count>pSize">正在加载</p>
+		<p class="noList" v-else-if="count<=pSize&&loadOver"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
 	</div>		
 </template>
 
@@ -58,24 +37,64 @@
 			return{
 				header_token:{"token": uToken()},
 				showAll:false,
-				listArr:[{id:1,val:'ssss',show:false},{id:2,val:'aaa',show:false}]
+				listArr:[],
+				pSize:10,
+				count:0,
+				loadOver:false,
+				load:false,
+				scrollTop:0,
 			}
 		},
 		watch:{
+			scrollTop(newValue, oldValue) {//滚动分页
+				var height = document.getElementsByClassName('earnAll')[0].scrollHeight;
+				let sTop = document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;//滚动的高度
+				let clientHeight=window.screen.height;//屏幕的高度
+				if(this.count>this.pSize){
+					if(sTop>0){
+						if(height-100<sTop+clientHeight&&this.load){
+							  // console.log('监听成功','到达底部')
+							if(this.pSize<this.count){
+								this.pSize=Number(this.pSize)+10; 
+							}
+							setTimeout(()=>{
+								this.loadOver=true
+							},1000)
+						 }
+					 }
+				}else{
+					setTimeout(()=>{
+						this.loadOver=true
+					},1000)
+				}
+			},
 		},
 		mounted(){
 			document.title="管理日报";
+			// 全局绑定滚动事件，
+			window.addEventListener("scroll", this.scrollT);
 			this.getData();
+		},
+		beforeDestroy() {
+			// 组件消失，解绑scroll事件
+			window.removeEventListener("scroll", this.scrollT);
 		},
 		components: {
 		},
 		methods:{
+			scrollT(){
+				this.scrollTop = window.scrollY;
+			},
+			showChild(v){
+				this.$set(v,'show',true);
+			},
 			getData(){
 				Indicator.open();
+				this.load=false;
 				return new Promise((resolve)=>{
 					this.$axios({
 						method:"get",
-						url:"/Message/GetList",
+						url:"/ManagerDaily/GetEmpDailyList",
 						headers:this.header_token,
 						params:{
 							PageSize:this.pSize,
@@ -85,12 +104,16 @@
 						this.ready=true;
 						console.log(res);
 						Indicator.close();
+						
 						if(res.data.code==0){
-							this.msg=res.data.data.DataList;
-							this.count=res.data.data.RecordCount;
+							if(res.data.data.IsManager){
+								this.listArr=res.data.data.EmpDailys;
+								this.count=res.data.data.EmpDailyCount;
+							}
 						}else{
 							Toast(res.data.msg);
 						}
+						this.load=true;
 					})
 					.catch(error=>{
 						this.ready=true;
@@ -146,6 +169,14 @@
 				border-top: 1px solid #eee;
 			}
 			.sUp{text-align: center;color: #999;border-top: 1px solid #eee;padding: 0.3rem 0;}
+			.listBox{
+				max-height: 4rem;
+				overflow: auto;
+			}
+		}
+		.noList{
+			color: #ccc;font-size: 0.26rem;text-align: center;margin-top: 0.8rem;
+			span{display: inline-block;height: 1px;width: 2rem;background-color: #eee;position: relative;top: -3px;}
 		}
 		.all{
 			height: auto;

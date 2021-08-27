@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="imgMsg" v-if="id==1">
-			<img src="../assets/img/good1.png" width="100%"/>
+			<img src="../assets/img/good1.png?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==2">
 			<img src="../assets/img/good2.png" width="100%"/>

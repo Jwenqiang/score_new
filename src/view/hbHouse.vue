@@ -137,10 +137,10 @@
             label: 'zh',
             value: '珠海',
           },
-          {
-            label: 'dg',
-            value: '东莞',
-          }
+          // {
+          //   label: 'dg',
+          //   value: '东莞',
+          // }
         ],
       ]
 			}
@@ -183,11 +183,19 @@
 				return p+"元/㎡";
 			},
 			changeImg(n){
-				let v=n.split('.jpg')[0];
-				return v+'_300x210_w.jpg';
+				if(n.indexOf('.jpg')>-1){
+					let v=n.split('.jpg')[0];
+					return v+'_300x210_w.jpg';
+				}else{
+					let v=n.split('.png')[0];
+					return v+'_300x210_w.png';
+				}
 			}
 		},
 		watch:{
+			cityName(){
+				this.search();
+			},
 			scrollTop(newValue, oldValue) {//滚动分页
 			console.log(newValue)
 				var height = document.getElementsByClassName('earnAll')[0].scrollHeight;
@@ -281,14 +289,14 @@
 				if(this.hType=='S'){
 					this.$router.push({name:'hh',query:{adsNo:id,empNo:num}})
 				}else{
-					this.$router.push({name:'h5New',query:{extId:id,empNo:num}})
+					this.$router.push({name:'h5New',query:{extId:id,empNo:num,cityen:this.cityen}})
 				}
 			},
 			goHb(type,id,pId){
 				if(type==1){
 					this.$router.push({name:'hb',query:{id:1,adsNo:id,postId:pId}})
 				}else{
-					this.$router.push({name:'hb',query:{id:6,estExtId:id}})
+					this.$router.push({name:'hb',query:{id:6,estExtId:id,cityen:this.cityen}})
 				}
 			},
 			getTags(){
@@ -472,7 +480,8 @@
 	.hbh .earnAll{padding: 1.2rem 0.34rem 1rem;min-height: 100vh;}
 	.hbh .earnAll .jjrSection{margin: 0.3rem 0;}
 	.jjrL{padding: 0.3rem 0.2rem;background-color: #fff;margin-bottom: 0.3rem;box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);border-radius: 0.1rem;}
-	.jrl{width: 2.4rem;float: left;margin-right: 0.2rem;height: 1.8rem;overflow: hidden;position: relative;}
+	.jrl{width: 2.4rem;float: left;margin-right: 0.2rem;height: 1.8rem;overflow: hidden;position: relative;border-radius: 0.08rem;}
+	.jrl img{min-height: 100%;}
 	.nStatus{padding: 2px 0.1rem;color: #fff;background-color: #F3240A;position: absolute;left: 0;top: 0;font-size: 0.24rem;}
 	.jrr{float: left;width: 3.82rem;}
 	.jrr h4{

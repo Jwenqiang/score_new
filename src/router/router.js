@@ -371,6 +371,15 @@ var router = new Router({
 			}			
 		},
 		{
+			path:'/callM',
+			name:"callM",
+			component:() =>import ('@/view/callM'),
+			meta:{
+				title:'拨打电话',
+				keepAlive:false
+			}			
+		},
+		{
 			path:'/custom',
 			name:"custom",
 			component:() =>import ('@/view/custom'),
@@ -424,7 +433,7 @@ var router = new Router({
 				keepAlive:false
 			}			
 		},		{
-			path:'/dayLogMsg',
+			path:'/dayLogMsg/:date/:id',
 			name:"dayLogMsg",
 			component:() =>import ('@/view/dayLogMsg'),
 			meta:{
@@ -464,7 +473,7 @@ if(u.indexOf('aplus') < 0){
 		}
 		if(to.name == 'error'){
 			 next(); // 跳转
-		}else if(to.name == 'days'||to.name == 'hh'||to.name == 'h5New'||to.name == 'school'||to.name == 'schoolAll'||to.name == 'call'||to.name == 'zxInfo'||to.name == 'rules'||to.name == 'rulesAll'){
+		}else if(to.name == 'days'||to.name == 'hh'||to.name == 'h5New'||to.name == 'school'||to.name == 'schoolAll'||to.name == 'call'||to.name == 'callM'||to.name == 'zxInfo'||to.name == 'rules'||to.name == 'rulesAll'){
 			 next(); // 跳转
 		}else if (!token && to.name !== LOGIN_PAGE_NAME) {
 		  // 未登录且要跳转的页面不是登录页  并且不是查看头像审核页

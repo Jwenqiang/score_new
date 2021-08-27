@@ -4,7 +4,7 @@
 			<label class="weekRules" @click="showRules=true"></label>
 		</div>
 		<div class="houseT">
-			<form action="" v-on:submit.prevent="noPush"><mt-search placeholder="请输入中原编码查找房源" @keyup.enter.native="search" v-model="adsNo"></mt-search></form>
+			<form action="" v-on:submit.prevent="noPush"><mt-search placeholder="请输入中原编码或标题/小区名查找房源" @keyup.enter.native="search" v-model="adsNo"></mt-search></form>
 		</div>
 		<mt-loadmore :top-method="loadTop" ref="loadmore">
 		<div class="earnAll">
@@ -86,7 +86,7 @@
 				</div>
 			</div>
 			<div class="bTip">
-				<p v-if="currentNum>0">当前广告位已有<span>{{currentNum}}</span>人出价，最高价为<span>{{nowNum}}</span>元宝。</p>
+				<p v-if="currentNum>0">该广告位已有<span>{{currentNum}}</span>人出价，最高为<span>{{nowNum}}</span>元宝，<template v-if="myCurrentYb>0">我的出价<span>{{myCurrentYb}}</span>元宝。</template> <template v-else><span>我暂未出价</span>。</template></p>
 				<p v-else>当前广告位暂无经纪人出价，赶快出价吧~</p>
 				<p>出价越高成功竞拍的机会越大，竞拍不成功所耗元宝将退回账户</p>
 			</div>
@@ -272,7 +272,8 @@
 				prize:"",
 				prizeName:"45元礼包",
 				runNum:Math.random(),
-				prizeId:""
+				prizeId:"",
+				myCurrentYb:""
 			}
 		},
 		mounted(){
@@ -631,6 +632,7 @@
 							console.log(res);
 							if(res.data.code==0){
 								this.currentNum=res.data.data.count;
+								this.myCurrentYb=res.data.data.currentYuanBaoMy;
 								this.isWeek=res.data.data.weekCoplete;
 								if(res.data.data.currentYuanBao>0){
 									this.nowNum=res.data.data.currentYuanBao;
@@ -783,6 +785,7 @@
 			closeModul(){
 				this.showModel=false;
 			},
+			// 我的房源
 			getHouse(){
 				this.allLoaded=false
 				this.load=false;
@@ -932,6 +935,9 @@
 								if(res.data.data.ZyHouseOutputDto){
 									this.house=[res.data.data];
 									this.count=1;
+								}else if(res.data.data.list){
+									this.house=res.data.data.list;
+									this.count=res.data.data.count;
 								}else{
 									Toast("未找到该房源编码对应房源");
 								}

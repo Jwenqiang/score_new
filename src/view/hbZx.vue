@@ -332,7 +332,7 @@
 		margin-right: 0.8rem;
 		width:1.2rem;
 		height:0.52rem;
-		line-height: 0.52rem;
+		line-height: 0.46rem;
 		background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);
 		border-radius:0.4rem;
 		font-size: 0.28rem;

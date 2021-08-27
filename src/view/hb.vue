@@ -84,19 +84,20 @@
 						</li>
 					</template>
 				</ul>
+				<!-- hbList.length==0&& -->
 				<div class="hbNone" v-else-if="hbList.length==0&&ready">
 					<p>免费领专属海报模板</p>
-					<div class="clear nhb" ref="nHb" v-if="newHb.Name">
-						<label>
-							<img :src="newHb.DisplaySmallImagePath" width="100%" />
-						</label>
-						<div class="nhbR">
-							<h5>最新{{hbName}}上线</h5>
-							<p>{{newHb.Name}}设计风格</p>
-						</div>
-						<button @click="getShopList()">立即领取</button>
-						<span class="nhbClose" @click="$refs.nHb.remove()"></span>
+				</div>
+				<div class="clear nhb" ref="nHb" v-if="newHb&&newHb.Name">
+					<label>
+						<img :src="newHb.DisplaySmallImagePath" width="100%" />
+					</label>
+					<div class="nhbR">
+						<h5>最新{{hbName}}上线</h5>
+						<p>{{newHb.Name}}设计风格</p>
 					</div>
+					<button @click="getShopList()">立即领取</button>
+					<span class="nhbClose" @click="$refs.nHb.remove()"></span>
 				</div>
 			</div>
 			<!-- 商城 -->
@@ -493,6 +494,7 @@
 				this.getHbList();
 			}
 			window.callback = this.callback;
+			this.getNewHb();
 		},
 
 		watch: {
@@ -549,7 +551,7 @@
 		methods: {
 			goBigHb(MyTemplateId, TemplateName, TemplateId) {
 				console.log(TemplateId)
-				if (TemplateId == 110 || TemplateId == 111 || TemplateId == 118 || TemplateId == 114) {
+				if (TemplateId == 110 || TemplateId == 111 || TemplateId == 118 || TemplateId == 114 || TemplateId == 134|| TemplateId == 135|| TemplateId == 136) {
 					this.showTag = true;
 				} else {
 					this.showTag = false;
@@ -655,13 +657,14 @@
 							url: "/ZhongyuanHouseV2/GetCcesNewPropExtInfoRequest",
 							params: {
 								estExtId: this.$route.query.estExtId,
-								empNo: ""
+								empNo: "",
+								cityen:this.$route.query.cityen
 							}
 						})
 						.then(res => {
 							console.log(res);
 							if (res.data.code == 0) {
-								if (res.data.data.NewPropImgs && res.data.data.NewPropImgs.length > 0) {
+								if (res.data.data&&res.data.data.NewPropImgs && res.data.data.NewPropImgs.length > 0) {
 									this.imgArrDy = res.data.data.NewPropImgs;
 									this.tempArr = this.imgArrDy.concat(this.imgArrHx);
 									this.ershouImg = this.tempArr[0].DefaultImage;
@@ -685,6 +688,7 @@
 						url: "/ZhongyuanHouseV2/GetCcesHouseTypesRequest",
 						params: {
 							estExtId: this.$route.query.estExtId,
+							cityen:this.$route.query.cityen
 						},
 					})
 					.then(res => {
@@ -811,9 +815,9 @@
 									this.hbList = list;
 									console.log(this.hbList);
 								}
-								if (res.data.data.DataList.length == 0) {
-									this.getNewHb();
-								}
+								// if (res.data.data.DataList.length == 0) {
+								// 	this.getNewHb();
+								// }
 							} else {
 								this.$toast.text(res.data.msg);
 								if (res.data.code == 500) {
@@ -990,7 +994,8 @@
 								tradeType: this.cjWy,
 								DisplayImagePath: this.ershouImg,
 								articlesId: Number(this.zxId) || 0,
-								FeatureName: tag
+								FeatureName: tag,
+								cityen:this.$route.query.cityen
 							}
 						})
 						.then(res => {
@@ -1177,10 +1182,12 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		padding: 0 0.3rem;
+		padding-bottom: 2rem;
 	}
 
 	.clist li {
 		width: 2.16rem;
+		/* height: 4.68rem; */
 		text-align: center;
 		position: relative;
 		margin-bottom: 0.3rem;
@@ -1339,13 +1346,14 @@
 		text-align: center;
 		font-size: 0.28rem;
 		color: #666;
+		z-index: 9;
 	}
 
 	.nhb {
 		height: 2rem;
 		width: 100%;
-		position: absolute;
-		bottom: 1.4rem;
+		position: fixed;
+		bottom: 0;
 		left: 0;
 		padding: 0.26rem 0.39rem;
 		background-color: #fff;
@@ -1357,6 +1365,7 @@
 		display: inline-block;
 		height: 1.48rem;
 		overflow: hidden;
+		border-radius: 0.06rem;
 	}
 
 	.nhbR {

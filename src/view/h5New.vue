@@ -12,15 +12,18 @@
 		</div>
 		<div class="top">
 			<mt-swipe :auto="0" :showIndicators="false" @change="handleChange">
-				<template>
+				<template v-if="$route.query.cityen=='sz'">
 					<mt-swipe-item v-for="(item,index) in imgArr" :key="index"><img :src="item.FullImagePath | changeImgBan" preview="1"/></mt-swipe-item>
+				</template>
+				<template v-else>
+					<mt-swipe-item v-for="(item,index) in imgArr" :key="index"><img :src="item.FullImagePath" preview="1"/></mt-swipe-item>
 				</template>
 			</mt-swipe>
 			<label class="idxTag" v-if="imgArr.length>0">{{aIdx}}/{{imgArr.length}}</label>
 		</div>
 		<div class="top1">
 			<div class="topTag" v-if="house.EstType"><label class="mTag" v-if="house.EstType">{{house.EstType}}</label><label v-if="house.Features.split('、')[0]">{{house.Features.split('、')[0]}}</label><label v-if="house.Features.split('、')[1]">{{house.Features.split('、')[1]}}</label><label v-if="house.Features.split('、')[2]">{{house.Features.split('、')[2]}}</label><label v-if="house.Features.split('、')[3]">{{house.Features.split('、')[3]}}</label></div>
-			<h3>{{house.AdName}}<span style="font-weight: 400;font-size: 0.32rem;" v-if="house.KeepRecordName">（{{house.KeepRecordName}}）</span><i style="background-color: #ddd;" v-else>{{house.ExtStatus}}</i><label style="background-color: #ddd;" v-if="house.ExtStatus=='售罄'">{{house.ExtStatus}}</label><label v-else>{{house.ExtStatus}}</label></h3>
+			<h3>{{house.AdName}}<span style="font-weight: 400;font-size: 0.32rem;" v-if="house.KeepRecordName">（{{house.KeepRecordName}}）</span><label style="background-color: #ddd;" v-if="house.ExtStatus=='售罄'">{{house.ExtStatus}}</label><label v-else>{{house.ExtStatus}}</label></h3>
 			<div class="topPrice">
 				<div class="topPl">
 					<p>均价 <strong v-if="house.AveragePrice>0">{{house.AveragePrice}}元/平</strong><strong v-else>待定</strong></p>
@@ -73,7 +76,7 @@
 				</template>
 			</div> -->
 		</div>
-		<div class="top3" v-if="cp.PingCeCount>0">
+		<div class="top3" v-if="cp&&cp.PingCeCount>0">
 			<h5>测评报告</h5>
 			<div class="t3Cp">
 				<a :href="'http://esf.centanet.com/tools/newprop/assess/?id='+house.InfoId+'&cityen=sz&type=evaluate'">
@@ -265,12 +268,23 @@
 				return new Date(y).getFullYear()+'-'+m+"-"+d;
 			},
 			changeImg(n){
-				let v=n.split('.jpg')[0];
-				return v+'_300x210_w.jpg';
+				if(n.indexOf('.jpg')>-1){
+					let v=n.split('.jpg')[0];
+					return v+'_300x210_w.jpg';
+				}else{
+					let v=n.split('.png')[0];
+					return v+'_300x210_w.png';
+				}
 			},
 			changeImgBan(n){
-				let v=n.split('.jpg')[0];
-				return v+'_750x500_w.jpg';
+				if(n.indexOf('.jpg')>-1){
+					let v=n.split('.jpg')[0];
+					return v+'_750x500_w.jpg';
+				}else{
+					let v=n.split('.png')[0];
+					return v+'_750x500_w.png';
+				}
+				
 			}
 		},
 		methods:{
@@ -362,6 +376,7 @@
 					url:"/ZhongyuanHouseV2/GetCcesNewPropInfosRequest",
 					params:{
 						estExtId:this.houseId,
+						cityen:this.$route.query.cityen||'sz'
 					},
 				})
 				.then(res=>{
@@ -375,6 +390,7 @@
 					url:"/ZhongyuanHouseV2/GetCcesHouseTypesRequest",
 					params:{
 						estExtId:this.houseId,
+						cityen:this.$route.query.cityen||'sz'
 					},
 				})
 				.then(res=>{
@@ -464,7 +480,8 @@
 							url:"/ZhongyuanHouseV2/GetCcesNewPropExtInfoRequest",
 							params:{
 								estExtId:this.houseId,
-								empNo:this.empNo
+								empNo:this.empNo,
+								cityen:this.$route.query.cityen||'sz'
 							}
 						})
 						.then(res=>{
@@ -630,7 +647,7 @@
 	  }
 	.hh{ background: #F3F6F8;padding-bottom: 1.6rem;}
 	.hh .top{margin-top: 1.2rem;position: relative;overflow: hidden;}
-	.hh .top img{display: block;width: 100%;}
+	.hh .top img{display: block;width: 100%;min-height: 5rem;}
 	.idxTag{padding: 2px 0.2rem;background-color: #000;opacity: 0.6;border-radius: 0.3rem;position: absolute;right: 0.2rem;bottom: 0.2rem;color: #fff;font-size: 0.2rem;}
 	.top,.swiper-warp{height: 5rem;width: 100%;}
 	.top1{padding: 0.3rem;background-color: #fff;margin-bottom: 0.2rem;}
@@ -639,7 +656,7 @@
 	.topTag label.mTag{background: #FF2D19;color: #fff;}
 	.top1 h3{font-size: 0.38rem;margin-bottom: 0.3rem;font-weight: 550;color: #333;}
 	.top1 h3 i{font-size: 0.2rem;font-style: normal;padding: 2px 0.1rem;background-color: #03a9f4;color: #fff;border-radius: 4px;margin-left: 0.2rem;}
-	.top1 h3 label{font-size: 0.22rem;padding: 2px 0.1rem;background-color: #00BCD4;font-weight: 400;color: #fff;border-radius: 0.06rem;}
+	.top1 h3 label{display: inline-block;font-size: 0.22rem;padding: 2px 0.1rem;background-color: #00BCD4;font-weight: 400;color: #fff;border-radius: 0.06rem;}
 	.topPrice{display: flex;justify-content: space-between;}
 	.topPrice .topPl{width: 60%;}
 	.topPrice .topPr{width: 40%;}

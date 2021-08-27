@@ -18,6 +18,7 @@
 					<img src="model/p-cdb.png" width="100%" v-else-if="item.PrizeId==10"/>
 					<img src="model/p-20.png" width="100%" v-else-if="item.PrizeId==11"/>
 					<img src="model/p-50.png" width="100%" v-else-if="item.PrizeId==12"/>
+					<img src="model/p-200.png" width="100%" v-else-if="item.PrizeId==13"/>
 				</label>
 				<div>
 					<h4>{{item.PrizeName}}</h4>

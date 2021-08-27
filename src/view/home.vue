@@ -19,14 +19,14 @@
 					 @slideChangeEnd="handleChange"
 				>
 				<div  class="nut-swiper-slide gray_1" >
+				    <a @click="$router.push({name:'rules',query:{id:'20210824'}})"><img src="img/zj0824.jpg"/></a>
+				</div>
+				<div  class="nut-swiper-slide gray_1" >
 					<a @click="$router.push({name:'days',params:{id:'31'}})"><img src="@/assets/img/banner1.jpg"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/_6MjrH007sRxo8QyCuk32A"><img src="@/assets/static/banner0812.jpg"/></a>
 				</div>
-					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'rules',query:{id:'20210817'}})"><img src="img/zj0817.jpg"/></a>
-					</div>
 					<div  class="nut-swiper-slide gray_1" >
 						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0803.jpg"/></a>
 					</div>
