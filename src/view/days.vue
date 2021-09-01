@@ -54,9 +54,6 @@
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==29">
 			<img src="../assets/img/day28.png" width="100%"/>
 		</div>
-		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==30">
-			<img src="../assets/img/day31.png" width="100%"/>
-		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==21">
 			<img src="../assets/img/day-d11.jpg?v=1" width="100%"/>
 		</div>
@@ -82,7 +79,7 @@
 			<img src="../assets/img/days-cj.jpg" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==30">
-			<img src="../assets/static/day30.jpg" width="100%"/>
+			<img src="../assets/img/day30.jpg" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==31">
 			<img src="../assets/img/days31.png" width="100%"/>

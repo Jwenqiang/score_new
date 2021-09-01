@@ -1,42 +1,45 @@
 <template>
-	<div class="dayLogMsg">
+	<div class="dayLogMsg" id="screenshotsSection">
 		<div class="top">
-			<span v-if="info&&info.DailyDate">{{info.DailyDate | change}} <template v-if="info.Area5">{{info.Area3}}-{{info.Area4}}-{{info.Area5}}</template><template v-else-if="info.Area4">{{info.Area2}}-{{info.Area3}}-{{info.Area4}}</template><template v-else-if="info.Area3">{{info.Area2}}-{{info.Area3}}</template></span>
+			<span v-if="info&&info.DailyDate">{{info.DailyDate | change}} </span>
+			<div style="height: 0.3rem;"></div>
+			<span><template v-if="info.Area5">{{info.Area3}}-{{info.Area4}}-{{info.Area5}}</template><template v-else-if="info.Area4">{{info.Area2}}-{{info.Area3}}-{{info.Area4}}</template><template v-else-if="info.Area3">{{info.Area2}}-{{info.Area3}}</template></span>
 		</div>
+		<label class="export-btn" @click="showUrl" v-show="!show"></label>
 		<div class="content" v-if="ready">
 			<template v-if="info">
 			<div class="list">
 				<div class="h4">
-					—— · 经纪人数据 · ——
+					<span></span> · 经纪人数据 · <span></span>
 				</div>
 				<div class="lMsg">
 					<p><label>经纪人<span>{{info.EmpCount}}</span>人：</label><span>入职{{info.UnRunEmpCount}}人，PPSZ员工{{info.RunEmpCount}}人</span></p>
 					<p><label>质检封禁人数：</label><span>{{info.BanEmpCount}}人</span></p>
-					<p><label>人均放盘量：</label><span>{{info.EmpAvgPushCount}}个</span></p>
-					<p><label>实际放盘一盘一出量：</label><span>{{info.RealityPushCount}}个</span></p>
+					<p><label>人均放盘量：</label><span>{{info.RealityEmpAvgPushCount||'0'}}个</span></p>
+					<p><label>实际放盘一盘一出量：</label><span>{{info.RealityPushCount||'0'}}个</span></p>
 				</div>
 			</div>
 			<div class="list">
 				<div class="h4">
-					—— · 店董操作数据 · ——
+					<span></span> · 店董操作数据 · <span></span>
 				</div>
 				<div class="lMsg">
 					<p><label>好房推荐率：</label><span>{{info.RecommendCount}}</span></p>
-					<p><label>网络查看次数：</label><span>{{info.LoginInCount}}人</span></p>
+					<p><label>网络查看次数：</label><span>{{info.LoginInCount}}次</span></p>
 				</div>
 			</div>
 			<div class="list">
 				<div class="h4">
-					—— · App推广数据 · ——
+					<span></span> · App推广数据 · <span></span>
 				</div>
 				<div class="lMsg">
 					<p><label>新用户数：</label><span>{{info.NewUserCount}}个</span></p>
-					<p><label>本月累计新用户总数：</label><span>{{info.NewUserAllCount}}人</span></p>
+					<p><label>本月累计新用户总数：</label><span>{{info.NewUserAllCount}}个</span></p>
 				</div>
 			</div>
 			<div class="list">
 				<div class="h4">
-					—— · 成长系统数据 · ——
+					<span></span> · 成长系统数据 · <span></span>
 				</div>
 				<div class="lMsg">
 					<p class="half"><strong><label>首页广告位：</label><span>{{info.CompeteHomeCount}}个</span></strong><strong><label>区域广告位：</label><span>{{info.CompeteAreaCount}}个</span></strong> </p>
@@ -56,7 +59,7 @@
 			</div>
 			<div class="list">
 				<div class="h4">
-					—— · 进线及服务数据 · ——
+					<span></span> · 进线及服务数据 · <span></span>
 				</div>
 				<h4 style="padding-top: 0.4rem;">400进线服务</h4>
 				<div class="lMsg" id="callMsg">
@@ -73,10 +76,26 @@
 				
 			</div>
 		</div>
+		
+		<!-- 隐藏该链接 -->
+		<a
+		  id="exportImgLink"
+		  class="export-img-link"
+		  :download="exportName + '.png'"
+			style="display: none;"
+		>
+		  <img id="exportImg" class="export-img" alt="cavas图" />
+		</a>
+		
+		<div id="html" style="display: none;"></div>
+		<nut-popup :style="{ width: '90%' }" v-model="show">
+			<img :src="htmlUrl" alt="管理日报长图" width="100%" style="display: block;" @click="share"/>
+		</nut-popup>
 	</div>		
 </template>
 
 <script>
+	import html2canvas from 'html2canvas'
 	import * as echarts from 'echarts';
 	import Vue from 'vue';
 	// 京东框架2.X
@@ -97,7 +116,13 @@
 				info:"",
 				all:"",
 				ready:false,
-				arr:[{id:'000',val:'111'},{id:'111',val:"222"}]
+				arr:[{id:'000',val:'111'},{id:'111',val:"222"}],
+				exportName:"管理日报图片",
+				htmlUrl:"",
+				show:false,
+				test:"测试2",
+				appImg:"",
+				loading:""
 			}
 		},
 		watch:{
@@ -111,11 +136,68 @@
 		},
 		mounted(){
 			document.title="管理日报";
+			window.callback = this.callback;
 			this.getData();
 		},
 		components: {
 		},
 		methods:{
+			showUrl(){
+				Indicator.open({
+					spinnerType: 'triple-bounce'
+				});
+				setTimeout(()=>{
+					Indicator.close();
+					this.show=true;
+				},800)
+			},
+			uploadImg(){
+					return new Promise((resolve)=>{
+						this.$axios({
+							method:"post",
+							url:"/Common/UploadImageBase64",
+							data:{
+								"base64Img":this.htmlUrl.split(',')[1]
+							}
+						})
+						.then(res=>{
+							console.log(res);
+							if(res.data.code==0){
+								this.appImg=res.data.url;
+								localStorage.setItem(this.$route.params.date+this.$route.params.id,res.data.url);
+							}
+						})
+						.catch(error=>{
+							Indicator.close();
+							Toast("网络错误，请稍后再试");
+						})
+					})
+			},
+			// html转图片
+			exportData() {
+				// Indicator.open({
+				// 	spinnerType: 'triple-bounce'
+				// });
+			  html2canvas(document.querySelector('#screenshotsSection'), {
+			    scale: 3, //放大一倍，使图像清晰一点
+			  }).then((canvas) => {
+					// Indicator.close();
+					// this.show=true;
+			    // const exportImgEle = document.querySelector('#exportImg');
+			    // const exportImgLinkEle = document.querySelector('#exportImgLink');
+			    // exportImgEle.src = canvas.toDataURL('image/png');
+			    // exportImgLinkEle.href = canvas.toDataURL('image/png');
+					this.htmlUrl=canvas.toDataURL('image/png');
+					let str=(this.$route.params.date+this.$route.params.id).toString();
+					console.log(str)
+					if(localStorage.getItem(str)){
+						this.appImg=localStorage.getItem(str)
+					}else{
+						this.uploadImg();
+					}
+			    // exportImgLinkEle.click();  // 执行 <a> 元素的下载
+			  });
+			},
 			writePic(){
 				// 基于准备好的dom，初始化echarts实例
 				var myChart = echarts.init(document.getElementById('jjr'));
@@ -149,7 +231,8 @@
 				    // },
 				    legend: {
 				        data: ['活跃百分比'],
-								icon:"circle"
+								icon:"circle",
+								bottom:"5%",
 				    },
 				    xAxis: [
 				        {
@@ -167,7 +250,7 @@
 				        {
 				            type: 'value',
 				            // min: 0,
-				            // max: 50,
+				            max: 100,
 				            // interval: 10,
 				            axisLabel: {
 				                formatter: '{value}%',
@@ -184,7 +267,7 @@
 											formatter:'{c}%',
 												show: true,
 												position: 'top',
-												color:"#000"
+												color:"#333"
 										},
 										color:"#FF3C3C",
 				            data: this.all.ActiveEmpRatios
@@ -192,11 +275,11 @@
 				    ]
 				};
 				option && myChart.setOption(option);
-						myChart.dispatchAction({
-						    type: 'showTip',
-						    seriesIndex: 0,
-						    dataIndex: 6
-						});
+						// myChart.dispatchAction({
+						//     type: 'showTip',
+						//     seriesIndex: 0,
+						//     dataIndex: 6
+						// });
 				    myChart.dispatchAction({
 				        type: 'highlight',
 				        seriesIndex: 0,
@@ -263,8 +346,16 @@
 				            type: 'value',
 				            // name: '400进线量',
 				            // min: 0,
-				            // max: 250,
-				            interval: 1,
+				            max: function (value) {
+				            	if(value.max>10){
+				            		return 25
+				            	}else if(value.max<5){
+				            		return 5;
+				            	}else{
+												return 10;
+											}
+				            },
+				            // interval: 1,
 				            axisLabel: {
 				                formatter: '{value}'
 												
@@ -274,7 +365,7 @@
 				            type: 'value',
 				            // name: '一分钟应答率',
 				            // min: 0,
-				            // max: 25,
+				            max: 100,
 				            // interval: 5,
 				            axisLabel: {
 				                formatter: '{value}%',
@@ -289,10 +380,10 @@
 										color:"#76C4FA",
 										itemStyle:{
 											normal:{
-												color:function(params){
-													var colorList=["#76C4FA","#76C4FA","#76C4FA","#76C4FA","#76C4FA","#76C4FA","#00a0fb"];
-													return colorList[params.dataIndex]
-												},
+												// color:function(params){
+												// 	var colorList=["#76C4FA","#76C4FA","#76C4FA","#76C4FA","#76C4FA","#76C4FA","#00a0fb"];
+												// 	return colorList[params.dataIndex]
+												// },
 												label: {
 														show: true,
 														position: 'inside',
@@ -300,7 +391,9 @@
 												},
 											}
 										},
-
+										labelLine: {
+											show: false
+										},
 				            data: this.all.WebWorkCounts
 				        },
 				        {
@@ -311,7 +404,7 @@
 											formatter:'{c}%',
 												show: true,
 												position: 'top',
-												color:"#000"
+												color:"#333"
 										},
 				            yAxisIndex: 1,
 				            data: this.all.WebWorkAnswerRatios
@@ -381,20 +474,29 @@
 				    yAxis: [
 				        {
 				            type: 'value',
-				            // name: '水量',
+				            // name: '微聊进线',
 				            // min: 0,
-				            // max: 250,
-				            // interval: 50,
+				            max: function (value) {
+				            	if(value.max>10){
+				            		return 25
+				            	}else if(value.max<5){
+				            		return 5;
+				            	}else{
+				            		return 10;
+				            	}
+				            },
+				            // interval: 2,
 				            axisLabel: {
 				                formatter: '{value}'
 				            }
 				        },
 				        {
 				            type: 'value',
-				            // name: '温度',
+				            // name: '一分钟应答率',
 				            // min: 0,
-				            // max: 25,
+				            max: 100,
 				            // interval: 5,
+										splitNumber:5,
 				            axisLabel: {
 				                formatter: '{value}%',
 												fontSize:10
@@ -407,10 +509,11 @@
 				            type: 'bar',
 										itemStyle:{
 											normal:{
-												color:function(params){
-													var colorList=["#7689FA","#7689FA","#7689FA","#7689FA","#7689FA","#7689FA","#4a64f9"];
-													return colorList[params.dataIndex]
-												},
+												// color:function(params){
+												// 	var colorList=["#7689FA","#7689FA","#7689FA","#7689FA","#7689FA","#7689FA","#4a64f9"];
+												// 	return colorList[params.dataIndex]
+												// },
+												color:"#7689FA",
 												label: {
 														show: true,
 														position: 'inside',
@@ -418,7 +521,10 @@
 												},
 											}
 										},
-				            data: this.all.ChatWorkCounts
+				            data: this.all.ChatWorkCounts,
+										labelLine: {
+											show: false
+										}
 				        },
 				        {
 				            name: '一分钟应答率',
@@ -427,10 +533,13 @@
 											formatter:'{c}%',
 										    show: true,
 										    position: 'top',
-												color:"#000"
+												color:"#333"
 										},
 										color:"#FF3C3C",
 				            yAxisIndex: 1,
+										labelLine: {
+											show: false
+										},
 				            data:this.all.ChatWorkAnswerRatios
 				        },
 				      //   {
@@ -466,6 +575,13 @@
 								this.writePic();
 								this.writeTwo();
 								this.writeThree();
+								setTimeout(()=>{
+									html2canvas(document.body).then(function(canvas) {
+									    document.querySelector('#html').appendChild(canvas);
+									});
+									// html转图片
+									this.exportData();
+								},1000)
 							},500)
 						}else{
 							Toast(res.data.msg);
@@ -479,6 +595,50 @@
 					})
 				})
 			},
+			
+			
+			// A+分享
+			share() {
+				if(!this.appImg){
+					this.loading = this.$toast.loading("图片处理中",{});
+					setTimeout(()=>{
+						this.loading.hide();
+						this.share();
+					},2000)
+				}else{
+					const img = this.appImg;
+					this.openShare(img)
+				}
+			},
+			
+			openShare(img) {
+				// window.callback = this.callback
+				window.location.href = "centaline:" + this.shareParams(img);
+			},
+			// A+分享回调
+			callback(item) {
+				this.test = item;
+				// window.callback = null
+			},
+			// A+分享
+			shareParams(i){
+			    var json = this.dataJson(i);
+			    var jsonData = JSON.stringify({
+			        action:"share",
+			        data:json
+			    });
+			    return encodeURIComponent(jsonData);
+			},
+			dataJson(src){
+			    return JSON.stringify({
+			            channel:["saveImage", "wxImage", "wxMomentsImage"],//["wx","wxImage","wxMomentsImage","QQ"]
+			            img:src,
+			            title:this.exportName,
+			            description:"",
+			            link:location.href
+			        });
+			},
+			
 		}
 	}	
 </script>
@@ -495,12 +655,12 @@
 			padding-top: 5rem;
 			text-align: center;
 			span{
-				padding: 0 0.4rem;
+				padding: 2px 0.4rem;
 				border: 1px solid #FF6A4E;
 				border-radius: 0.24rem;
 				background-color: #fff;
 				opacity: 0.9;
-				line-height: 0.47rem;
+				line-height: 1;
 				font-size: 0.3rem;
 				color: #382E2A;
 			}
@@ -520,6 +680,14 @@
 					color: #fff;
 					font-size: 0.32rem;
 					line-height: 1;
+					span{
+						display: inline-block;
+						height: 1px;
+						width: 0.7rem;
+						position: relative;
+						top: -0.09rem;
+						background-color: #fff;
+					}
 				}
 				.lMsg{
 					p{
@@ -555,7 +723,7 @@
 				border-radius: 0 0 0.2rem 0.2rem;
 				margin-bottom: 0.3rem;
 				p{
-					margin-bottom: 0.2rem;
+					// margin-bottom: 0.2rem;
 					padding-left: 0.2rem;
 					label{
 						color: #666;
@@ -600,6 +768,18 @@
 				background-size: 5.5rem;
 				border-radius: 0.1rem;
 			}
+		}
+		.export-btn{
+			display: block;
+			width: 1.02rem;
+			height: 1.71rem;
+			margin: 0 auto;
+			background: url(../assets/img/day-share.png) center no-repeat;
+			background-size: 100%;
+			position: fixed;
+			right: 0;
+			top: 6rem;
+			z-index: 999;
 		}
 	}
 </style>

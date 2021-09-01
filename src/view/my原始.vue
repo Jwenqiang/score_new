@@ -148,9 +148,9 @@
 <!-- 			<div class="logOut" @click="logOut">
 				退出登录
 			</div> -->
-<!-- 			<div class="logOut" v-if="hasTest">
+			<div class="logOut" v-if="hasTest">
 				<a href="https://sz.centanet.com/partner/house/test/aplus/">成长系统新功能测试</a>
-			</div> -->
+			</div>
 		</div>
 		<foot tab4='1'></foot>	
 	</div>
@@ -233,52 +233,10 @@
 		methods:{
 			vip(){
 				var arrVip=this.empArr;
-				// arrVip.push('103524');
-				arrVip.push('55558');
-				arrVip.push('135355');
-				arrVip.push('59440');
-				arrVip.push('76183');
-				arrVip.push('112261');
 				arrVip.push('121728');
-				arrVip.push('133233');
-				arrVip.push('120561');
-				arrVip.push('121331');
-				arrVip.push('121325');
-				arrVip.push('114053');
-				arrVip.push('115577');
-				arrVip.push('125193');
-				arrVip.push('135755');
-				arrVip.push('103138');
-				arrVip.push('135847');
-				arrVip.push('136858');
-				arrVip.push('132277');
-				arrVip.push('121774');
-				arrVip.push('69020');
-				arrVip.push('121585');
-				arrVip.push('68056');
-				arrVip.push('37074');
-				arrVip.push('136538');
-				arrVip.push('136001');
-				arrVip.push('134194');
-				arrVip.push('119141');
-				arrVip.push('90425');
-				arrVip.push('133232');
-				arrVip.push('121775');
 				arrVip.push('63119');
-				arrVip.push('130096');
-				arrVip.push('107302');
+				arrVip.push('119141');
 				arrVip.push('103524');
-				arrVip.push('131617');
-				arrVip.push('132268');
-				arrVip.push('129159');
-				arrVip.push('133234');
-				arrVip.push('121488');
-				arrVip.push('118320');
-				arrVip.push('136722');
-				arrVip.push('107977');
-				arrVip.push('104257');
-				arrVip.push('115486');
-				arrVip.push('84840');
 			},
 			getUser(){
 				Indicator.open();

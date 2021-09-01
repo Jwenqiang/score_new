@@ -31,7 +31,7 @@ import App from './App.vue'
 Vue.prototype.GLOBAL = global_;//便于全局变量访问
 axios.defaults.baseURL=global_.BASE_URL;
 // axios.defaults.baseURL = process.env.VUE_APP_URL;
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 20000;
 Vue.config.productionTip = false
 Vue.use(Mint)
 Vue.prototype.$axios=axios

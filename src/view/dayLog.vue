@@ -7,8 +7,8 @@
 				<p class="dayMsg">早晨！网络管理日报已生成，点击查看哦</p>
 			</div>
 			<div class="sday" v-if="item.show">
-				<div class="listBox" v-for="citem in item.EmpDeptments">
-					<div class="dayChild" @click="$router.push({name:'dayLogMsg',params:{date:item.DailyDate,id:citem.DeptId}})">
+				<div class="listBox">
+					<div class="dayChild" @click="$router.push({name:'dayLogMsg',params:{date:item.DailyDate,id:citem.DeptId}})" v-for="(citem,cindex) in item.EmpDeptments" :key="cindex">
 						<label>{{citem.DeptName}}</label>
 					</div>
 				</div>
@@ -47,7 +47,7 @@
 		},
 		watch:{
 			scrollTop(newValue, oldValue) {//滚动分页
-				var height = document.getElementsByClassName('earnAll')[0].scrollHeight;
+				var height = document.getElementsByClassName('dayLog')[0].scrollHeight;
 				let sTop = document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;//滚动的高度
 				let clientHeight=window.screen.height;//屏幕的高度
 				if(this.count>this.pSize){

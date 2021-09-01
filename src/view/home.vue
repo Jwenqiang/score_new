@@ -19,7 +19,10 @@
 					 @slideChangeEnd="handleChange"
 				>
 				<div  class="nut-swiper-slide gray_1" >
-				    <a @click="$router.push({name:'rules',query:{id:'20210824'}})"><img src="img/zj0824.jpg"/></a>
+				    <a href="https://mp.weixin.qq.com/s/QyndcyRE5nl7ZK_8u6kTqQ"><img src="img/banner0831.png"/></a>
+				</div>
+				<div  class="nut-swiper-slide gray_1" >
+				    <a @click="$router.push({name:'rules',query:{id:'20210831'}})"><img src="img/zj0831.jpg"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray_1" >
 					<a @click="$router.push({name:'days',params:{id:'31'}})"><img src="@/assets/img/banner1.jpg"/></a>
@@ -29,9 +32,6 @@
 				</div>
 					<div  class="nut-swiper-slide gray_1" >
 						<a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/static/banner0803.jpg"/></a>
-					</div>
-					<div  class="nut-swiper-slide gray" >
-					    <a @click="$router.push({name:'shareCenter'})"><img src="img/banner0623.png?v=1"/></a>
 					</div>
 					<div  class="nut-swiper-slide gray" >
 					    <a @click="$router.push({name:'houseList'})"><img src="@/assets/static/banner-bz.png"/></a>
