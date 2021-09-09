@@ -49,6 +49,11 @@
 			...mapActions(['isLogin','login']),//vuex里面的Action方法名  可以用this.xx直接调用
 			// 通过action登录
 			ulogin(){
+				// 神策新增自定义事件
+				this.$sensors.track('click_registration_login', {
+					type:"登录",
+					registration_login_way:"A+"
+				});
 				if(this.username==""){
 					Toast("请输入您的工号");
 					return;
@@ -72,6 +77,13 @@
 							if(res.data.code==0){
 								if(res.data.data.Token==''){
 									Toast(res.data.data.Remark);
+									// 神策新增自定义事件
+									this.$sensors.track('registration_login_result', {
+										type:"登录",
+										registration_login_way:"A+",
+										is_success:false,
+										failure_reason:res.data.data.Remark
+									});
 								}else{//登录成功
 									var storage={
 										token:res.data.data.Token,
@@ -89,6 +101,15 @@
 											this.$router.push({name:'home'})
 										},100)
 									}
+									
+									// 神策新增自定义事件
+									this.$sensors.track('login_result', {
+										type:"登录",
+										registration_login_way:"A+",
+										is_success:true,
+										failure_reason:""
+									});
+									this.$sensors.login(res.data.data.Token);
 								}
 							}else{
 								Toast(res.data.message);

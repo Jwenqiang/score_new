@@ -432,7 +432,17 @@ var router = new Router({
 				title:'管理日报',
 				keepAlive:false
 			}			
-		},		{
+		},
+		{
+			path:'/dayLogPath/:date/:id/:path',
+			name:"dayLogPath",
+			component:() =>import ('@/view/dayLogPath'),
+			meta:{
+				title:'管理日报',
+				keepAlive:false
+			}			
+		},	
+		{
 			path:'/dayLogMsg/:date/:id',
 			name:"dayLogMsg",
 			component:() =>import ('@/view/dayLogMsg'),
@@ -486,7 +496,8 @@ if(u.indexOf('aplus') < 0){
 		  // 未登陆且要跳转的页面是登录页
 		  next(); // 跳转
 		}else if (token && nowDate>endTime) {
-			localStorage.removeItem("userInfo");//防止在这里循环
+			// localStorage.removeItem("userInfo");//防止在这里循环
+			localStorage.clear();//防止在这里循环
 			var oldUrl=window.location.href;
 			sessionStorage.setItem('toName',oldUrl);
 		  // 已登录且要跳转的页面是登录页

@@ -1,27 +1,23 @@
 <template>
 	<div class="dayLog">
 		<template v-if=""></template>
-		<div class="dayList" :class="item.show?'all':'aa'" v-for="(item,idx) in listArr" :key="item.DailyDate">
-			<div @click="showChild(item)">
-				<h4>【{{item.DailyDate}}】管理日报<!-- <label>09:29</label> --></h4>
-				<p class="dayMsg">早晨！网络管理日报已生成，点击查看哦</p>
+		<div class="dayList">
+			<div @click="goMsg">
+				<p class="dayMsg">{{dptName}}管理日报</p>
 			</div>
-			<div class="sday" v-if="item.show">
+			<div class="sday">
 				<div class="listBox">
-					<!-- 店董 -->
-					<template v-if="item.DeptRank==5">
-					<div class="dayChild dayChildDpt" @click="$router.push({name:'dayLogMsg',params:{date:item.DailyDate,id:citem.DeptId}})" v-for="(citem,cindex) in item.EmpDeptments" :key="cindex">
-						<label>{{citem.DeptName}}</label>
+					<template v-if="dPath==5">
+					<div class="dayChild dayChildDpt" @click="$router.push({name:'dayLogMsg',params:{date:$route.params.date,id:item.DeptId}})"  v-for="(item,idx) in listArr" :key="item.DeptName">
+						<label>{{item.DeptName}}</label>
 					</div>
 					</template>
-					<!--  -->
 					<template v-else>
-					<div class="dayChild" @click="$router.push({name:'dayLogPath',params:{date:item.DailyDate,id:citem.DeptId,path:item.DeptRank}})" v-for="(citem,cindex) in item.EmpDeptments" :key="cindex">
-						<label>{{citem.DeptName}}</label>
+					<div class="dayChild" @click="goPath(item.DeptId)"  v-for="(item,idx) in listArr" :key="item.DeptName">
+						<label>{{item.DeptName}}</label>
 					</div>
 					</template>
 				</div>
-				<div class="sUp" @click="item.show=false"> —— 收起 —— </div>
 			</div>
 		</div>
 		<p class="noList" @click="pSize+=10" v-if="count>pSize">正在加载</p>
@@ -41,7 +37,7 @@
 	  uToken,
 	} from "@/global/token.js";
 	export default{
-		name: 'dayLog',
+		name: 'dayLogPath',
 		data(){
 			return{
 				header_token:{"token": uToken()},
@@ -52,47 +48,28 @@
 				loadOver:false,
 				load:false,
 				scrollTop:0,
+				dPath:"",
+				dptName:""
 			}
 		},
 		watch:{
-			scrollTop(newValue, oldValue) {//滚动分页
-				var height = document.getElementsByClassName('dayLog')[0].scrollHeight;
-				let sTop = document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;//滚动的高度
-				let clientHeight=window.screen.height;//屏幕的高度
-				if(this.count>this.pSize){
-					if(sTop>0){
-						if(height-100<sTop+clientHeight&&this.load){
-							  // console.log('监听成功','到达底部')
-							if(this.pSize<this.count){
-								this.pSize=Number(this.pSize)+10; 
-							}
-							setTimeout(()=>{
-								this.loadOver=true
-							},1000)
-						 }
-					 }
-				}else{
-					setTimeout(()=>{
-						this.loadOver=true
-					},1000)
-				}
-			},
+			'$route' (to, from){
+				this.getData();
+			}
 		},
 		mounted(){
-			document.title="管理日报";
-			// 全局绑定滚动事件，
-			window.addEventListener("scroll", this.scrollT);
+			document.title=`${this.$route.params.date}日报`;
 			this.getData();
 		},
-		beforeDestroy() {
-			// 组件消失，解绑scroll事件
-			window.removeEventListener("scroll", this.scrollT);
-		},
+
 		components: {
 		},
 		methods:{
-			scrollT(){
-				this.scrollTop = window.scrollY;
+			goMsg(){
+				this.$router.push({name:'dayLogMsg',params:{date:this.$route.params.date,id:this.$route.params.id}})
+			},
+			goPath(DeptId){
+				this.$router.push({name:'dayLogPath',params:{date:this.$route.params.date,id:DeptId,path:this.dPath}});
 			},
 			showChild(v){
 				this.$set(v,'show',true);
@@ -103,10 +80,11 @@
 				return new Promise((resolve)=>{
 					this.$axios({
 						method:"get",
-						url:"/ManagerDaily/GetEmpDailyList",
+						url:"/ManagerDaily/GetEmpDeptments",
 						headers:this.header_token,
 						params:{
-							PageSize:this.pSize,
+							deptId:this.$route.params.id,  
+							dailyDate:this.$route.params.date 
 						}
 					})
 					.then(res=>{
@@ -115,8 +93,9 @@
 						Indicator.close();
 						
 						if(res.data.code==0){
-								this.listArr=res.data.data.EmpDailys;
-								this.count=res.data.data.EmpDailyCount;
+								this.dptName=res.data.data.DeptName;
+								this.dPath=res.data.data.DeptRank;
+								this.listArr=res.data.data.EmpDeptments;
 						}else{
 							Toast(res.data.msg);
 						}
@@ -139,7 +118,7 @@
 		background-color: #F5F5F5;
 		min-height: 100vh;
 		.dayList{
-			padding: 0.36rem 0.3rem 0;
+			padding: 0 0.3rem;
 			background: #fff;
 			position: relative;
 			box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);
@@ -161,15 +140,15 @@
 				}
 			}
 			.dayMsg{
-				color: #999;
-				font-size: 0.28rem;
-				background: url(../assets/img/log-right.png) right center no-repeat;
-				background-size: 0.12rem;
-				margin-bottom: 0.3rem;
+				color: #333;
+				font-size: 0.34rem;
+				background: url(../assets/img/icon-log.png) right center no-repeat;
+				background-size: 0.44rem;
+				padding: 0.5rem 0;
 			}
 			.dayChild{
 				color: #666;
-				line-height: 0.9rem;
+				line-height: 1.1rem;
 				font-size: 0.3rem;
 				background: url(../assets/img/log-right.png) right center no-repeat;
 				background-size: 0.12rem;
@@ -181,8 +160,6 @@
 			}
 			.sUp{text-align: center;color: #999;border-top: 1px solid #eee;padding: 0.3rem 0;}
 			.listBox{
-				max-height: 4.1rem;
-				overflow: auto;
 			}
 		}
 		.noList{

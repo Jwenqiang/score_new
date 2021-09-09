@@ -13,6 +13,7 @@
 						<p class="massage-tip tip4" v-else-if="item.MsgTypes==4">系统通知</p>
 						<p class="massage-tip tip5" v-else-if="item.MsgTypes==5">竞拍通知</p>
 						<p class="massage-tip tip6" v-else-if="item.MsgTypes==6">福利元宝</p>
+						<p class="massage-tip tip3" v-else-if="item.MsgTypes==7">管理日报</p>
 						<h5>{{item.Title}}</h5>
 						<div class="massage-info-msg">
 							<p v-if="item.ListImageUrl"><img :src="item.ListImageUrl" width="100%"/></p>
@@ -228,6 +229,9 @@
 				}else if(type==6){
 					this.readMsg(id);
 					this.$router.push({name:"yb",params:{t:1}});
+				}else if(type==7){
+					this.readMsg(id);
+					this.$router.push({name:"dayLog"});
 				}
 				
 			},

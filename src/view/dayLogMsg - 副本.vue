@@ -6,7 +6,7 @@
 			<div class="top">
 				<span v-if="info&&info.DailyDate">{{info.DailyDate | change}} </span>
 				<div style="height: 0.2rem;"></div>
-				<span v-if="info"><template v-if="info.Area5">{{info.Area3}}-{{info.Area4}}-{{info.Area5}}</template><template v-else-if="info.Area4">{{info.Area2}}-{{info.Area3}}-{{info.Area4}}</template><template v-else-if="info.Area3">{{info.Area2}}-{{info.Area3}}</template><template v-else-if="info.Area2">{{info.Area2}}</template></span>
+				<span><template v-if="info.Area5">{{info.Area3}}-{{info.Area4}}-{{info.Area5}}</template><template v-else-if="info.Area4">{{info.Area2}}-{{info.Area3}}-{{info.Area4}}</template><template v-else-if="info.Area3">{{info.Area1}}-{{info.Area2}}-{{info.Area3}}</template><template v-else>{{info.Area1}}-{{info.Area2}}</template></span>
 			</div>
 			<!-- <label class="export-btn" @click="showUrl" v-show="!show"></label> -->
 			<div class="content" v-if="ready">
@@ -188,12 +188,15 @@
 				this.getShareLog();
 				// html转图片
 				this.exportData();
+				Indicator.open({
+					spinnerType: 'triple-bounce'
+				});
 				if(!this.htmlUrl){
 				}else{
-					// setTimeout(()=>{
-					// 	Indicator.close();
-					// 	this.show=true;
-					// },800)
+					setTimeout(()=>{
+						Indicator.close();
+						this.show=true;
+					},800)
 				}
 
 			},
@@ -210,12 +213,8 @@
 							console.log(res);
 							if(res.data.code==0){
 								this.appImg=res.data.url;
-								// localStorage.setItem(this.$route.params.date+this.$route.params.id,res.data.url);
-								// this.showBtn=true;
-								setTimeout(()=>{
-									Indicator.close();
-									this.show=true;
-								},500)
+								localStorage.setItem(this.$route.params.date+this.$route.params.id,res.data.url);
+								this.showBtn=true;
 							}
 						})
 						.catch(error=>{
@@ -229,9 +228,7 @@
 				// Indicator.open({
 				// 	spinnerType: 'triple-bounce'
 				// });
-				Indicator.open({
-					spinnerType: 'triple-bounce'
-				});
+				
 			  html2canvas(document.querySelector('#screenshotsSection'), {
 			    scale: 3, //放大一倍，使图像清晰一点
 			  }).then((canvas) => {
@@ -243,20 +240,15 @@
 			    // exportImgLinkEle.href = canvas.toDataURL('image/png');
 					this.htmlUrl=canvas.toDataURL('image/png');
 					if(!this.inApp){
-						// this.showBtn=true;
-						setTimeout(()=>{
-							Indicator.close();
-							this.show=true;
-						},500)
+						this.showBtn=true;
 					}else{
 						let str=(this.$route.params.date+this.$route.params.id).toString();
-						this.uploadImg();
-						// if(localStorage.getItem(str)){
-						// 	this.appImg=localStorage.getItem(str);
-						// 	this.showBtn=true;
-						// }else{
-						// 	this.uploadImg();
-						// }
+						if(localStorage.getItem(str)){
+							this.appImg=localStorage.getItem(str);
+							this.showBtn=true;
+						}else{
+							this.uploadImg();
+						}
 					}
 			    // exportImgLinkEle.click();  // 执行 <a> 元素的下载
 			  });
@@ -643,9 +635,6 @@
 				};
 				
 				option && myChart.setOption(option);
-				setTimeout(()=>{
-					this.showBtn=true;
-				},500)
 			},
 			getData(){
 				Indicator.open();
@@ -662,15 +651,22 @@
 					.then(res=>{
 						console.log(res);
 						if(res.data.code==0){
-							if(res.data.data){
-								this.info=res.data.data.EmpDailyManagement;
-								this.all=res.data.data;
+							this.info=res.data.data.EmpDailyManagement;
+							this.all=res.data.data;
+							setTimeout(()=>{
+								this.writePic();
+								this.writeTwo();
+								this.writeThree();
 								setTimeout(()=>{
-									this.writePic();
-									this.writeTwo();
-									this.writeThree();
-								},100)
-							}
+									// html2canvas(document.body).then(function(canvas) {
+									//     document.querySelector('#html').appendChild(canvas);
+									// });
+									// html转图片
+									if(this.inApp){
+										this.exportData();
+									}
+								},1000)
+							},500)
 						}else{
 							Toast(res.data.msg);
 						}
@@ -748,14 +744,13 @@
 			text-align: center;
 			padding: 5rem 0.2rem 0;
 			span{
-				padding: 0 0.4rem;
+				padding: 2px 0.4rem;
 				border: 1px solid #FF6A4E;
 				border-radius: 0.24rem;
 				background-color: #fff;
 				opacity: 0.9;
-				line-height: 0.38rem;
+				line-height: 1;
 				font-size: 0.3rem;
-				height: 0.42rem;
 				color: #382E2A;
 				display: inline-block;
 				max-width: 100%;

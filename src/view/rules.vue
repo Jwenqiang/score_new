@@ -66,7 +66,7 @@
 		title: "中原找房质检公告",
 		desc: '每周二不见不散',
 		link: shareLink,
-		imgUrl: "https://sz.centanet.com/partner/house/shareImg/share-zj.png"
+		imgUrl: "https://sz.centanet.com/partner/house/shareImg/share-zj.jpg"
 	};
 	import { Toast,Indicator } from 'mint-ui';
 	import {
@@ -247,8 +247,8 @@
 </script>
 
 <style lang="less" module>
-	.rules{min-height: 100vh;position: relative;background-color: #E64E4E;}
-	.top{height: 7.1rem;width: 7.5rem;background: url(../assets/img/zjTop.png) center no-repeat;background-size: 100%;}
+	.rules{min-height: 100vh;position: relative;background-color: #8cb1ff;}
+	.top{height: 7.1rem;width: 7.5rem;background: url(../assets/img/zjBanner.jpg) center no-repeat;background-size: 100%;}
 	.content{
 		padding: 0 0.3rem;
 	}

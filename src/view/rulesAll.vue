@@ -13,7 +13,7 @@
 						<th :class="$style.th5">违规内容</th>
 						<th :class="$style.th6">封号时间</th>
 					</tr>
-					<tbody>
+					<tbody style="border-bottom: 1px solid #fff;">
 						<tr v-for="item in ershouList" :key="item.EmpNo">
 							<td :class="$style.td1" v-text="item.EmpNo"></td>
 							<td>{{item.EmpCnName}}</td>
@@ -58,7 +58,7 @@
 		title: "中原找房质检违规名单",
 		desc: '每周二不见不散',
 		link: shareLink,
-		imgUrl: "https://sz.centanet.com/partner/house/shareImg/share-zj.png",
+		imgUrl: "https://sz.centanet.com/partner/house/shareImg/share-zj.jpg",
 	};
 	import { Toast,Indicator } from 'mint-ui';
 	import {
@@ -238,8 +238,8 @@
 </script>
 
 <style lang="less" module>
-.rules{min-height: 100vh;position: relative;background-color: #E64E4E;}
-.ruleC{padding: 0.7rem 0.1rem;}
+.rules{min-height: 100vh;position: relative;background-color: #e9f0ff;}
+.ruleC{padding: 0.7rem 0;}
 .section{
 	.title{
 		width: 7.5rem;
@@ -257,15 +257,23 @@
 		border-collapse:collapse;
 		text-align: center;
 		margin-bottom: 0.4rem;
-		tr{display: flex;}
+		tr{
+			display: flex;
+		&:nth-of-type(odd){
+			background-color: #e9f0ff;
+		}
+		&:nth-of-type(even){
+			background-color: #fff4eb;
+		}
+		}
 		.trh{border-radius: 0.1rem;}
-		th{color: #fff;background-color: #EC7171;flex: 1;line-height: 0.76rem;}
+		th{color: #fff;background-color: #ff6485;flex: 1;line-height: 0.76rem;}
 
 		.th5{
 			flex: 1.2;
 		}
 
-		td{font-size: 0.2rem;color: #fff;padding:0.2rem 2px;flex: 1;overflow: hidden;word-wrap:break-word;}
+		td{font-size: 0.2rem;color: #333;padding:0.2rem 2px;flex: 1;overflow: hidden;word-wrap:break-word;}
 		.td4,.td5{text-align: left;}
 		.td5{flex: 1.2;}
 	}

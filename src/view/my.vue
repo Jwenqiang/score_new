@@ -240,12 +240,13 @@
 				arrVip.push('103524');
 			},
 			goDay(){
-				Toast("近期上线，敬请期待~");
-				// if(this.userInfo.RoleName=='大战区合伙人'||this.userInfo.RoleName=='小战区合伙人'||this.userInfo.RoleName=='店董'||this.userInfo.EstateName=="网络运营部"){
-				// 	this.$router.push({name:'dayLog'});
-				// }else{
-				// 	Toast("您没有该权限~");
-				// }
+				// 0830  6896  0710  0034  2963
+				let isManger=this.userInfo.RoleName=='总经理'||this.userInfo.RoleName=='大战区合伙人'||this.userInfo.RoleName=='小战区合伙人'||this.userInfo.RoleName=='店董'||this.userInfo.EstateName=='网络运营部'||this.userInfo.EmpNo=="0830"||this.userInfo.EmpNo=="6896"||this.userInfo.EmpNo=="0710"||this.userInfo.EmpNo=="0034"||this.userInfo.EmpNo=="2963"
+				if(isManger){
+					this.$router.push({name:'dayLog'});
+				}else{
+					Toast("您没有该权限哦~");
+				}
 			},
 			getUser(){
 				Indicator.open();
