@@ -21,19 +21,19 @@
 				<div  class="nut-swiper-slide gray_1" >
 				    <a href="https://mp.weixin.qq.com/s/QyndcyRE5nl7ZK_8u6kTqQ" @click="goPage('','','一周年庆活动','1')"><img src="img/banner0831.png"/></a>
 				</div>
-				<div  class="nut-swiper-slide gray_1" >
-					<a @click="goPage('days','24','8月优秀学员名单','2')"><img src="@/assets/static/banner0901.jpg"/></a>
+				<div  class="nut-swiper-slide gray" >
+				    <a href="https://mp.weixin.qq.com/s/2pG4hrvpa8NrEdPh0B7Yhw" @click="goPage('','','网络英雄','4')"><img src="images/banner0916.png"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray_1" >
 				    <!-- <a @click="$router.push({name:'rules',query:{id:'20210831'}})"><img src="img/zj0831.jpg"/></a> -->
 				    <a @click="goPage('rules','','质检公告','3')"><img src="../assets/img/banner_zj.jpg"/></a>
 				</div>
+				<div  class="nut-swiper-slide gray_1" >
+					<a @click="goPage('days','24','8月优秀学员名单','2')"><img src="@/assets/static/banner0901.jpg"/></a>
+				</div>				
 <!-- 				<div  class="nut-swiper-slide gray_1" >
 					<a @click="$router.push({name:'days',params:{id:'31'}})" @click="goPage('days','31','质检公告')"><img src="@/assets/img/banner1.jpg"/></a>
 				</div> -->
-				<div  class="nut-swiper-slide gray" >
-				    <a href="https://mp.weixin.qq.com/s/_6MjrH007sRxo8QyCuk32A" @click="goPage('','','网络英雄','4')"><img src="@/assets/static/banner0812.jpg"/></a>
-				</div>
 					<div  class="nut-swiper-slide gray" >
 					    <a @click="goPage('houseList','','竞拍广告位','5')"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>

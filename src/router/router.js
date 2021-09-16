@@ -450,7 +450,16 @@ var router = new Router({
 				title:'管理日报',
 				keepAlive:false
 			}			
-		},			
+		},
+		{
+			path:'/morning',
+			name:"morning",
+			component:() =>import ('@/view/morning'),
+			meta:{
+				title:'早安分享',
+				keepAlive:false
+			}			
+		},				
 		// {
 		// 	path:'/User',
 		// 	name:"user",

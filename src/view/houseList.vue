@@ -33,7 +33,9 @@
 							</div>
 						</div>
 						<p class="hr1"></p>
-						<p class="dTip"><img src="../assets/img/d-tip.png"/><template v-if="item.ZyHouseOutputDto.OffLeftDays>0"><span>{{item.ZyHouseOutputDto.OffLeftDays}}</span>天后</template><template v-else><span>明天</span>会</template>被自动下架，<template v-if="item.ZyHouseOutputDto.DeleteLeftDays>0"><span>{{item.ZyHouseOutputDto.DeleteLeftDays}}</span>天后</template><template v-else><span>明天</span>会</template>被自动删除，请及时更新。</p>
+						<p class="dTip">
+							<img src="../assets/img/d-tip.png"/>房源<template v-if="item.ZyHouseOutputDto.OffLeftDays<item.ZyHouseOutputDto.DeleteLeftDays"><span>{{item.ZyHouseOutputDto.OffLeftDays}}</span>天后自动下架，</template><template v-else><span>{{item.ZyHouseOutputDto.DeleteLeftDays}}</span>天后自动删除，</template>请及时更新。
+						</p>
 					</div>
 					<p class="noList" @click="pSize+=10" v-if="count>pSize">正在加载</p>
 					<p class="noList" v-else-if="count<=pSize&&loadOver"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>

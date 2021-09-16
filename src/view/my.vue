@@ -72,6 +72,7 @@
 					<label @click="$router.push({name:'hbZx',query:{jjr:jjrNum}})">分享资讯</label>
 					<label @click="$router.push({name:'schoolList',query:{jjr:jjrNum}})">分享学校</label>
 					<label @click="$router.push({name:'hbHouseNew',query:{jjr:jjrNum}})">新盘入市</label>
+					<label @click="$router.push({name:'morning'})">早安分享</label>
 				</div>
 			</div>
 			<nut-popup v-model="show">
@@ -395,6 +396,7 @@
 	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(11){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.56rem;}
 	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;}
 	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
 	.miContent{padding: 0.3rem;}
