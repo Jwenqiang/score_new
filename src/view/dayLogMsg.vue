@@ -95,7 +95,7 @@
 					<p v-if="inApp">点击图片分享</p>
 					<p v-else>长按图片保存</p>
 					<div style="height: 93%;overflow-y: auto;">
-					<img :src="htmlUrl" alt="管理日报长图" width="100%" style="display: block;" @click="share"/>
+					<img :src="appImg" alt="管理日报长图" width="100%" style="display: block;" @click="share"/>
 					</div>
 				</div>
 				
@@ -160,6 +160,29 @@
 		components: {
 		},
 		methods:{
+			getDoLog() {
+				return new Promise((resolve) => {
+					this.$axios({
+							method: "post",
+							url: "/ManagerDaily/SetPosterGenerateLog",
+							headers: this.header_token,
+							data: {
+								empDailyId:this.info.Id,
+								source:"web"
+							}
+						})
+						.then(res => {
+							console.log(res);
+							resolve(res);
+							if (res.data.code == 0) {
+			
+							}
+						})
+						.catch(error => {
+							// this.$toast.text("网络错误，请稍后再试");
+						})
+				})
+			},
 			getShareLog(id) {
 				return new Promise((resolve) => {
 					this.$axios({
@@ -184,8 +207,7 @@
 				})
 			},
 			showUrl(){
-				// 写入日志
-				this.getShareLog();
+				this.getDoLog();
 				// html转图片
 				this.exportData();
 				if(!this.htmlUrl){
@@ -211,7 +233,7 @@
 							if(res.data.code==0){
 								this.appImg=res.data.url;
 								// localStorage.setItem(this.$route.params.date+this.$route.params.id,res.data.url);
-								// this.showBtn=true;
+								this.showBtn=true;
 								setTimeout(()=>{
 									Indicator.close();
 									this.show=true;
@@ -226,6 +248,9 @@
 			},
 			// html转图片
 			exportData() {
+				var u = navigator.userAgent;
+				var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器 
+				var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 				// Indicator.open({
 				// 	spinnerType: 'triple-bounce'
 				// });
@@ -242,22 +267,22 @@
 			    // exportImgEle.src = canvas.toDataURL('image/png');
 			    // exportImgLinkEle.href = canvas.toDataURL('image/png');
 					this.htmlUrl=canvas.toDataURL('image/png');
-					if(!this.inApp){
-						// this.showBtn=true;
-						setTimeout(()=>{
-							Indicator.close();
-							this.show=true;
-						},500)
-					}else{
-						let str=(this.$route.params.date+this.$route.params.id).toString();
-						this.uploadImg();
-						// if(localStorage.getItem(str)){
-						// 	this.appImg=localStorage.getItem(str);
-						// 	this.showBtn=true;
-						// }else{
-						// 	this.uploadImg();
-						// }
-					}
+					// this.htmlUrl=this.htmlUrl.replace(/(\r\n)|(\n)|(\r)/g,'');
+					// if(!this.inApp){
+					// 	// this.showBtn=true;
+					// 	setTimeout(()=>{
+					// 		Indicator.close();
+					// 		this.show=true;
+					// 		// 写入日志
+					// 		this.getShareLog();
+					// 	},500)
+					// }else{
+					// 	let str=(this.$route.params.date+this.$route.params.id).toString();
+					// 	this.uploadImg();
+					// }
+					
+					this.uploadImg();
+					
 			    // exportImgLinkEle.click();  // 执行 <a> 元素的下载
 			  });
 			},
@@ -709,6 +734,8 @@
 			// A+分享回调
 			callback(item) {
 				if(item){
+					// 写入日志
+					this.getShareLog();
 					this.show=false;
 				}
 				// window.callback = null

@@ -7,14 +7,14 @@
 						<div class="hkMain">
 						</div>
 						<nut-luckycard
-										:content="prizeName" 
-										:coverImg="coverImage"
-										backgroundColor="#FF3848"
-										height="80"
-										width="176"
-										ratio="0.3"
-										@open="changeNum"
-										style="color: #FFEB8B !important;font-weight: bold !important;16px"></nut-luckycard>
+							:content="prizeName" 
+							:coverImg="coverImage"
+							backgroundColor="#FF3848"
+							height="80"
+							width="176"
+							ratio="0.3"
+							@open="changeNum"
+							style="color: #FFEB8B !important;font-weight: bold !important;16px"></nut-luckycard>
 				</div>
 				<!-- 红包 -->
 				<div class="hkBody" :class="showOn==4?'hk':''">

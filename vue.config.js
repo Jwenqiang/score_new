@@ -4,15 +4,17 @@ module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
 	productionSourceMap:false,
   css: {
+    requireModuleExtension: true,
     loaderOptions: {
       css: {
-        // 这里的选项会传递给 css-loader
-        importLoaders: 1
-      },
-      // sass: {
-      //   prependData: `@import "./src/assets/css/base";`
-      // }    "node-sass": "^4.13.1","sass-loader": "^8.0.2",
-    
+        url: src => !src.startsWith('../images'),
+        modules: {
+          localIdentName:
+            process.env.NODE_ENV === 'development'
+              ? '[name]__[local]__[hash:base64:5]'
+              : '[sha256:hash:base64:8]'
+        }
+      }
     }
   },
   devServer: {
@@ -28,7 +30,6 @@ module.exports = {
       }
     }
   },
-
   chainWebpack: conf => {
     conf.plugin('html').tap(args => {
       args[0].version = version

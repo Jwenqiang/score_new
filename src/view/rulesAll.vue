@@ -257,6 +257,7 @@
 		border-collapse:collapse;
 		text-align: center;
 		margin-bottom: 0.4rem;
+		width: 100%;
 		tr{
 			display: flex;
 		&:nth-of-type(odd){

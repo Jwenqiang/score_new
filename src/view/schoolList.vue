@@ -211,6 +211,11 @@
 				})
 			},
 			getHouse(){
+				this.$sensors.track('sc_click_search', {
+					sc_srh_word:this.content,
+					sc_srh_house_type:"学校",
+					sc_source_page:"分享学校页"
+				});
 				this.allLoaded=false
 				this.load=false
 				Indicator.open();

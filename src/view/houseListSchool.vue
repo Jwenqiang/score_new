@@ -471,61 +471,61 @@
 				this.sName="";
 				this.getGlist();
 			},
-			getChild(v,idx){
-				if(v!=undefined){
-					this.childMsg[0]=v;
-					this.maxNum=v.MaxYuanBao;
-					this.adId=v.AdPositionId;
-				}
-				if(idx!=undefined){
-					this.on=idx;
-				}
-				this.$set(this.childMsg[0],'on',idx);
-				var adplace="";
-				if(this.type=="3"){
-					adplace=this.sHouse.RegionId
-				}else if(this.type=="4"){
-					adplace=this.sHouse.EstateCode
-				}
-				return new Promise((resolve)=>{
-						this.$axios({
-							method:"get",
-							url:"/AdPosition/GetCurrentAdData",
-							headers:this.header_token,
-							params:{
-								"AdType": this.type,
-							    "AdPositionId": this.adId,
-								"PropId":this.sHouse.PropId,
-								"AdPlace": adplace
-							}
-						})
-						.then(res=>{
-							console.log(res);
-							if(res.data.code==0){
-								this.currentNum=res.data.data.count;
-								this.myCurrentYb=res.data.data.currentYuanBaoMy;
-								if(res.data.data.currentYuanBao>0){
-									this.nowNum=res.data.data.currentYuanBao;
-									if(this.nowNum==this.maxNum){
-										this.mainNum=this.maxNum;
-									}else{
-										this.mainNum=this.nowNum+5;
-									}
-								}else{
-									this.nowNum=0;
-									this.mainNum=50;
-								}
-							}else{
-								Toast(res.data.msg);
-							}
-							Indicator.close();
-						})
-						.catch(error=>{
-							Indicator.close();
-							Toast("网络错误，请稍后再试");
-						})
-				})
-			},
+			// getChild(v,idx){
+			// 	if(v!=undefined){
+			// 		this.childMsg[0]=v;
+			// 		this.maxNum=v.MaxYuanBao;
+			// 		this.adId=v.AdPositionId;
+			// 	}
+			// 	if(idx!=undefined){
+			// 		this.on=idx;
+			// 	}
+			// 	this.$set(this.childMsg[0],'on',idx);
+			// 	var adplace="";
+			// 	if(this.type=="3"){
+			// 		adplace=this.sHouse.RegionId
+			// 	}else if(this.type=="4"){
+			// 		adplace=this.sHouse.EstateCode
+			// 	}
+			// 	return new Promise((resolve)=>{
+			// 			this.$axios({
+			// 				method:"get",
+			// 				url:"/AdPosition/GetCurrentAdData",
+			// 				headers:this.header_token,
+			// 				params:{
+			// 					"AdType": this.type,
+			// 				    "AdPositionId": this.adId,
+			// 					"PropId":this.sHouse.PropId,
+			// 					"AdPlace": adplace
+			// 				}
+			// 			})
+			// 			.then(res=>{
+			// 				console.log(res);
+			// 				if(res.data.code==0){
+			// 					this.currentNum=res.data.data.count;
+			// 					this.myCurrentYb=res.data.data.currentYuanBaoMy;
+			// 					if(res.data.data.currentYuanBao>0){
+			// 						this.nowNum=res.data.data.currentYuanBao;
+			// 						if(this.nowNum==this.maxNum){
+			// 							this.mainNum=this.maxNum;
+			// 						}else{
+			// 							this.mainNum=this.nowNum+5;
+			// 						}
+			// 					}else{
+			// 						this.nowNum=0;
+			// 						this.mainNum=50;
+			// 					}
+			// 				}else{
+			// 					Toast(res.data.msg);
+			// 				}
+			// 				Indicator.close();
+			// 			})
+			// 			.catch(error=>{
+			// 				Indicator.close();
+			// 				Toast("网络错误，请稍后再试");
+			// 			})
+			// 	})
+			// },
 			loadTop(){
 				this.pSize=10;
 				this.getSchool()
@@ -604,6 +604,7 @@
 							console.log(res);
 							if(res.data.code==0){
 								this.currentNum=res.data.data.count;
+								this.myCurrentYb=res.data.data.currentYuanBaoMy;
 								if(res.data.data.currentYuanBao>0){
 									this.nowNum=res.data.data.currentYuanBao;
 									if(this.nowNum==this.maxNum){
@@ -872,6 +873,7 @@
 								if(res.data.data.IsSuccess){
 									this.showCode=false;
 									Toast("出价成功,您将有机会竞得该位置~");
+									this.getSchoolCurrentYb();
 								}else{
 									Toast(res.data.data.Reamark);
 									this.getImgCode();
@@ -977,6 +979,13 @@
 				return false;
 			},
 			getSchool(){
+				this.$sensors.track('sc_click_search', {
+					sc_business_type:"school",
+					sc_srh_word:this.content,
+					sc_house_id:'',
+					sc_srh_type:"手动搜索",
+					sc_source_page:"首页_竞拍学校页"
+				});
 				this.allLoaded=false
 				this.load=false;
 				Indicator.open();

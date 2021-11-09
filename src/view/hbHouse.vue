@@ -378,6 +378,15 @@
 				if(n){
 					this.content=n.split("　")[0];
 				}
+				// 神策
+				let id=this.content.length>17;
+				this.$sensors.track('sc_click_search', {
+					sc_business_type:this.hType=='N'?"new_house":"second_hand_house",
+					sc_srh_word:this.content,
+					sc_house_id:id?this.content:'',
+					sc_srh_type:"手动搜索",
+					sc_source_page:"我的_房源分享页"
+				});
 				this.tagList="";
 				Indicator.open();
 				if(this.hType=='S'){
@@ -536,7 +545,11 @@
 	.searchResult li span:last-child{color: #666;width: 26%;text-align: right;}
 	.searchResult li span i{font-style: normal;color: #F3240A;}
 	
-	.hbh .hbTab{text-align: center;padding: 0.4rem 0 0;font-size: 0.32rem;color: #333;position: fixed;bottom: 0;left: 0;width: 100%;z-index: 7;}
+	.hbh .hbTab{text-align: center;padding: 0;font-size: 0.32rem;color: #333;position: fixed;bottom: 0;left: 0;width: 100%;z-index: 7;
+			padding-bottom: constant(safe-area-inset-bottom);
+			padding-bottom:env(safe-area-inset-bottom);
+			background-color: #fff;
+	}
 	.hbh .hbTab a{display: inline-block;background-color: #fff;box-shadow: 0 0 2px #ccc;}
 	.hbh .hbTab label{display: inline-block;width: 3.65rem;height: 1rem;margin: 0 0.2rem 0 0;line-height: 1rem;color: #333;font-weight: 600;}
 	.hbh .hbTab label:last-child{margin: 0;}

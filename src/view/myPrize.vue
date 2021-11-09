@@ -7,7 +7,7 @@
 			<div class="list" v-for="item in list" :key="item.Id">
 				<label>
 					<img src="model/p-mbjb.png" width="100%" v-if="item.PrizeId==1"/>
-					<img src="model/p-bz.png" width="100%" v-else-if="item.PrizeId==2"/>
+					<img src="model/p-bz.png?v=1" width="100%" v-else-if="item.PrizeId==2"/>
 					<img src="model/p-cj.png" width="100%" v-else-if="item.PrizeId==3"/>
 					<img src="model/p-dz.png" width="100%" v-else-if="item.PrizeId==4"/>
 					<img src="model/p-zjh.png" width="100%" v-else-if="item.PrizeId==5"/>

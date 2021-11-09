@@ -3,15 +3,15 @@
 		<div class="top">
 			<div class="topT">
 				<div class="label">
-					<h4>60</h4>
+					<h4>{{info.AllSignDays}}</h4>
 					<p>累计早起</p>
 				</div>
 				<div class="label">
-					<h4>25</h4>
+					<h4>{{info.ContinueSignDays}}</h4>
 					<p>连续早起</p>
 				</div>
 				<div class="label">
-					<h4>10</h4>
+					<h4>{{info.MaxSignDays}}</h4>
 					<p>最长连续</p>
 				</div>
 			</div>
@@ -22,43 +22,16 @@
 				
 				<div class="tbSign">
 					<div class="tbLine">
-						<div class="redLine"></div>
+						<div class="redLine" :style="`width: ${info.CompletionRate};`"></div>
 					</div>
 					<div class="tbIcon">
-						<label class="on">
-							<img src="images/za-0.png" />
+						<label :class="(item.Status<3||item.Days==0)?'on':''" v-for="item in arr" :key="item.Days">
+							<img src="images/za-0.png" v-if="item.Days==0"/>
+							<img src="images/za-1.png" v-else-if="item.Status==1"/>
+							<img src="images/za-2.png" v-else-if="item.Status==2" @click="getYb(item.Date,item.YuanBao)"/>
+							<img src="images/za-3.png" v-else-if="item.Status==3"/>
 							<p><span></span></p> 
-							<p>0天</p>
-						</label>
-						<label class="on">
-							<img src="images/za-1.png"/>
-							<p><span></span></p> 
-							<p>5天</p>
-						</label>
-						<label class="on">
-							<img src="images/za-2.png"/>
-							<p><span></span></p> 
-							<p>10天</p>
-						</label>
-						<label>
-							<img src="images/za-3.png"/>
-							<p><span></span></p> 
-							<p>15天</p>
-						</label>
-						<label>
-							<img src="images/za-3.png"/>
-							<p><span></span></p> 
-							<p>20天</p>
-						</label>
-						<label>
-							<img src="images/za-3.png"/>
-							<p><span></span></p> 
-							<p>25天</p>
-						</label>
-						<label>
-							<img src="images/za-3.png"/>
-							<p><span></span></p> 
-							<p>30天</p>
+							<p>{{item.Days}}天</p>
 						</label>
 					</div>
 				</div>
@@ -77,18 +50,24 @@
 			</div>
 			<div class="box-tip">
 				<p>抽海报说明：</p>
-				<p>1、每天抽取分享时间为早上4:00-08:00</p>
-				<p>2、每天首次分享得奖励</p>
+				<p>1、早安海报分享时间为早上4点-8点。</p>
+				<p>2、每天首次分享才得奖励。</p>
 			</div>
 		</div>
 		<nut-popup v-model="show" style="border-radius: 0.1rem;">
 			<div class="bigHb" v-show="showHb">
-				<p class="bigF">早安你好</p>
+				<p class="bigF">{{title}}</p>
 				<p class="bigS"><span></span> {{ inApp ? '点击图片分享' : '长按图片保存' }} <span></span></p>
 				<div class="bigHc">
-					<img src="https://sz.centanet.com/partner/jifen/My/ShowPosterTemplate?t=3e8709a5-041c-47e0-95de-252f256a8b13" width="100%" @click="share(bigImg)"/>
+					<img :src="bigImg + '&fmt=jpg'" width="100%" @click="share(bigImg)"/>
 				</div>
 				<label @click="show=false"></label>
+			</div>
+		</nut-popup>
+		<nut-popup v-model="showSuc">
+			<div class="success">
+				<p>恭喜您获得{{yb}}元宝</p>
+				<label @click="showSuc=false"></label>
 			</div>
 		</nut-popup>
 	</div>
@@ -112,19 +91,56 @@
 				show:false,
 				dh:false,
 				showHb:false,
-				bigImg:""
+				bigImg:"",
+				arr:[
+					{
+						type:1,
+						date:0,	
+					},
+					{
+						type:1,
+						date:5,	
+					},
+					{
+						type:1,
+						date:10,	
+					},
+					{
+						type:2,
+						date:15,	
+					},
+					{
+						type:3,
+						date:20,	
+					},
+					{
+						type:3,
+						date:25,	
+					},
+					{
+						type:3,
+						date:30,	
+					},
+				],
+				showSuc:false,
+				info:"",
+				yb:"",
+				title:"早安你好",
+				test:"--"
 			}
 		},
 		computed: {
 
 		},
 		created() {
-
+			document.title="早安分享";
+			window.callback = this.callback;
 		},
 		mounted(){
 			if(navigator.userAgent.indexOf('aplus') > -1){
 				this.inApp=true
 			}
+			this.getInfo();
 		},
 		components: {
 
@@ -139,8 +155,42 @@
 
 		},
 		methods:{
+			// 领取元宝
+			getYb(date,yb){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/MorningShare/ReceiveYB",
+							headers:this.header_token,
+							params:{
+								date:date
+							}
+						})
+						.then(res=>{
+							console.log(res);
+							if(res.data.code==0){
+								this.yb=yb;
+								this.showSuc=true;
+								this.info=res.data.data;
+								this.arr=res.data.data.Progress;
+							}
+							resolve(res);
+						})
+						.catch(error=>{
+							this.$toast.text("网络错误，请稍后再试");
+						})
+				})
+				
+			},
 			setImg(){
+				var time=new Date().getHours();
+				console.log(time);
+				if(time<4||time>7){
+					this.$toast.text("早安海报分享4点-8点开放");
+					return false;
+				}
 				this.dh=true;
+				this.getHb();
 				setTimeout(()=>{
 					this.show=true;
 					this.dh=false;
@@ -149,18 +199,51 @@
 					},500)
 				},1500)
 			},
-			setOld(){
+			getInfo(){
+				this.loading = this.$toast.loading("",{
+				    cover: false
+				});
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"get",
-							url:"",
+							url:"/MorningShare/GetShareInfo",
 							headers:this.header_token,
-							params:{
-								
-							}
 						})
 						.then(res=>{
 							console.log(res);
+							if(res.data.code==0){
+								this.info=res.data.data;
+								this.arr=res.data.data.Progress;
+							}
+							resolve(res);
+							setTimeout(()=>{
+								this.loading.hide();
+							},500)
+							
+						})
+						.catch(error=>{
+							setTimeout(()=>{
+								this.loading.hide();
+							},500)
+							this.$toast.text("网络错误，请稍后再试");
+						})
+				})
+			},
+			getHb(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/MorningShare/RandomPoster",
+							headers:this.header_token,
+						})
+						.then(res=>{
+							console.log(res.data);
+							if(res.data.code==0){
+								this.bigImg=res.data.data.ShareImageUrl;
+							}else{
+								this.$toast.text("图片加载失败，请稍后重试");
+							}
+							
 							resolve(res);
 						})
 						.catch(error=>{
@@ -170,9 +253,11 @@
 			},
 			// A+分享
 			share() {
-				console.log('分享')
 				const img = this.bigImg
-				this.openShare(img)
+				if(this.inApp){
+					this.openShare(img)
+				}
+				// this.setShare()
 			},
 
 			openShare(img) {
@@ -182,33 +267,35 @@
 
 			// A+分享回调
 			callback(item) {
-				this.testCall = " ";
+				setTimeout(() => {
+					this.title="早安 你好"
+					this.setShare();
+				}, 500)
 				// window.callback = null
-				if (item) {
-					setTimeout(() => {
-						this.getShareLog(item);
-					}, 500)
-				}
+				// if (item=="wxImage"||item=="wxMomentsImage") {
+				// 	setTimeout(() => {
+				// 		this.title="早安 你好"
+				// 		this.setShare();
+				// 	}, 500)
+				// }
 			},
 
-			getShareLog(shareName) {
+			setShare() {
 				return new Promise((resolve) => {
 					this.$axios({
-							method: "post",
-							url: "/Poster/PostMyTemplateShareLog",
+							method: "get",
+							url: "/MorningShare/Sign",
 							headers: this.header_token,
-							data: {
-								Id: "",
-								SharedDestination: shareName
-							}
 						})
 						.then(res => {
 							console.log(res);
 							resolve(res);
 							if (res.data.code == 0) {
-								if (res.data.data.IsSuccess) {
-								} else {
-								}
+								this.info=res.data.data;
+								this.arr=res.data.data.Progress;
+								this.$toast.text("分享成功");
+							}else{
+								this.$toast.text("早安海报分享4点-8点开放");
 							}
 						})
 						.catch(error => {
@@ -228,7 +315,7 @@
 
 			dataJson(src) {
 				return JSON.stringify({
-					channel: ["saveImage", "wxImage", "wxMomentsImage"], //["wx","wxImage","wxMomentsImage","QQ"]
+					channel: ["wxImage", "wxMomentsImage"], //["wx","wxImage","wxMomentsImage","QQ"]
 					img: src,
 					title: "",
 					description: "",
@@ -291,7 +378,7 @@
 					.redLine{
 						background-color: #FA4D32;
 						height: 100%;
-						width: 40%;
+						width: 0;
 					}
 				}
 			}
@@ -304,6 +391,7 @@
 					text-align: center;
 					img{
 						width: 0.6rem;
+						min-height: 0.6rem;
 					}
 					p{
 						color: #999;
@@ -360,7 +448,7 @@
 				width: 100%;
 				img{
 					width: 2.21rem;
-					&:active{
+					&:hover,&:active{
 						transform: translateY(3px);
 					}
 				}
@@ -380,22 +468,22 @@
 	}
 	.bigHb {
 		width: 6rem;
-		min-height: 11.2rem;
+		min-height: 11rem;
 		position: relative;
 		background: #fff url(../assets/img/pNone.png) center no-repeat;
 		background-size: 4rem;
 		padding: 0.3rem;
 		overflow: hidden;
 		animation: big ease 0.3s forwards;
-	}
-	.bigHb label {
-		width: 0.6rem;
-		height: 0.6rem;
-		background: url(../assets/img/r-close.png) right top no-repeat;
-		background-size: 0.4rem;
-		position: absolute;
-		right: 0.2rem;
-		top: 0.2rem;
+		label {
+			width: 0.6rem;
+			height: 0.6rem;
+			background: url(../../public/images/close.png) right top no-repeat;
+			background-size: 0.46rem;
+			position: absolute;
+			right: 0.2rem;
+			top: 0.2rem;
+		}
 	}
 	
 	.bigF {
@@ -421,7 +509,26 @@
 			margin: 0 3px;
 		}
 	}
-
+	.success{
+		width: 6rem;
+		height: 6rem;
+		background: url(../../public/images/za-suc.png) center top no-repeat;
+		background-size: 5.34rem;
+		text-align: center;
+		padding-top: 5rem;
+		font-size: 0.36rem;
+		color: #fff;
+		animation: big ease 0.3s forwards;
+		label {
+			width: 0.6rem;
+			height: 0.6rem;
+			background: url(../../public/images/close.png) right top no-repeat;
+			background-size: 0.48rem;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+	}
 	.bigHc {
 		overflow-y: auto;
 		height: 9.61rem;

@@ -14,6 +14,7 @@
 						<p class="massage-tip tip5" v-else-if="item.MsgTypes==5">竞拍通知</p>
 						<p class="massage-tip tip6" v-else-if="item.MsgTypes==6">福利元宝</p>
 						<p class="massage-tip tip3" v-else-if="item.MsgTypes==7">管理日报</p>
+						<p class="massage-tip tip3" v-else-if="item.MsgTypes==8">委托抢拍</p>
 						<h5>{{item.Title}}</h5>
 						<div class="massage-info-msg">
 							<p v-if="item.ListImageUrl"><img :src="item.ListImageUrl" width="100%"/></p>
@@ -216,7 +217,7 @@
 				})
 			},
 			goMsg(id,type,link){
-				if(type==1||type==2||type==3||type==4){
+				if(type==1||type==2||type==3||type==4||type==8){
 					if(link){
 						this.readMsg(id);
 						window.location.href=link;

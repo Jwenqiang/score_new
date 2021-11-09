@@ -5,16 +5,18 @@
 				</div>
 				<div class="scBody">
 					<div class="nineC ninesC">
-						<label @click="$router.push({name:'hb',query:{id:'0'}})">名片海报</label>
-						<label @click="$router.push({name:'hbHouse',query:{jjr:jjrNum}})">房源海报</label>
-						<label @click="$router.push({name:'hb',query:{id:'2'}})">招聘海报<!-- <span v-if="showZp"></span> --><!-- <i>new</i> --></label>
-						<label @click="$router.push({name:'hb',query:{id:'3'}})">节日海报<!-- <span v-if="showJr"></span> --><!-- <i>new</i> --></label>
-						<label @click="$router.push({name:'hb',query:{id:'4'}})">正能量海报</label>
-						<label @click="$router.push({name:'hb',query:{id:'5'}})">App下载海报</label>
-						<label @click="$router.push({name:'hb',query:{id:'7'}})">成交战报</label>
-						<label @click="$router.push({name:'hbZx',query:{jjr:jjrNum}})">分享资讯</label>
-						<label @click="$router.push({name:'schoolList',query:{jjr:jjrNum}})">分享学校</label>
-						<label @click="$router.push({name:'hbHouseNew',query:{jjr:jjrNum}})">新盘入市</label>
+						<label @click="goIcon('hb','名片海报','0','','(1,1)')">名片海报</label>
+						<label @click="goIcon('hbHouse','房源海报',jjrNum,'jjr','(1,2)')">房源海报</label>
+						<label @click="goIcon('hb','招聘海报','2','','(1,3)')">招聘海报<!-- <span v-if="showZp"></span> --><!-- <i>new</i> --></label>
+						<label @click="goIcon('hb','节日海报','3','','(2,1)')">节日海报<!-- <span v-if="showJr"></span> --><!-- <i>new</i> --></label>
+						<label @click="goIcon('hb','正能量海报','4','','(2,2)')">正能量海报</label>
+						<label @click="goIcon('hb','App下载海报','5','','(2,3)')">App下载海报</label>
+						<label @click="goIcon('hb','成交战报','7','','(3,1)')">成交战报</label>
+						<label @click="goIcon('hbZx','分享资讯',jjrNum,'jjr','(3,2)')">分享资讯</label>
+						<label @click="goIcon('schoolList','分享学校',jjrNum,'jjr','(3,3)')">分享学校</label>
+						<label @click="goIcon('hbHouseNew','新盘入市',jjrNum,'jjr','(4,1)')">新盘入市</label>
+						<label @click="goIcon('morning','早安分享','','','(4,2)')">早安分享</label>
+						<label @click="goIcon('hb','小贴士','11','','(4,3)')">小贴士</label>
 					</div>
 					<p class="scTip">温馨提示：【节日海报】当日当天更新</p>
 				</div>
@@ -88,6 +90,23 @@
 			Module
 		},
 		methods:{
+			// icon跳转 神策
+			goIcon(r,n,num,jjr,position){
+				if(jjr){
+					this.$router.push({'name':r,query:{jjr:num}});
+				}
+				else if(num){
+					this.$router.push({'name':r,query:{id:num}});
+				}else{
+					this.$router.push({'name':r});
+				}
+				this.$sensors.track('sc_click_icon', {
+					sc_business_type:'other',
+					sc_current_page:"首页_分享中心页",
+					sc_icon_name:n+"icon",
+					sc_icon_position:position
+				});
+			},
 			// 经纪人回馈活动中奖查询
 			getPrize(){
 				return new Promise((resolve)=>{
@@ -235,7 +254,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.shareCenter{background: linear-gradient(360deg, #DEF0FF 0%, #A1D4F8 100%);min-height: 100vh;}
 	.scBaner{width: 100%;height: 3.2rem;background: url(../../public/img/scBan.png) center no-repeat;background-size: 7.5rem;}
 	.scBody{padding: 0.3rem;}
@@ -256,6 +275,8 @@
 	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.64rem;border: 1px solid #eee;/* border-bottom: 0; */}
 	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.64rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;}
 	.scBody .ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.64rem;border-right: 1px solid #eee;}
+	.ninesC label:nth-of-type(11){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.64rem;border-right: 1px solid #eee;}
+	.ninesC label:nth-of-type(12){background: url(~@/assets/img/m-icon-ts.png) center 0.4rem no-repeat;background-size: 0.42rem;}
 	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;}
 	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
 	.miContent{padding: 0.3rem;}

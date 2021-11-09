@@ -17,7 +17,7 @@
 						</div>
 						<div class="ccPrice">
 							<div v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
-								<h4>{{item.EstateRegion2}}</h4>
+								<h4><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</h4>
 								<p>区域</p>
 							</div>
 							<span v-if="item.HuXing&&item.EstateRegion2&&item.EstateRegion2!='--'"></span>
@@ -35,15 +35,27 @@
 							<label>楼盘名称：</label>
 							<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
 						</div>
+						<div class="pli" v-if="item.BuildingNo">
+							<label>楼栋房号：</label>
+							<span>{{item.BuildingNo}}</span>
+						</div>
 						<div class="pli" v-if="item.YuSuanJiaGe">
 							<label>预算范围：</label>
 							<span>{{item.YuSuanJiaGe}}</span>
 						</div>
+						<div class="pli" v-if="item.SalePrice>0">
+							<label>委托售价：</label>
+							<span>{{item.SalePrice}}万</span>
+						</div>
+						<div class="pli" v-if="item.RentPrice>0">
+							<label>委托租价：</label>
+							<span>{{item.RentPrice}}元/月</span>
+						</div>
 						<div class="pli" v-if="item.SourceName">
 							<label>商机来源：</label>
-							<span>{{item.SourceName}}</span>
+							<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template></span>
 						</div>
-						<div class="pli" v-if="item.CalledMsg&&item.ChannelType!='经纪人'">
+						<div class="pli" v-if="item.CalledMsg&&item.ChannelType!='经纪人'&&item.Type!=2">
 							<label>呼叫信息：</label>
 							<span>{{item.CalledMsg}}</span>
 						</div>
@@ -56,7 +68,7 @@
 							<button @click="buy(item)">兑换商机</button>
 						</div>
 					</div>
-					<p class="noList" @click="pSize+=10" v-if="count>pSize">正在加载</p>
+					<p class="noList" v-if="count>pSize">正在加载</p>
 					<p class="noList" v-else-if="count<=pSize&&loadOver"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
 				</template>
 				<div v-else-if="cList.length==0&&ready" class="empty-shang-ji-wrap">
@@ -67,7 +79,7 @@
 			<!-- 我的客户 -->
 			<template v-if="cType==2">
 				<template v-if="myList && myList.length">
-					<a :href="'tel:'+call" ref="cphone" style="display: none;"></a>
+					<a :href="'tel:'+call" ref="cphone" style="display: none;" @click="setSc"></a>
 <!-- 					<div class="c2Tip" @click="readImg" v-if="read==false">
 						<div class="tBj"></div>
 						<div class="tMsg"></div>
@@ -108,15 +120,27 @@
 							<label>楼盘名称：</label>
 							<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
 						</div>
+						<div class="pli" v-if="item.BuildingNo">
+							<label>楼栋房号：</label>
+							<span>{{item.BuildingNo}}</span>
+						</div>
 						<div class="pli" v-if="item.YuSuanJiaGe">
 							<label>预算范围：</label>
 							<span>{{item.YuSuanJiaGe}}</span>
 						</div>
+						<div class="pli" v-if="item.SalePrice>0">
+							<label>委托售价：</label>
+							<span>{{item.SalePrice}}万</span>
+						</div>
+						<div class="pli" v-if="item.RentPrice>0">
+							<label>委托租价：</label>
+							<span>{{item.RentPrice}}元/月</span>
+						</div>
 						<div class="pli" v-if="item.SourceName">
 							<label>商机来源：</label>
-							<span>{{item.SourceName}}</span>
+							<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template> </span>
 						</div>
-						<div class="pli" v-if="item.CalledMsg&&item.ChannelType!='经纪人'">
+						<div class="pli" v-if="item.CalledMsg&&item.ChannelType!='经纪人'&&item.Type!=2">
 							<label>呼叫信息：</label>
 							<span>{{item.CalledMsg}}</span>
 						</div>
@@ -125,9 +149,9 @@
 							<span>{{item.CreateTime}}</span>
 						</div>
 						<div class="ccBtn" v-if="item.IsRelease!=1">
-							<button class="callCommt" @click="change(item.MobileCompeteId)">商机反馈</button>
+							<button class="callCommt" @click="change(item.MobileCompeteId,item.Type)">商机反馈</button>
 							<button @click="getMobile(item.Id)" v-if="item.IsMobile==1">拨打电话</button>
-							<button v-else><a :href="'tel:'+item.CallerNumberDisplay">拨打电话</a></button>
+							<button v-else><a :href="'tel:'+item.CallerNumberDisplay" @click="setSc">拨打电话</a></button>
 						</div>
 						<div class="ccBtn" style="color: #666;" @click="getRecord(item.Id)" v-if="item.IsRelease!=1">
 							查看拨打和反馈记录
@@ -136,7 +160,7 @@
 							该商机超半小时未电话跟进，已重新分配
 						</div>
 					</div>
-					<p class="noList" @click="pSizeMy+=10" v-if="countMy>pSizeMy">正在加载</p>
+					<p class="noList" v-if="countMy>pSizeMy">正在加载</p>
 					<p class="noList" v-else-if="countMy<=pSizeMy&&loadOver"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
 				</template>
 				<div v-else-if="myList.length==0&&myReady" class="empty-shang-ji-wrap">
@@ -147,9 +171,9 @@
 		</div>
 		<nut-popup style="border-radius: 0.12rem;" closeable v-model="showRecord">
 			<div class="myIntr" style="min-height: 6.58rem;">
-				<div class="ccRecord">
-					<h4>记录</h4>
-					<div class="ccrTag"><label :class="jl==1?'on':''" @click="jl=1">拨打记录<i></i></label><label :class="jl==2?'on':''" @click="jl=2">商机反馈<i></i></label></div>
+				<div class="ccRecord" style="padding-top: 0.3rem;">
+					<h4 style="margin-bottom: 0.2rem;">记录</h4>
+					<div class="ccrTag"><label :class="jl==1?'on':''" @click="jl=1">拨打记录<!-- <i></i> --></label><label :class="jl==2?'on':''" @click="jl=2">商机反馈<!-- <i></i> --></label></div>
 					<!--  v-if="record.length==0" -->
 					<div class="ccMr">
 <!-- 						<div class="ccrInfo" v-for="item in record">
@@ -158,7 +182,7 @@
 						<template v-if="jl==1">
 							<template v-if="record.length>0">
 							<div class="ccrInfo ccrInfoS" style="text-align: center;" v-for="item in record" :key="item.Id">
-								<span>{{item.CreateTime}}</span>  <span>拨打客户电话</span> <span v-if="item.Result=='ANSWERED'" style="color: #00CC66;">已接听</span><span style="color: #F06431;" v-else>未接听</span>
+								<span>{{item.CreateTime}}</span>  <span>拨打客户电话</span> <span v-if="item.Result=='ANSWERED'" style="color: #00CC66;">已接听</span><span style="color: #F42C1D;" v-else>未接听</span>
 							</div>
 							</template>
 							<div class="infoNone" v-else>
@@ -168,7 +192,7 @@
 						<template v-else>
 							<template v-if="recordCommt.length>0">
 							<div class="ccrInfo" v-for="item in recordCommt" :key="item.Id">
-								<span>{{item.CreateTime}}</span>  <span>【{{item.CusLevelName}}】{{item.TitleName}}</span>
+								<span>{{item.CreateTime}}</span>  <span><i>{{item.CusLevelName}}</i>{{item.TitleName}}</span>
 							</div>
 							</template>
 							<div class="infoNone" style="text-align: center;" v-else>
@@ -188,11 +212,13 @@
 				</div>
 			</div>
 		</nut-popup>
-		<nut-popup style="border-radius: 0.12rem;" v-model="showPay">
-			<div class="myIntr" style="height: 5.6rem;width: 6.2rem;">
+		<nut-popup class="payTip" style="border-radius: 0.12rem;" v-model="showPay">
+			<div class="myIntr" style="min-height: 5.3rem;height: 5.3rem;width: 6.2rem;">
+				<div class="payTitle">
+				</div>
 				<div class="miTop">兑换商机</div>
 				<div class="miContent">
-					<div class="micM" style="display: block;">当前商机价格为<span style="color: #FF2D19;">{{buyInfo.BuyYuanBaoRealNum}}</span>元宝，是否兑换？</div>
+					<div class="micM" style="display: block;">当前商机价格为<span style="color: #FF2D19;">{{buyInfo.BuyYuanBaoRealNum}}</span>元宝<br />是否兑换？</div>
 					<div class="miBtn mibPay">
 						<label @click="showPay=false">取消</label>
 						<label @click="buyCustom()">确定</label>
@@ -205,7 +231,7 @@
 				<div class="miContent">
 					<h4>商机反馈</h4>
 					<div class="micM mdM">
-						<label :class="md==item.CusLevelId?'on':''" @click="md=item.CusLevelId" v-for="item in intention" :key="item.CusLevelId">{{item.CusLevelName}}<i></i></label>
+						<label :class="md==item.CusLevelId?'on':''" @click="md=item.CusLevelId" v-for="item in intention" :key="item.CusLevelId">{{item.CusLevelName}}<!-- <i></i> --></label>
 <!-- 						<label :class="md==1?'on':''" @click="md=1">强意向<i></i></label>
 						<label :class="md==2?'on':''" @click="md=2">中意向<i></i></label>
 						<label :class="md==3?'on':''" @click="md=3">低意向<i></i></label>
@@ -308,7 +334,8 @@
 				prize:"",
 				prizeName:"45元礼包",
 				runNum:Math.random(),
-				prizeId:""
+				prizeId:"",
+				typeNum:1
 			}
 		},
 		components: {
@@ -344,8 +371,10 @@
 			cType(){
 				this.load=false;
 				if(this.cType==1){
+					this.pSize=10;
 					this.getcList();
 				}else{
+					this.pSizeMy=10;
 					this.getMyList();
 				}
 			},
@@ -368,12 +397,12 @@
 						if(height-100<sTop+clientHeight&&this.load){
 							  // console.log('监听成功','到达底部')
 							  if(this.cType==1){
-								if(this.pSize<this.count){
-									this.pSize=Number(this.pSize)+10; 
-								}
-								setTimeout(()=>{
-									this.loadOver=true
-								},1000)								  
+									if(this.pSize<this.count){
+										this.pSize=Number(this.pSize)+10; 
+									}
+									setTimeout(()=>{
+										this.loadOver=true
+									},1000)								  
 							  }else{
 								  if(this.pSizeMy<this.countMy){
 								  	this.pSizeMy=Number(this.pSizeMy)+10; 
@@ -384,14 +413,39 @@
 							  }
 						 }
 					 }
+				}else if(this.countMy>this.pSizeMy){
+					if(sTop>0){
+						if(height-100<sTop+clientHeight&&this.load){
+							  if(this.cType==2){
+								  if(this.pSizeMy<this.countMy){
+								  	this.pSizeMy=Number(this.pSizeMy)+10; 
+								  }
+								  setTimeout(()=>{
+								  	this.loadOver=true
+								  },1000)							  
+							  }
+					 }
+					}
 				}else{
 					setTimeout(()=>{
 						this.loadOver=true
 					},1000)
 				}
-			},
+			}
 		},
 		methods:{
+			// 神策电话埋点
+			setSc(){
+				this.$sensors.track('sc_click_call', {
+					sc_business_type:"other",
+					sc_button_name:"拨打电话按钮",
+					sc_click_page:"商机_我的商机页",
+					sc_house_id:"",
+					sc_house_name:"",
+					sc_click_area:"我的商机区域",
+					sc_button_position:""
+				});
+			},
 			// 经纪人回馈活动中奖查询
 			getPrize(){
 				return new Promise((resolve)=>{
@@ -466,12 +520,18 @@
 				
 			},
 			
-			getCommt(){
+			getCommt(type){
+				if(type==undefined){
+					type=1;
+				}
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"get",
 							url:"/mobilecompete/custleveltitle",
-							headers:this.header_token
+							headers:this.header_token,
+							params:{
+								type:type
+							}
 						})
 						.then(res=>{
 							console.log(res);
@@ -503,7 +563,8 @@
 							data:{
 								mobileCompeteId:this.cId,
 								cusLevelId:this.md,
-								titleId:this.cmd
+								titleId:this.cmd,
+								type:this.typeNum
 							}
 						})
 						.then(res=>{
@@ -710,9 +771,11 @@
 						})
 				})
 			},
-			change(id){
+			change(id,type){
 				this.showMd=true;
 				this.cId=id;
+				this.typeNum=type;
+				this.getCommt(type);
 			},
 			changeMd(id){
 				return new Promise((resolve)=>{
@@ -782,24 +845,24 @@
 	.hbTab label{display: inline-block;width: 1.8rem;height: 0.7rem;margin: 0 0.2rem 0 0;line-height: 0.7rem;color: #333;}
 	.hbTab label:last-child{margin: 0;}
 	.hbTab label.on{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;border-radius: 0.35rem;}
-	.myIntr{width: 6.9rem;min-height: 6.12rem;background-color: #fff;}
+	.myIntr{width: 6.9rem;min-height: 6rem;background-color: #fff;border-radius: 0.2rem;}
 	.myIntr h4{text-align: center;font-size: 0.36rem;color: #333;border: 0;font-weight: 550;}
-	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
-	.miContent{padding: 0.3rem;}
+	.miTop{height: 1.3rem;line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;margin-top: -1rem;color: #F42C1D;font-size: 0.4rem;}
+	.miContent{padding: 0 0.3rem 0.3rem;}
 	.miContent textarea{width: 100%;height: 2rem;background-color: #eee;border: 1px solid #ddd;padding: 0.2rem;}
-	.miBtn{margin-top: 0.6rem;text-align: center;}
-	.miBtn label{display: inline-block;width: 3.7rem;height: 0.8rem;border-radius: 0.4rem;margin: 0 0.2rem;background-color: #ccc;line-height: 0.76rem;font-size: 0.36rem;color: #fff;}
-	.miBtn label:last-child{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);}
+	.miBtn{margin-top: 0.6rem;text-align: center;margin-bottom: 0.4rem;}
+	.miBtn label{display: inline-block;width: 3.7rem;height: 0.94rem;border-radius: 0.12rem;margin: 0 0.2rem;line-height: 0.9rem;font-size: 0.36rem;color: #F42C1D;border: 1px solid #F42C1D;}
+	.miBtn label:last-child{background: #F42C1D;color: #fff;}
 	.mibPay{margin-top: 0.8rem;}
 	.mibPay label{width: 2.4rem;}
-	.micM{font-size: 0.36rem;margin: 0.6rem 0 0.4rem;line-height: 1.6;}
+	.micM{font-size: 0.36rem;line-height: 1.6;text-align: center;}
 	.ccMy .ccTop label{float: none;}
 	.ccMy .ccTop span{margin: 0 0.2rem 0 0;background-color: #FA6400;}
 	.ccMy .ccTop span i{font-style: normal;}
 	.ccBtn{padding: 0.3rem 0;text-align: center;border-top: 1px solid #ddd;}
-	.ccBtn button{width: 3rem;height: 0.8rem;background: #EB2C30;border-radius: 0.4rem;color: #fff;font-size: 0.36rem;}
+	.ccBtn button{width: 2.8rem;height: 0.8rem;background: #F42C1D;border-radius: 0.4rem;color: #fff;font-size: 0.32rem;}
 	.ccBtn button a{color: #fff;width: 100%;display: inline-block;height: 100%;border-radius: 0.4rem;line-height: 0.78rem;}
-	.ccBtn button:first-child{margin-right: 0.4rem;background: none;border: 1px solid #EB2C30;color: #EB2C30;}
+	.ccBtn button:first-child{margin-right: 0.4rem;background: none;border: 1px solid #F42C1D;color: #F42C1D;}
 	.ccRecord{padding-top: 0.4rem;text-align: center;color: #666;}
 	.ccRecord p{font-size: 0.32rem;margin-bottom: 0.2rem;font-weight: 600;display: flex;justify-content:  center;align-items: center;}
 	.ccRecord p i{display: inline-block;width: 1.8rem;height: 1px;background-color: #ddd;}
@@ -808,22 +871,24 @@
 	.ccRecord h4{margin-bottom: 0.4rem;}
 	.ccrImg{padding: 0.3rem 0 0;border-top: 1px solid #ddd;text-align: center;}
 	.ccrImg img{width: 0.38rem;}
-	.ccMr{max-height: 4.5rem;overflow: hidden;padding: 0.2rem;overflow-y: auto;text-align: left;margin-top: 0.2rem;}
-	.ccrInfo span:first-child{flex: 1;}
-	.ccrInfo span:last-child{flex: 1.2;}
+	.ccMr{max-height: 4.5rem;overflow: hidden;padding: 0.2rem;overflow-y: auto;text-align: left;margin-top: 0.2rem;background-color: #f5f5f5;}
+	.ccrInfo{font-size: 0.26rem;}
+	.ccrInfo span:first-child{flex: 1;text-align: center;}
+	.ccrInfo span:last-child{flex: 1.2;line-height: 1.6;}
 	.ccrInfoS span:last-child{flex: 0.6;}
-	.miContent h4{font-size: 0.36rem;text-align: center;font-weight: 550;padding-top: 0.2rem;}
+	.ccrInfo span i{font-style: normal;font-size: 0.2rem;color: #F42C1D;padding: 1px 2px;border: 1px solid #F42C1D;border-radius: 2px;margin-right: 0.1rem;}
+	.miContent h4{font-size: 0.36rem;text-align: center;font-weight: 550;padding-top: 0.3rem;padding-bottom: 0.2rem;}
 	.micM,.ccrTag{display: flex;justify-content: space-between;}
 	.micM label,.ccrTag label{font-weight: 500;display: inline-block;position: relative;flex: 1;height: 0.6rem;line-height: 0.6rem;text-align: center;font-size: 0.3rem;border-radius: 0.05rem;color: #666;}
 	/* .micM label:nth-last-of-type(2){margin: 0 0.3rem;} */
-	.micM label.on,.ccrTag label.on{color: #EB2C30;}
-	.micM label.on i,.ccrTag label.on i{display: inline-block;height: 2px;width:0.8rem;background-color: #EB2C30;position: absolute;bottom: 0;left: 0.38rem;}
+	.micM label.on,.ccrTag label.on{color: #F42C1D;}
+	.micM label.on i,.ccrTag label.on i{display: inline-block;height: 2px;width:0.8rem;background-color: #F42C1D;position: absolute;bottom: 0;left: 0.38rem;}
 	.ccrTag label.on i{left: 1.3rem;}
-	.mdM{text-align: center;}
-	.micMsg{padding-top: 0.1rem;height: 1.84rem;}
-	.micMsg label{display: inline-block;padding: 0.15rem;font-size: 0.24rem;border-radius: 3px;margin-right: 0.3rem;margin-bottom: 0.3rem;background-color: #F3F6F8;color: #666;}
+	.mdM{text-align: center;margin-bottom: 0.2rem;}
+	.micMsg{padding-top: 0.2rem;min-height: 1.84rem;background-color: #f5f5f5;text-align: center;}
+	.micMsg label{display: inline-block;padding: 0.15rem;font-size: 0.24rem;border-radius: 3px;margin-right: 0.3rem;margin-bottom: 0.3rem;background-color: #fff;color: #666;}
 	.micMsg label:last-child{margin-right: 0;}
-	.micMsg label.on{background-color: #FDE9EA;color: #EB2C30;}
+	.micMsg label.on{background-color: #FDE9EA;color: #F42C1D;}
 	.cTag{width: 1.2rem;height: 1.2rem;background: url(../assets/img/c-new.png) right top no-repeat;background-size: 100%;position: absolute;right: -0.25rem;top: -0.28rem;}
 	.c2Tip{width: 100%;height: 100%;z-index: 6;}
 	.tBj{width: 100%;height: 100%;z-index: 7;background-color: #000;opacity: 0.7;position: fixed;left: 0;top: 0;}
@@ -843,7 +908,7 @@
 		border: 1px solid #999;
 		color: #999;
 	}
-	.infoNone{text-align: center;margin-top: 0.4rem;color: #999;}
+	.infoNone{text-align: center;margin: 0.4rem 0;color: #999;}
 
 	.i-yhc{width: 100%;height: 100%;display: block;position: absolute;left: 0;top: 0;color: #fff;}
 	.i-yhc label{background: #000;position: absolute;left: 0;top: 0;opacity: 0.6;z-index: 3;display: block;width: 100%;height: 100%;border-radius: 0.1rem;}
@@ -854,4 +919,6 @@
 	
 	.overAll,.overAll label,.overAll a{color: #999 !important;}
 	.overAll{background-color: #f5f5f5 !important;}
+	.payTip{overflow: visible;border-radius: 0.2rem;}
+	.payTitle{height: 1.52rem;width: 100%;background: url(../assets/img/icon-pay.png) center no-repeat;background-size: 1.52rem;position: relative;top: -0.7rem;}
 </style>

@@ -63,6 +63,26 @@
 							</div>
 						</li>
 					</template>
+					<template v-else-if="hbId==11">
+						<!-- 新增 -->
+						<li class="tipHb" v-for="(item,index) in hbList" :key="item.MyTemplateId">
+							<div @click="bigHb(item.MyTemplateId,item.TemplateName)" v-if="item.Status>0">
+								<div class="hbImg">
+									<img v-lazy="item" width="100%" />
+								</div>
+								<button style="margin: 0.2rem;border-radius: 0.24rem;height: 0.48rem;width: 1.92rem;line-height: 0.48rem;font-size: 0.28rem;">生成海报</button>
+							</div>
+							<div class="overJr" v-else>
+								<div class="op5"></div>
+								<div class="hbImg">
+									<img v-lazy="item" width="100%" />
+									<span class="oldHb">已过期</span>
+								</div>
+							</div>
+						</li>
+						<!--  -->
+
+					</template>
 					<template v-else>
 						<li v-for="(item,index) in hbList" :key="item.MyTemplateId">
 							<div @click="bigHb(item.MyTemplateId,item.TemplateName)" v-if="item.Status>0">
@@ -88,35 +108,71 @@
 				<div class="hbNone" v-else-if="hbList.length==0&&ready">
 					<p>免费领专属海报模板</p>
 				</div>
-				<div class="clear nhb" ref="nHb" v-if="newHb&&newHb.Name">
+				<div class="clear nhb" :class="hbId==11?'nhbTip':''" ref="nHb" v-if="newHb&&newHb.Name">
 					<label>
 						<img :src="newHb.DisplaySmallImagePath" width="100%" />
 					</label>
-					<div class="nhbR">
-						<h5>最新{{hbName}}上线</h5>
+					<div class="nhbR" v-if="hbId==8">
+						<h5>[深圳中原]官微出品</h5>
+						<p>一键转发，让客户主动找到你！</p>
+					</div>
+					<div class="nhbR" v-else>
+						<h5>最新海报上线</h5>
 						<p>{{newHb.Name}}设计风格</p>
 					</div>
-					<button @click="getShopList()">立即领取</button>
+					<button @click="getShopList()" style="" v-if="hbId==11">立即领取</button>
+					<button @click="getShopList()" v-else>立即领取</button>
 					<span class="nhbClose" @click="$refs.nHb.remove()"></span>
 				</div>
 			</div>
 			<!-- 商城 -->
 			<div class="hbShop" v-if="hbType==2">
 				<ul class="clist" v-if="shopList.length>0">
-					<li v-for="item in shopList" :key="item.DisplaySmallImagePath">
+				<!-- 新增 -->
+<!-- 					<li class="tipHb" v-for="item in shopList" :key="item.DisplaySmallImagePath" v-if="hbId==11">
 						<div style="position: relative;">
 							<div class="hbImg" style="border-radius: 0.06rem 0.06rem 0 0;">
-								<img v-lazy="item" width="100%" preview="0" :preview-text="item.Name" />
+								<img v-lazy="item" width="100%"/>
 							</div>
 							<i class="hbTip">{{item.AllBuyCount}}人购买</i>
-							<!-- <p>{{item.Name}}</p> -->
-							<p class="sp" style="bottom: 0;">
-								<span>{{item.Price}}<i>元宝</i></span><a>{{item.OriginalPrice}}<i>元宝</i></a></p>
 						</div>
-						<div>
+						<div class="hbTen">
+							<span>0<i style="font-size: 0.18rem;">元宝</i></span><a style="font-size: 0.18rem;">200<i>元宝</i></a>
 							<button @click="buy(item)" v-if="item.IsBuy==false">我要兑换</button>
 							<button class="hasBuy" v-else>我已购买</button>
 						</div>
+					</li> -->
+				<!--  -->
+					<li :class="hbId==11?'tipHb':''" v-for="item in shopList" :key="item.DisplaySmallImagePath">
+						<template v-if="hbId==11">
+							<div style="position: relative;">
+								<div class="hbImg" :style="`border-radius: 0.06rem 0.06rem 0 0;background:url(${item}) center no-repeat;background-size:100%;`">
+									<img v-lazy="item" width="100%"/>
+								</div>
+								<i class="hbTip">{{item.AllBuyCount}}人购买</i>
+							</div>
+							<div class="hbTen">
+								<span>{{item.Price}}<i style="font-size: 0.18rem;">元宝</i></span><a style="font-size: 0.18rem;">{{item.OriginalPrice}}<i>元宝</i></a>
+								<button @click="buy(item)" v-if="item.IsBuy==false">我要兑换</button>
+								<button class="hasBuy" v-else>我已购买</button>
+							</div>
+						</template>
+						<template v-else>
+							<div style="position: relative;">
+								<div class="hbImg" style="border-radius: 0.06rem 0.06rem 0 0;">
+									<!--  preview="0" :preview-text="item.Name"  -->
+									<img v-lazy="item" width="100%"/>
+								</div>
+								<i class="hbTip">{{item.AllBuyCount}}人购买</i>
+								<!-- <p>{{item.Name}}</p> -->
+								<p class="sp" style="bottom: 0;">
+									<span>{{item.Price}}<i>元宝</i></span><a>{{item.OriginalPrice}}<i>元宝</i></a></p>
+							</div>
+							<div>
+								<button @click="buy(item)" v-if="item.IsBuy==false">我要兑换</button>
+								<button class="hasBuy" v-else>我已购买</button>
+							</div>
+						</template>
 					</li>
 				</ul>
 				<div class="hbNone" v-else-if="shopList.length==0&&readyShop">
@@ -188,24 +244,31 @@
 	</nut-popup> -->
 
 		<nut-popup v-model="show" style="border-radius: 0.1rem;">
-			<div class="bigHb">
+			<div class="bigHb" :class="hbId==11?'bigTip':''">
+				<template v-if="hbId==11">
+					<p class="bigS" style="margin: 0.2rem 0 0.4rem;">{{ inApp ? '点击分享' : '长按保存' }}高清原图，可下载打印张贴</p>
+				</template>
+				<template v-else>
 				<p class="bigF">{{ bigName }}</p>
-				<p class="bigS">{{ inApp ? '点击图片分享' : '长按图片保存' }}{{testCall}}</p>
+				<p class="bigS">{{ inApp ? '点击图片分享' : '长按图片保存' }}</p>
+				</template>
 				<div class="bigHc">
 					<template v-if="bigImg">
 						<img :src="bigImg + '&fmt=jpg'" width="100%" :key="bigImg" @click="share(bigImg)"
 							v-if="inApp" />
-						<img :src="bigImg + '&fmt=jpg'" width="100%" :key="bigImg" v-else />
+						<img :src="bigImg" width="100%" :key="bigImg" v-else />
 					</template>
 				</div>
 				<label @click="show=false"></label>
 			</div>
 		</nut-popup>
-		<nut-popup style="border-radius: 0.12rem;" v-model="showPay">
+		<nut-popup class="payTip" style="border-radius: 0.12rem;" v-model="showPay">
 			<div class="myIntr">
-				<div class="miTop">兑换支付</div>
+				<div class="payTitle">
+				</div>
+				<div class="payTop">兑换支付</div>
 				<div class="miContent">
-					<div class="micM">{{buyInfo.Name}}模板价格为{{buyInfo.Price}}元宝，是否兑换？</div>
+					<div class="micM">{{buyInfo.Name}}模板价格为{{buyInfo.Price}}元宝<br/>是否兑换？</div>
 					<div class="miBtn">
 						<label @click="showPay=false">取消</label>
 						<label @click="buyHb">确定</label>
@@ -221,7 +284,7 @@
 					<div class="cjM">
 						<p class="cjInput">
 							<input type="text" placeholder="成交人姓名" v-model="cjName" @input="getEmp()" />
-						<ul v-show="cjList.length>0">
+						<ul v-show="cjList.length>0&&cjName">
 							<li v-for="item in cjList" :key="item.EmpNo" @click="selectName(item.EmpCnName,item.EmpNo)">
 								{{item.EmpCnName}}({{item.EmpNo}}) {{item.DeptName}}</li>
 						</ul>
@@ -543,6 +606,10 @@
 					this.hbName = "成交战报";
 				} else if (this.hbId == '8') {
 					this.hbName = "资讯海报";
+				}else if (this.hbId == '9') {
+					this.hbName = "新盘入市海报";
+				}else if (this.hbId == '11') {
+					this.hbName = "小贴士";
 				}
 				document.title = this.hbName;
 			}
@@ -551,7 +618,8 @@
 		methods: {
 			goBigHb(MyTemplateId, TemplateName, TemplateId) {
 				console.log(TemplateId)
-				if (TemplateId == 110 || TemplateId == 111 || TemplateId == 118 || TemplateId == 114 || TemplateId == 134|| TemplateId == 135|| TemplateId == 136) {
+				// TemplateId == 110 || TemplateId == 111 || TemplateId == 118 || TemplateId == 114 || TemplateId == 134|| TemplateId == 135|| TemplateId == 136
+				if (TemplateId>109) {
 					this.showTag = true;
 				} else {
 					this.showTag = false;
@@ -871,7 +939,11 @@
 								if (list.length > 0) {
 									for (let i in list) {
 										this.$set(list[i], 'loading', this.loadImg)
-										this.$set(list[i], 'src', list[i].DisplayImagePath)
+										if(this.hbId==11){//提示语缩略图
+											this.$set(list[i], 'src', list[i].DisplaySmallImagePath)
+										}else{
+											this.$set(list[i], 'src', list[i].DisplayImagePath)
+										}
 									}
 									this.shopList = list;
 								}
@@ -925,8 +997,24 @@
 								if (res.data.data.IsSuccess) {
 									this.$toast.success('兑换成功');
 									this.getShopList();
+									// 神策
+									this.$sensors.track('sc_poster_type_exchange', {
+										sc_poster_type:this.hbName,
+										sc_original_price:this.buyInfo.OriginalPrice,
+										sc_discont_price:this.buyInfo.Price,
+										sc_is_success:true,
+										sc_failure_reason:""
+									});
 								} else {
-									this.$toast.success(res.data.data.Reamark);
+									this.$toast.warn(res.data.data.Reamark);
+									// 神策
+									this.$sensors.track('sc_poster_type_exchange', {
+										sc_poster_type:this.hbName,
+										sc_original_price:this.buyInfo.OriginalPrice,
+										sc_discont_price:this.buyInfo.Price,
+										sc_is_success:false,
+										sc_failure_reason:res.data.data.Reamark
+									});
 								}
 							} else {
 								this.$toast.text(res.data.msg);
@@ -1046,8 +1134,21 @@
 				// window.callback = null
 				if (item) {
 					setTimeout(() => {
+						this.bigName=this.bigName;
 						this.getShareLog(item);
 					}, 500)
+					if(item=="saveImg"){
+						// 神策
+						this.$sensors.track('sc_poster_save', {
+							sc_poster_type:this.hbName
+						});
+					}else{
+						// 神策
+						this.$sensors.track('sc_poster_share', {
+							sc_poster_type:this.hbName,
+							sc_share_way:item
+						});
+					}
 				}
 			},
 
@@ -1275,12 +1376,13 @@
 
 	.bigHb {
 		width: 6rem;
-		min-height: 11.2rem;
+		min-height: 11rem;
 		position: relative;
 		background: #fff url(../assets/img/pNone.png) center no-repeat;
 		background-size: 4rem;
 		padding: 0.3rem;
 		overflow: hidden;
+		border-radius: 0.15rem;
 	}
 
 	/** 海报大图预取 */
@@ -1357,6 +1459,7 @@
 		left: 0;
 		padding: 0.26rem 0.39rem;
 		background-color: #fff;
+		z-index: 9;
 	}
 
 	.nhb label {
@@ -1367,7 +1470,9 @@
 		overflow: hidden;
 		border-radius: 0.06rem;
 	}
-
+ .nhb label img{
+	 min-height: 80%;
+ }
 	.nhbR {
 		width: 5.2rem;
 		float: left;
@@ -1378,14 +1483,15 @@
 	.nhbR h5 {
 		font-size: 0.32rem;
 		font-weight: 400;
-		color: #333;
+		color: #EF5151;
+		padding-top: 0.1rem;
 	}
 
 	.nhbR p {
 		font-size: 0.28rem;
 		font-weight: 400;
-		color: #666;
-		margin-top: 0.2rem;
+		color: #999;
+		margin-top: 0.12rem;
 		width: 2.9rem;
 		overflow: hidden;
 	}
@@ -1428,8 +1534,9 @@
 
 	.myIntr {
 		width: 6.2rem;
-		height: 5.6rem;
+		height: 5.4rem;
 		background-color: #fff;
+		border-radius: 0.2rem;
 	}
 
 	.myCj {
@@ -1445,9 +1552,10 @@
 		font-weight: 600;
 		color: #fff;
 	}
+	.payTop{height: 1.3rem;line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;margin-top: -1rem;color: #F42C1D;font-size: 0.4rem;}
 
 	.miContent {
-		padding: 0.3rem;
+		padding: 0 0.3rem 0.3rem;
 	}
 
 	.miContent textarea {
@@ -1458,31 +1566,14 @@
 		padding: 0.2rem;
 	}
 
-	.miBtn {
-		margin-top: 0.6rem;
-		text-align: center;
-	}
-
-	.miBtn label {
-		display: inline-block;
-		width: 2.4rem;
-		height: 0.8rem;
-		border-radius: 0.4rem;
-		margin: 0 0.2rem;
-		background-color: #ccc;
-		line-height: 0.8rem;
-		font-size: 0.36rem;
-		color: #fff;
-	}
-
-	.miBtn label:last-child {
-		background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);
-	}
+	.miBtn{margin-top: 0.6rem;text-align: center;margin-bottom: 0.4rem;}
+	.miBtn label{display: inline-block;width: 2.4rem;height: 0.94rem;border-radius: 0.12rem;margin: 0 0.2rem;line-height: 0.9rem;font-size: 0.36rem;color: #F42C1D;border: 1px solid #F42C1D;}
+	.miBtn label:last-child{background: #F42C1D;color: #fff;}
 
 	.micM {
 		font-size: 0.36rem;
-		margin: 0.6rem 0 0.4rem;
 		line-height: 1.6;
+		text-align: center;
 	}
 
 	.bigF {
@@ -1536,6 +1627,9 @@
 		.bigHb {
 			width: 6.7rem;
 			min-height: 12rem;
+		}
+		.bigHc{
+			height: 10rem;
 		}
 	}
 
@@ -1652,7 +1746,7 @@
 	}
 
 	.cjM {
-		padding-top: 0.1rem;
+		padding-top: 0.6rem;
 	}
 
 	.cjInput input {
@@ -1909,19 +2003,34 @@
 		margin: 0 auto;
 		text-align: center;
 	}
-
-	/* 选择标签 */
-	/* 	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;border-radius: 0.1rem;}
-	.myCj{height: 8.2rem;}
-	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
-	.miContent{padding: 0.3rem;}
-	.miContent textarea{width: 100%;height: 2rem;background-color: #eee;border: 1px solid #ddd;padding: 0.2rem;}
-	.miBtn{margin-top: 0.8rem;text-align: center;}
-	.miBtn label{display: inline-block;width: 2.4rem;height: 0.8rem;border-radius: 0.4rem;margin: 0 0.2rem;background-color: #ccc;line-height: 0.8rem;font-size: 0.36rem;color: #fff;}
-	.miBtn label:last-child{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);}
-	.micM{font-size: 0.36rem;margin: 0.8rem 0 0.4rem;line-height: 1.6;}
-	.miContent h4{font-size: 0.36rem;text-align: center;font-weight: 550;padding-top: 0.2rem;}
-	.micM label{display: inline-block;width: 1.2rem;height: 0.6rem;line-height: 0.6rem;text-align: center;background-color: #F3F6F8;font-size: 0.24rem;border-radius: 0.05rem;}
-	.micM label.on{background-color: #FF2D19;color: #fff;}
-	.mdM{text-align: center;display: flex;justify-content: space-between;} */
+	.payTip{overflow: visible;}
+	.payTitle{height: 1.52rem;width: 100%;background: url(../assets/img/icon-pay.png) center no-repeat;background-size: 1.52rem;position: relative;top: -0.7rem;}
+	.clist li.tipHb{
+		width: 3.4rem;
+	}
+	.tipHb .hbImg img{height: auto;min-height: 100%;}
+	.clist li.tipHb .hbImg{
+		width: 100%;
+		height: 1.74rem;
+	}
+	.hbTen{font-size: 0.28rem;padding: 0.2rem 0;}
+	.hbTen span{color: #F42B11;font-size: 0.28rem;margin-right: 2px;}
+	.hbTen i{font-style: normal;}
+	.hbTen a{text-decoration: line-through;color: #D1D1D1;}
+	.clist li .hbTen button{width: 1.46rem;height: 0.48rem;border-radius: 0.24rem;line-height: 0.48rem;font-size: 0.28rem;margin-left: 0.14rem;}
+	.bigTip{
+		min-height: 5.4rem;
+		height: auto;
+		background: #fff;
+	}
+	.bigTip .bigHc{
+		min-height: 4.61rem;
+		height: auto;
+		max-height: 8rem;
+	}
+	.nhbTip{padding-top: 0.4rem;}
+	.nhbTip button{
+		right: 0.6rem;
+		bottom: 0.7rem;
+	}
 </style>

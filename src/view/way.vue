@@ -22,15 +22,47 @@
 				<div class="clear newList">
 					<img src="../assets/img/mrQ.png" class="nlT"/>
 					<div class="newM">
-						<h4>签到<span style="width: 1.5rem;">最高+20</span></h4>
+						<h4>签到<span style="width: 1.5rem;">最高+35</span></h4>
 						<label>每日1次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="setSign" v-if="nowSign==false">签到</mt-button>
 					<mt-button type="primary" class="nlBtn" style="opacity: 0.6;"  v-else>已签到</mt-button>
 				</div>
 				<div class="clear newList">
-					<img src="../assets/img/mr5.png" class="nlT"/>
+					<img src="../assets/img/task-wx.png" class="nlT"/>
 					<div class="newM">
+						<h4>转发【深圳中原】文章<span>+20</span> </h4>
+						<label>每日1次</label><label>每月x6次</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'33'}})">如何完成</mt-button>
+				</div>
+				<div class="clear newList">
+					<img src="../assets/img/mr9.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>签订业主独家委托<span>最高+200</span></h4>
+						<label>不限次数</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'9'}})">如何完成</mt-button>
+				</div>
+				<div class="clear newList">
+					<img src="../assets/img/mr8.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>签订业主委托<span>最高+150</span></h4>
+						<label>不限次数</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'8'}})">如何完成</mt-button>
+				</div>
+				<div class="clear newList">
+					<img src="../assets/img/mr7.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>成功约拍房源VR实勘<span>最高+100</span></h4>
+						<label>不限次数</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'7'}})">如何完成</mt-button>
+				</div>
+				<div class="clear newList">
+					<img src="../assets/img/mr5.png" class="nlT"/>
+					<div class="newM nDay">
 						<h4>成功发布新房点评<span>+5</span></h4>
 						<label>每日1次</label>
 					</div>
@@ -38,39 +70,15 @@
 				</div>
 				<div class="clear newList">
 					<img src="../assets/img/mr4.png" class="nlT"/>
-					<div class="newM">
+					<div class="newM nDay">
 						<h4>开盘<span>+10</span></h4>
 						<label>每日x3次</label><label>每月x15次</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'4'}})">如何完成</mt-button>
 				</div>
 				<div class="clear newList">
-					<img src="../assets/img/mr8.png" class="nlT"/>
-					<div class="newM">
-						<h4>签订业主委托<span>+20</span></h4>
-						<label>不限次数</label>
-					</div>
-					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'8'}})">如何完成</mt-button>
-				</div>
-				<div class="clear newList">
-					<img src="../assets/img/mr9.png" class="nlT"/>
-					<div class="newM">
-						<h4>签订业主独家委托<span style="width: 1rem;">+100</span></h4>
-						<label>不限次数</label>
-					</div>
-					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'9'}})">如何完成</mt-button>
-				</div>	
-				<div class="clear newList">
-					<img src="../assets/img/mr7.png" class="nlT"/>
-					<div class="newM">
-						<h4>成功约拍房源VR实勘<span>+30</span></h4>
-						<label>不限次数</label>
-					</div>
-					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'7'}})">如何完成</mt-button>
-				</div>
-				<div class="clear newList">
 					<img src="../assets/img/mr6.png" class="nlT"/>
-					<div class="newM">
+					<div class="newM nDay">
 						<h4>成功约拍房源图片实勘<span>+15</span></h4>
 						<label>不限次数</label>
 					</div>
@@ -78,7 +86,7 @@
 				</div>
 				<div class="clear newList">
 					<img src="../assets/img/mr1.png" class="nlT"/>
-					<div class="newM">
+					<div class="newM nDay">
 						<h4>成功录入新客源<span>+10</span></h4>
 						<label>每日x3次</label><label>每月x15次</label>
 					</div>
@@ -86,7 +94,7 @@
 				</div>
 				<div class="clear newList">
 					<img src="../assets/img/mr2.png" class="nlT"/>
-					<div class="newM">
+					<div class="newM nDay">
 						<h4>成功带客户看房<span>+10</span></h4>
 						<label>每日x3次</label><label>每月x15次</label>
 					</div>
@@ -188,6 +196,14 @@
 			</div>
 			
 			<div class="tabC" v-else-if="select==4">
+				<div class="clear newList">
+					<img src="../assets/img/task-wx.png" class="nlT"/>
+					<div class="newM">
+						<h4>关注公众号</h4>
+						<p><span>+30</span></p>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'32'}})">如何完成</mt-button>
+				</div>
 				<div class="clear newList">
 					<img src="../assets/img/sl1.png" class="nlT"/>
 					<div class="newM">
@@ -556,6 +572,8 @@
 	.newM{width: 5.4rem;float: left;margin-left: 0.2rem;}
 	.newM h4{font-size: 0.32rem;color: #333;margin-bottom: 0.16rem;font-weight: 500;line-height: 1;}
 	.newM h4 span,.newM p span{position: relative;top: -2px;font-weight: 400;font-size: 0.24rem; display: inline-block;width: 0.86rem;height: 0.38rem;line-height: 0.38rem;padding-left: 0.42rem;background: url(../assets/img/icon-syb.png) left center no-repeat;background-size: 0.38rem;margin-left: 0.14rem;color: #F3260C;}
+	.nDay h4{margin-bottom: 0.24rem;}
+	.nDay h4 span{width: 2rem;}
 	.tabFl h4 span{float: right;margin-right: 0.2rem;margin-top: 0.1rem;}
 	.newM p span{margin-left: 0;top: 0;}
 	.newM p{font-size: 0.24rem;color: #999;margin-bottom: 0.1rem;min-height: 0.2rem;}

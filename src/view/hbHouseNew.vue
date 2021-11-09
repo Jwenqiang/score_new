@@ -148,6 +148,12 @@
 				if(n){
 					this.content=n.split("　")[0];
 				}
+				// 神策
+				this.$sensors.track('sc_click_search', {
+					sc_srh_word:this.content,
+					sc_srh_house_type:'新房',
+					sc_source_page:"新盘入市页"
+				});
 				this.tagList="";
 				Indicator.open();
 					return new Promise((resolve)=>{

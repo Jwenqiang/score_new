@@ -68,7 +68,7 @@
 					<p>产权：<span v-if="house.PropertyRight>0">{{house.PropertyRight}}</span><span v-else>暂无数据</span></p>
 				</div>
 			</div>
-			<div class="ctip"><a :href="'tel:'+user.Mobile">该房源附近中小学情况<span>免费咨询</span></a></div>
+			<div class="ctip"><a :href="'tel:'+user.Mobile" @click="setSc('免费咨询')">该房源附近中小学情况<span>免费咨询</span></a></div>
 		</div>
 		<div class="top3">
 			<h5>房源介绍</h5>
@@ -90,7 +90,7 @@
 				</template>
 				<p v-if="tag==4&&yz.length>0">{{yz[0].CoverContent}}</p>
 			</div>
-			<a :href="'tel:'+user.Mobile" class="callMore">咨询更多房源优势</a>
+			<a :href="'tel:'+user.Mobile" class="callMore" @click="setSc('咨询更多房源优势')">咨询更多房源优势</a>
 		</div>
 		<div class="top4">
 			<h5>房源动态</h5>
@@ -108,7 +108,7 @@
 					<p>关注人数</p>
 				</div>
 			</div>
-			<a :href="'tel:'+user.Mobile" class="callMore">咨询最新房源动态</a>
+			<a :href="'tel:'+user.Mobile" class="callMore" @click="setSc('咨询最新房源动态')">咨询最新房源动态</a>
 		</div>
 		<div class="top5">
 			<h5>{{house.EstateName}}<a :href="'https://m.sz.centanet.com/xiaoqu/xq-'+house.EstateCode">小区详情</a></h5>
@@ -121,7 +121,7 @@
 					<img :src="xq.FullImagePath" width="100%"/>
 				</div>
 			</div>
-			<a :href="'tel:'+user.Mobile" class="callMore">联系小区专家</a>
+			<a :href="'tel:'+user.Mobile" class="callMore" @click="setSc('联系小区专家')">联系小区专家</a>
 		</div>
 		<div class="clear hhFoot">
 			<label><img :src="'https://pic.centanet.com/shenzhen/pic/agent/'+user.EmpNo+'.jpg'"  onerror="this.src='https://sz.centanet.com/partner/house/userImg/tx_none.png'" width="100%"/></label>
@@ -130,10 +130,10 @@
 				<span>{{user.PositionName}}</span>
 			</label>
 			<div class="appBtn" v-if="inApp">
-				<a :href="'tel:'+user.Mobile">电话咨询</a>
+				<a :href="'tel:'+user.Mobile" @click="setSc('电话咨询')">电话咨询</a>
 				<a @click="share(banner)">分享</a>
 			</div>
-			<a :href="'tel:'+user.Mobile" v-else>电话咨询<p>隐藏号码</p></a>
+			<a :href="'tel:'+user.Mobile" @click="setSc('电话咨询')" v-else>电话咨询<p>隐藏号码</p></a>
 		</div>
 		<!-- 弹窗 -->
 		<div class="sModel mMsg" v-if="hasYb&&inApp">
@@ -251,6 +251,18 @@
 			}
 		},
 		methods:{
+			// 神策电话埋点
+			setSc(name){
+				this.$sensors.track('sc_click_call', {
+					sc_business_type:"second_hand_house",
+					sc_button_name:name,
+					sc_click_page:"房源海报_二手房详情页",
+					sc_house_id:this.houseId,
+					sc_house_name:document.title,
+					sc_click_area:"底部区域",
+					sc_button_position:""
+				});
+			},
 			goVR(){
 				let link="https://esf.centanet.com/tools/vr/?adsno="+this.$route.query.adsNo+"&cityen=sz&posttype=s&type=out"
 				location.href=link;

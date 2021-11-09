@@ -13,7 +13,7 @@
 		<div class="top">
 			<mt-swipe :auto="0" :showIndicators="false" @change="handleChange">
 				<template v-if="$route.query.cityen=='sz'">
-					<mt-swipe-item v-for="(item,index) in imgArr" :key="index"><img :src="item.FullImagePath | changeImgBan" preview="1"/></mt-swipe-item>
+					<mt-swipe-item v-for="(item,index) in imgArr" :key="index"><img :src="item.FullImagePath" preview="1"/></mt-swipe-item>
 				</template>
 				<template v-else>
 					<mt-swipe-item v-for="(item,index) in imgArr" :key="index"><img :src="item.FullImagePath" preview="1"/></mt-swipe-item>
@@ -60,7 +60,7 @@
 				<p>发证时间 <span></span></p> -->
 			</div>
 			</template>
-			<div class="ctip"><a :href="'tel:'+user.Mobile">该项目附近中小学情况<span>免费咨询</span></a></div>
+			<div class="ctip"><a :href="'tel:'+user.Mobile" @click="setSc('咨询该项目附近中小学情况')">该项目附近中小学情况<span>免费咨询</span></a></div>
 			<div class="readMore" @click="showDetails">
 				<label v-if="show==1"><i></i> 查看更多 <i></i></label>
 				<label v-if="show==2"><i></i> 收起更多 <i></i></label>
@@ -79,7 +79,7 @@
 		<div class="top3" v-if="cp&&cp.PingCeCount>0">
 			<h5>测评报告</h5>
 			<div class="t3Cp">
-				<a :href="'http://esf.centanet.com/tools/newprop/assess/?id='+house.InfoId+'&cityen=sz&type=evaluate'">
+				<a :href="'http://esf.centanet.com/tools/newprop/assess/?id='+house.InfoId+'&cityen='+$route.query.cityen+'&type=evaluate'">
 					<label><img src="../assets/img/bj-cp.png" width="100%"/></label>
 					<p>中原地产-{{house.AdName}}专业测评</p>
 					<p><span>已有<i>{{cp.PingCeCount}}</i>人查看<img src="../assets/img/icon-right.png"/></span></p>
@@ -117,7 +117,7 @@
 									<div class="hxBtom">
 										<p v-if="item.TotalPrice>0">总价 {{item.TotalPrice/10000 | fix}}万/套 </p>
 										<p v-else>总价 待定 </p>
-										<p><a :href="'tel:'+user.Mobile">联系户型顾问</a></p>
+										<p><a :href="'tel:'+user.Mobile" @click="setSc('联系户型顾问')">联系户型顾问</a></p>
 									</div>
 								</div>
 							</div>
@@ -143,7 +143,7 @@
 				</div>
 			</div>
 			<div style="text-align: center;color: #999;font-size: 0.24rem;" v-else>暂无楼盘动态</div>
-			<a :href="'tel:'+user.Mobile" class="callMore">咨询最新动态</a>
+			<a :href="'tel:'+user.Mobile" class="callMore" @click="setSc('咨询最新动态')">咨询最新动态</a>
 		</div>
 
 		<div class="clear hhFoot">
@@ -153,10 +153,10 @@
 				<span>{{user.PositionName}}</span>
 			</label>
 			<div class="appBtn" v-if="inApp">
-				<a :href="'tel:'+user.Mobile">电话咨询</a>
+				<a :href="'tel:'+user.Mobile" @click="setSc('电话咨询')">电话咨询</a>
 				<a @click="share(banner)">分享</a>
 			</div>
-			<a :href="'tel:'+user.Mobile" v-else>电话咨询<p>隐藏号码</p></a>
+			<a :href="'tel:'+user.Mobile" @click="setSc('电话咨询')" v-else>电话咨询<p>隐藏号码</p></a>
 		</div>
 
 		<!-- 弹窗 -->
@@ -288,6 +288,18 @@
 			}
 		},
 		methods:{
+			// 神策电话埋点
+			setSc(name){
+				this.$sensors.track('sc_click_call', {
+					sc_business_type:"new_house",
+					sc_button_name:name,
+					sc_click_page:"房源海报_新房详情页",
+					sc_house_id:this.houseId,
+					sc_house_name:document.title,
+					sc_click_area:"底部区域",
+					sc_button_position:""
+				});
+			},
 			// A+分享回调
 			callback(item){
 				this.shareText="回调："+item;
@@ -363,6 +375,7 @@
 					url:"/ZhongyuanHouseV2/GetCcesSearchNewPropCountRequest",
 					params:{
 						estExtId:this.houseId,
+						cityen:this.$route.query.cityen
 					},
 				})
 				.then(res=>{

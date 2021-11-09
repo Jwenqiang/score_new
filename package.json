@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@nutui/nutui": "^2.2.15",
+    "@nutui/nutui": "^2.3.6",
     "axios": "^0.21.1",
     "core-js": "^3.12.1",
     "echarts": "^5.1.2",

@@ -21,10 +21,10 @@
 				<span>{{user.PositionName}}</span>
 			</label>
 			<div class="appBtn" v-if="inApp">
-				<a :href="'tel:'+user.Mobile">电话咨询</a>
+				<a :href="'tel:'+user.Mobile" @click="setSc">电话咨询</a>
 				<a @click="share()">分享</a>
 			</div>
-			<a :href="'tel:'+user.Mobile" v-else>电话咨询<p>隐藏号码</p></a>
+			<a :href="'tel:'+user.Mobile" @click="setSc" v-else>电话咨询<p>隐藏号码</p></a>
 		</div>
 	</div>		
 </template>
@@ -104,6 +104,28 @@
 			
 		},
 		methods:{
+			// 神策电话埋点
+			setSc(){
+				this.$sensors.track('sc_click_call', {
+					sc_business_type:"information",
+					sc_button_name:"电话咨询",
+					sc_click_page:"我的_资讯分享页_资讯详情页",
+					sc_house_id:"",
+					sc_house_name:"",
+					sc_click_area:"底部区域",
+					sc_button_position:""
+				});
+			},
+			// 神策电话埋点
+			setScEnter(){
+				this.$sensors.track('sc_information_read', {
+					sc_click_entry:"分享资讯icon",
+					sc_information_type:"",
+					sc_information_title:this.msg.title,
+					sc_information_author:this.msg.author,
+					sc_post_time:this.msg.CreateDateString
+				});
+			},
 			scrollT(){
 				this.scrollTop = window.scrollY;
 			},
@@ -232,6 +254,7 @@
 							shareObj.title=res.data.data.title;
 							shareObj.desc=res.data.data.summary;
 							this.wxShare();
+							this.setScEnter();
 						}else{
 							Toast(res.data.msg);
 						}

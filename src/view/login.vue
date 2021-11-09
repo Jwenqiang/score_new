@@ -49,11 +49,6 @@
 			...mapActions(['isLogin','login']),//vuex里面的Action方法名  可以用this.xx直接调用
 			// 通过action登录
 			ulogin(){
-				// 神策新增自定义事件
-				this.$sensors.track('click_registration_login', {
-					type:"登录",
-					registration_login_way:"A+"
-				});
 				if(this.username==""){
 					Toast("请输入您的工号");
 					return;
@@ -66,6 +61,10 @@
 					 "UserName": this.username,
 					  "UserPwd": this.pwd
 				}
+				// 神策新增自定义事件
+				this.$sensors.track('sc_click_registration_login', {
+					sc_registration_login_way:'2',
+				});
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"post",
@@ -78,11 +77,11 @@
 								if(res.data.data.Token==''){
 									Toast(res.data.data.Remark);
 									// 神策新增自定义事件
-									this.$sensors.track('registration_login_result', {
-										type:"登录",
-										registration_login_way:"A+",
-										is_success:false,
-										failure_reason:res.data.data.Remark
+									this.$sensors.track('sc_registration_login_result', {
+										sc_type:"登录",
+										sc_registration_login_way:"2",
+										sc_is_success:false,
+										sc_failure_reason:res.data.data.Remark
 									});
 								}else{//登录成功
 									var storage={
@@ -102,14 +101,14 @@
 										},100)
 									}
 									
+									this.$sensors.login(this.username);
 									// 神策新增自定义事件
-									this.$sensors.track('login_result', {
-										type:"登录",
-										registration_login_way:"A+",
-										is_success:true,
-										failure_reason:""
+									this.$sensors.track('sc_registration_login_result', {
+										sc_type:"登录",
+										sc_registration_login_way:"2",
+										sc_is_success:true,
+										sc_failure_reason:""
 									});
-									this.$sensors.login(res.data.data.Token);
 								}
 							}else{
 								Toast(res.data.message);

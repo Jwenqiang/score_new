@@ -18,54 +18,50 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
-				<div  class="nut-swiper-slide gray_1" >
-				    <a href="https://mp.weixin.qq.com/s/QyndcyRE5nl7ZK_8u6kTqQ" @click="goPage('','','一周年庆活动','1')"><img src="img/banner0831.png"/></a>
+				<div  class="nut-swiper-slide gray" >
+				    <a @click="goPage('days','32','days/32','1')"><img src="../assets/img/banner1025.jpg"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray" >
-				    <a href="https://mp.weixin.qq.com/s/2pG4hrvpa8NrEdPh0B7Yhw" @click="goPage('','','网络英雄','4')"><img src="images/banner0916.png"/></a>
+				    <a href="https://mp.weixin.qq.com/s/oK1RbaZZCARxx6e6379ZDA" @click="goPage('','','https://mp.weixin.qq.com/s/oK1RbaZZCARxx6e6379ZDA','2')"><img src="images/banner1115.jpg"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray_1" >
-				    <!-- <a @click="$router.push({name:'rules',query:{id:'20210831'}})"><img src="img/zj0831.jpg"/></a> -->
-				    <a @click="goPage('rules','','质检公告','3')"><img src="../assets/img/banner_zj.jpg"/></a>
+					<a @click="goPage('days','24','days/24','3')"><img src="@/assets/static/banner1103.jpg"/></a>
 				</div>
+<!-- 				<div  class="nut-swiper-slide gray" >
+				    <a href="https://mp.weixin.qq.com/s/6T75RV6uPknG4UCNK9pyHg" @click="goPage('','','https://mp.weixin.qq.com/s/6T75RV6uPknG4UCNK9pyHg','4')"><img src="images/banner1018.jpg"/></a>
+				</div> -->
 				<div  class="nut-swiper-slide gray_1" >
-					<a @click="goPage('days','24','8月优秀学员名单','2')"><img src="@/assets/static/banner0901.jpg"/></a>
-				</div>				
-<!-- 				<div  class="nut-swiper-slide gray_1" >
-					<a @click="$router.push({name:'days',params:{id:'31'}})" @click="goPage('days','31','质检公告')"><img src="@/assets/img/banner1.jpg"/></a>
+				    <a @click="goPage('rules','','rules','5')"><img src="../assets/img/banner_zj.jpg"/></a>
+				</div>
+<!-- 				<div  class="nut-swiper-slide gray" >
+				    <a href="https://mp.weixin.qq.com/s/oIL_NKl1OF7qJHoloGYiXg" @click="goPage('','','网络王','6')"><img src="images/banner0917.jpg"/></a>
 				</div> -->
 					<div  class="nut-swiper-slide gray" >
-					    <a @click="goPage('houseList','','竞拍广告位','5')"><img src="@/assets/static/banner-bz.png"/></a>
+					    <a @click="goPage('houseList','','houseList','6')"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
 				    <div  class="nut-swiper-slide gray" >
-				        <a @click="goPage('days','30','经纪人接听标准','6')"><img src="@/assets/static/banner0531.png"/></a>
+				        <a @click="goPage('days','30','days/30','7')"><img src="@/assets/static/banner0531.png"/></a>
 				    </div>
 				    <div  class="nut-swiper-slide gray_1" >
-				        <a @click="goPage('days','27','深圳二手房指导价','7')"><img src="@/assets/img/banner0222.jpg?v=1"/></a>
+				        <a @click="goPage('days','27','days/27','8')"><img src="@/assets/img/banner0222.jpg?v=1"/></a>
 				    </div>
-<!-- 					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'days',params:{id:'24'}})"><img src="@/assets/img/banner0508.jpg"/></a>
-					</div> -->
-<!-- 					<div  class="nut-swiper-slide gray_1" >
-					    <a @click="$router.push({name:'days',params:{id:'25'}})"><img src="@/assets/img/banner020501.jpg"/></a>
-					</div> -->
 				</nut-swiper>
 			</div>
 		</div>
 		<div class="hTag">
-			<div class="htL" @click="$router.push({'name':'houseList'})">
+			<div class="htL" @click="goIcon('houseList','竞拍房源Icon','(1,1)')">
 				<p><img src="../assets/img/h-fy.png"/></p>
 				<p>竞拍房源</p>
 			</div>
-			<div class="htL" @click="$router.push({'name':'houseListSchool'})">
+			<div class="htL" @click="goIcon('houseListSchool','竞拍学校Icon','(1,2)')">
 				<p><img src="../assets/img/h-xx.png"/></p>
 				<p>竞拍学校</p>
 			</div>
-			<div class="htL" @click="$router.push({name:'shareCenter'})">
+			<div class="htL" @click="goIcon('shareCenter','分享中心Icon','(1,3)')">
 				<p><img src="../assets/img/h-hb.png"/></p>
 				<p>分享中心</p>
 			</div>
-			<div class="htL" @click="$router.push({'name':'record'})">
+			<div class="htL" @click="goIcon('record','竞拍记录Icon','(1,4)')">
 				<p><img src="../assets/img/h-jl.png"/></p>
 				<p>竞拍记录</p>
 			</div>
@@ -87,59 +83,116 @@
 			<div class="sign">
 				<div class="clear signT">
 					<div class="stL">
-						<p>{{signText}}</p>
+						<template v-if="signText&&isSign>0">
+							<h4>已签到{{isSign}}天</h4>
+							<p>{{signText}}</p>
+						</template>
+						<template v-else-if="signText&&isSign==0">
+							<h4>您还没有签到哦</h4>
+							<p>连续签到有惊喜元宝奖励</p>
+						</template>
 					</div>
 					<div class="stR">
-						<mt-button type="primary" @click="setSign" v-if="nowSign==false">签到</mt-button>
-						<mt-button type="primary" style="opacity: 0.6;" v-else>已签到</mt-button>
+						<template v-if="signText">
+							<mt-button type="primary" @click="setSign" v-if="nowSign==false">签到</mt-button>
+							<mt-button type="primary" style="opacity: 0.7;" v-else>已签到</mt-button>
+						</template>
+						<template v-else>
+							<mt-button type="primary" style="opacity: 0.7;">签到</mt-button>
+						</template>
 					</div>
 				</div>
 				<div class="signM">
-					<div class="smIcon">
-						<img src="../assets/img/qd1.png" v-if="isSign<1"/>
-						<img src="../assets/img/qd1-1.png" v-else/>
-						<p>1天</p>
+					<nut-scroller :scrollTo="signNum" @scrollToCbk="signScrol">
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd1.png" v-if="isSign<1"/>
+						<img src="../assets/static/qd1-1.png" v-else/>
+						<p>第1天</p>
 					</div>
-					<div class="smIcon">
-						<img src="../assets/img/qd2.png" v-if="isSign<2"/>
-						<img src="../assets/img/qd2-1.png" v-else/>
-						<p>2天</p>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd2.png" v-if="isSign<2"/>
+						<img src="../assets/static/qd2-1.png" v-else/>
+						<p>第2天</p>
 					</div>
-					<div class="smIcon">
-						<img src="../assets/img/qd3.png" v-if="isSign<3"/>
-						<img src="../assets/img/qd3-1.png" v-else/>
-						<p>3天</p>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd3.png" v-if="isSign<3"/>
+						<img src="../assets/static/qd3-1.png" v-else/>
+						<p>第3天</p>
 					</div>
-					<div class="smIcon">
-						<img src="../assets/img/qd4.png" v-if="isSign<4"/>
-						<img src="../assets/img/qd4-1.png" v-else/>
-						<p>4天</p>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd4.png" v-if="isSign<4"/>
+						<img src="../assets/static/qd4-1.png" v-else/>
+						<p>第4天</p>
 					</div>
-					<div class="smIcon">
-						<img src="../assets/img/qd5.png" v-if="isSign<5"/>
-						<img src="../assets/img/qd5-1.png" v-else/>
-						<p>5天</p>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd5.png" v-if="isSign<5"/>
+						<img src="../assets/static/qd5-1.png" v-else/>
+						<p>连签奖</p>
 					</div>
-					<div class="smIcon">
-						<img src="../assets/img/qd6.png" v-if="isSign<6"/>
-						<img src="../assets/img/qd6-1.png" v-else/>
-						<p>6天</p>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd6.png" v-if="isSign<6"/>
+						<img src="../assets/static/qd6-1.png" v-else/>
+						<p>第6天</p>
 					</div>
-					<div class="smIcon">
-						<img src="../assets/img/qd7.png" v-if="isSign<7"/>
-						<img src="../assets/img/qd7-1.png" v-else/>
-						<p>7天</p>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd7.png" v-if="isSign<7"/>
+						<img src="../assets/static/qd7-1.png" v-else/>
+						<p>第7天</p>
 					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd8.png" v-if="isSign<8"/>
+						<img src="../assets/static/qd8-1.png" v-else/>
+						<p>第8天</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd9.png" v-if="isSign<9"/>
+						<img src="../assets/static/qd9-1.png" v-else/>
+						<p>第9天</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd10.png" v-if="isSign<10"/>
+						<img src="../assets/static/qd10-1.png" v-else/>
+						<p>连签奖</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd11.png" v-if="isSign<11"/>
+						<img src="../assets/static/qd11-1.png" v-else/>
+						<p>第11天</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd12.png" v-if="isSign<12"/>
+						<img src="../assets/static/qd12-1.png" v-else/>
+						<p>第12天</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd13.png" v-if="isSign<13"/>
+						<img src="../assets/static/qd13-1.png" v-else/>
+						<p>第13天</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd14.png" v-if="isSign<14"/>
+						<img src="../assets/static/qd14-1.png" v-else/>
+						<p>第14天</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+						<img src="../assets/static/qd15.png" v-if="isSign<15"/>
+						<img src="../assets/static/qd15-1.png" v-else/>
+						<p>连签奖</p>
+					</div>
+					<div slot="list" class="nut-hor-list-item">
+					</div>
+					</nut-scroller>
 				</div>
 			</div>
+			
 <!-- 			<div class="newMore" @click="$router.push({'name':'way',params:{'tab':4}})">
 				<img src="../assets/img/icon-new.png"/>新手大礼包
 			</div> -->
 			<div class="newP clear">
-				<div class="newP1" @click="$router.push({'name':'way',params:{'tab':3}})"></div>
+				<div class="newP1" @click="goTask('way','3','way','1','福利任务banner')"></div>
 				<div class="clear newD">
-					<div class="newP2" @click="$router.push({'name':'way',params:{'tab':4}})"></div>
-					<div class="newP3" @click="$router.push({'name':'way',params:{'tab':2}})"></div>
+					<div class="newP2" @click="goTask('way','4','way','2','新手任务banner')"></div>
+					<div class="newP3" @click="goTask('way','2','way','3','每日任务banner')"></div>
 				</div>
 			</div>
 			<div class="ltitle">
@@ -159,7 +212,7 @@
 		  <div class="bj"></div>
 		  <div class="showMsg">
 		    <label class="modelClose" @click="isShowTip=false"></label>
-			<p class="homeTip">很遗憾，昨天签到中断了。快去签到领元宝吧，第<span>7天</span>签到可领<span>20元宝</span></p>
+			<p class="homeTip">很遗憾，昨天签到中断了。快去签到领元宝吧，第<span>5天</span>即可拿连签奖哦！</p>
 			<mt-button type="primary" class="hmBtn" @click="setSign()">立即签到</mt-button>
 		  </div>
 		</div>
@@ -180,10 +233,21 @@
 		  <div class="bRead" @click="setCook()">
 		  </div>
 		</div> -->
-<!-- 		<div class="sModel mMsg" v-if="readMsg">
-		  <div class="bj" @click="readMsg=false"></div>
-		  <label class="sclose" @click="readMsg=false"></label>
-		  <div class="bRead" @click="setCook()">
+		<!-- 签到成功 -->
+		<div class="sModel mMsg" v-show="signed">
+		  <div class="bj" @click="signed=false"></div>
+		  <!-- <label class="sclose" @click="signed=false"></label> -->
+		  <div class="bRead">
+				<h3>{{sucText}}</h3>
+				<p>+{{sucYb}}元宝</p>
+				<button @click="signed=false">我知道啦</button>
+		  </div>
+		</div>
+		<!-- 问卷调查 -->
+<!-- 		<div class="sModel mMsg" v-show="getIder">
+		  <div class="bj" @click="getIder=false"></div>
+		  <div class="bRead iderBj" @click="setLocal">
+				<a href="https://www.wjx.cn/vj/OFKnawC.aspx" style="width: 100%;height: 100%;display: block;"></a>
 		  </div>
 		</div> -->
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
@@ -198,11 +262,11 @@
 				<Module :showOn="moduleNum" :prizeName="prizeName" @changeNum="changeModule"></Module>
 			</div>
 			<!-- 领取成功弹窗 -->
-			<div class="hkShow" :class="addCar?'animationCar':''">
-				<div class="hkbj" v-if="addCar" @click="addCar=false"></div>
+<!-- 			<div class="hkShow" :class="addCar?'animationCar':''">
+				<div class="hkbj" v-if="addCarr" @click="addCar=false"></div>
 				<div class="giveMsg" @click="$router.push({'name':'myPrize'})">
 				</div>
-			</div>
+			</div> -->
 	</div>
 </template>
 
@@ -229,6 +293,7 @@
 		name: 'home',
 		data(){
 			return{
+				publicPath: process.env.BASE_URL,
 				header_token:{"token": uToken()},
 				signList:"",
 				signText:"",
@@ -252,7 +317,13 @@
 				prize:"",
 				prizeName:"45元礼包",
 				runNum:Math.random(),
-				prizeId:""
+				prizeId:"",
+				signed:false,
+				signNum:1,
+				sucText:"",
+				sucYb:"",
+				disID:"没有值",
+				getIder:true
 				// showNew:false
 			}
 		},
@@ -260,12 +331,21 @@
 			...mapState(['hasLogin','userInfo']),//判断是否已经登录
 		},
 		created() {
+			if(sessionStorage.getItem('model')){
+				this.getIder=false
+			}
 			if(localStorage.getItem("readHome")){
 				this.readMsg=false;
 			}
-			console.log(this.runNum)
-		},
+
+			// this.$sensors.setProfile({email:'632795201@qq.com'}); 设置用户属性
+		},           
 		mounted(){
+			var cook=this.getCookie("sensorsdata2015jssdkcross");
+			cook=decodeURIComponent(cook);
+			cook=JSON.parse(cook);
+			console.log(cook.distinct_id);
+			
 			if(navigator.userAgent.indexOf('aplus') > -1){
 				this.inApp=true
 				this.isApp=true
@@ -310,18 +390,69 @@
 
 		},
 		methods:{
+			setLocal(){
+				sessionStorage.setItem('model',"true");
+			},
+			getCookie(key){
+					var cookies=document.cookie;
+					if(cookies.length>0){
+							var start=cookies.indexOf(key+"=");
+							if(start<0){
+									return "";
+							}
+							var end =cookies.indexOf(";",start);
+							if(end<0){
+									end=cookies.length;
+							}
+							return cookies.substring(start+key.length+1,end);
+					}
+			},
+			// icon跳转 神策
+			goIcon(r,n,p){
+				this.$router.push({'name':r});
+				this.$sensors.track('sc_click_icon', {
+					sc_business_type:'other',
+					sc_current_page:"首页",
+					sc_icon_name:n,
+					sc_icon_position:p
+				});
+			},
+			signScrol(n){
+				this.signNum=n
+			},
 			// banner跳转
 			goPage(name,id,title,idx){
+				let url=""
+				if(title.indexOf('http')>-1){
+					url=title;
+				}else{
+					url="https://sz.centanet.com/partner/house/aplus/#/"+title;
+				}
 				let scJson={
-					current_page:"产品首页",
-					banner_name:title,
-					banner_sort:idx,
-					banner_jump_url:title,
-					Banner_board:"头部banner"
+					sc_business_type:"other",
+					sc_current_page:"首页",
+					sc_banner_name:"广告位banner",
+					sc_banner_sort:`(1,${idx})`,
+					sc_banner_jump_url:url,
 				};
-				this.$sensors.track('click_banner', scJson);
+				this.$sensors.track('sc_click_banner', scJson);
 				if(name){
 					this.$router.push({'name':name,params:{'id':id}})
+				}
+			},
+			// banner跳转
+			goTask(name,id,title,idx,n){
+				let	url="https://sz.centanet.com/partner/house/aplus/#/"+title;
+				let scJson={
+					sc_business_type:"other",
+					sc_current_page:"首页",
+					sc_banner_name:n,
+					sc_banner_sort:`(1,${idx})`,
+					sc_banner_jump_url:url,
+				};
+				this.$sensors.track('sc_click_banner', scJson);
+				if(name){
+					this.$router.push({'name':name,params:{'tab':id}})
 				}
 			},
 			// 经纪人回馈活动中奖查询
@@ -514,13 +645,27 @@
 						})
 						.then(res=>{
 							console.log(res);
-							resolve(res);
 							if(res.data.code==0){
 								this.signText=res.data.data.DayText
 								this.signList=res.data.data.ListSign
 								this.isSign=res.data.data.DayIndex
 								this.nowSign=res.data.data.IsTodaySigned,
-								this.isShowTip=res.data.data.IsShowTips
+								this.isShowTip=res.data.data.IsShowTips;
+								// 滑动条
+								if(res.data.data.DayIndex>5&&res.data.data.DayIndex<11){
+									this.$nextTick(()=>{
+										this.signScrol(-201)
+									}) 
+								}else if(res.data.data.DayIndex>10){
+									this.$nextTick(()=>{
+										this.signScrol(-409)
+									}) 
+								}else{
+									this.$nextTick(()=>{
+										this.signScrol(1)
+									}) 
+								}
+								
 							}else{
 								Toast(res.data.msg);
 								if(res.data.code==500){
@@ -531,6 +676,7 @@
 									},500)
 								}
 							}
+							resolve(res);
 						})
 						.catch(error=>{
 							Indicator.close();
@@ -539,6 +685,9 @@
 				})
 			},
 			setSign(){
+				Indicator.open({
+				  spinnerType: 'triple-bounce'
+				});
 				let rNum=Math.random();
 				if(rNum<0.4){
 						this.getPrize()
@@ -550,21 +699,28 @@
 							url:"/My/Sign",
 							headers:this.header_token
 						})
-						.then(res=>{
+						.then(async (res)=>{
 							console.log(res);
 							resolve(res);
 							if(res.data.code==0){
 								if(res.data.data.IsSuccess){
-									Toast('签到成功~');
-									this.getSign();
+									this.sucText=res.data.data.Reamark;
+									this.sucYb=res.data.data.SuccessYuanBao;
+									this.signed=true;
+									await this.getSign();
+									this.$sensors.track('sc_check_in', {
+										sc_consecutive_check_in_days:this.isSign
+									});
 								}else{
-									Toast(res.data.data.Reamark);
+									Toast("签到失败，请稍后重试");
 								}
 							}else{
 								Toast(res.data.msg);
 							}
+							Indicator.close();
 						})
 						.catch(error=>{
+							Indicator.close();
 							Toast("网络错误，请稍后再试");
 						})
 				})
@@ -640,20 +796,23 @@
 	.ltitle{width: 100%;height: 0.8rem;line-height: 0.8rem;font-size: 0.32rem;font-weight: 500;}
 	.ltitle span{display: block;width: 4px;height: 0.3rem;float: left;background-color: #F4472D;margin-right: 0.2rem;margin-top: 0.25rem;}
 	.sign {padding: 0.3rem 0.2rem;background-color: #fff;margin-bottom: 0.3rem;margin-top: 0.1rem;border-radius: 0.1rem;box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
-	.signT{margin-bottom: 0.2rem;height: 0.8rem;}
+	.signT{margin-bottom: 0.36rem;height: 0.8rem;}
 	.stL{width: 70%;float: left;height: 0.8rem;line-height: 0.8rem;}
-	.stL h4{font-size: 0.3rem;margin-bottom: 0.1rem;}
+	.stL h4{margin-bottom: 0.2rem;line-height: 1;font-size: 0.36rem;font-weight: 550;color: #333;}
+	.stL p{line-height: 1;color: #666;font-size: 0.28rem;}
 	.stR{width: 30%;float: left;text-align: right;padding-top: 0.1rem;}
 	.stR button{
-		width:1.6rem;
-		height:0.6rem;
-		background:#F4472D;
+		width:1.7rem;
+		height:0.65rem;
+		background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);
 		border-radius:0.4rem;
-		font-size: 0.3rem;
+		font-size: 0.34rem;
+		line-height: 0.63rem;
+		padding-bottom: 0.3px;
 	}
-	.signM{display: flex;width: 100%;}
-	.smIcon{flex: 1;text-align: center;color: #999;font-size: 0.24rem;}
-	.smIcon img{height: 0.56rem;}
+	.signM{display: block;width: 100%;white-space: nowrap;overflow: auto;}
+	.smIcon{width: 0.65rem;text-align: center;color: #999;font-size: 0.24rem;display: inline-block;}
+	.smIcon img{height: 0.56rem;width: 0.65rem;}
 	.newMore{width: 100%;height: 0.8rem; line-height: 0.8rem;border-radius: 0.4rem;padding: 0 0.4rem;background: #fff url(../assets/img/n-right.png) 96% center no-repeat;background-size: 0.36rem;margin-bottom: 0.3rem;}
 	.newMore img{width: 0.5rem;margin-right: 0.2rem;vertical-align: -6px;}
 	.newP{margin-bottom: 0.3rem;}
@@ -767,18 +926,44 @@
 		100%{transform: scale(1);}
 	 }
 	 @keyframes bh{
-	 	0%{transform: translateX(-600px);}
+	 	0%{transform: translateY(-600px);}
 	 	100%{transform: translateX(0);}
 	 }
 /* 	 .bRead{
 		 font-size: 16px; position: fixed;left: 50%;top: 50%;margin: -4.5rem 0 0 -3.75rem; width: 7.5rem;height: 7.2rem; background: url(../assets/img/fiveTc.png) center bottom no-repeat;background-size: 5.72rem; z-index: 92;;
 		 animation: bh 0.5s 1 forwards;
 	 } */
-	 .bRead{
+/* 	 .bRead{
 	 		 font-size: 16px; position: fixed;left: 0;top: 50%;margin: -4.8rem 0 0 0; width: 7.5rem;height: 9.5rem; background: url(../../public/img/showShare.png?v=2) center bottom no-repeat;background-size: 7.5rem; z-index: 92;;
 	 		 animation: bh 0.5s 1 forwards;
+	 } */
+	 .bRead{
+	 		 font-size: 16px; position: fixed;left: 0;top: 50%;margin: -4.8rem 0 0 0; width: 7.5rem;height: 7.5rem; background: url(../assets/img/signSuc.png) center bottom no-repeat;background-size: 6.64rem; z-index: 92;;
+	 		 animation: bh 0.5s 1 forwards;
+			 padding: 2.5rem 0 0.72rem;
+			 text-align: center;
 	 }
-	.mClose{position: absolute;right: 1.4rem;top: 1rem;cursor: pointer;width: 0.8rem;height: 0.8rem;display: block;background: url(../assets/img/nClose.png) center no-repeat;background-size: 0.27rem;}
+	 .bRead h3{
+		 font-size: 0.6rem;
+		 color: #F4601B;
+		 font-weight: 500;
+		 margin-bottom: 0.2rem;
+	 }
+	 .bRead p{
+		 font-size: 0.48rem;
+		 color: #F41B1B;
+	 }
+	 .bRead button{
+		 width: 3.3rem;
+		 height: 0.98rem;
+		 background: url(../assets/img/signBtn.png) center no-repeat;background-size: 100%; 
+		 margin-top: 1.6rem;
+		 padding-bottom: 0.2rem;
+		 font-size: 0.36rem;
+		 color: #611207;
+		 font-weight: 550;
+	 }
+.mClose{position: absolute;right: 1.4rem;top: 1rem;cursor: pointer;width: 0.8rem;height: 0.8rem;display: block;background: url(../assets/img/nClose.png) center no-repeat;background-size: 0.27rem;}
 .tipMsg{text-align: center;padding-top: 3.5rem;padding-right: 0.4rem;}
 .tipMsg h5{font-size: 0.3rem;color: #fff;}
 .smallTip{font-size: 0.22rem;margin-top: 0.05rem; margin-bottom: 0.1rem;color: #fff;}
@@ -792,16 +977,16 @@
 box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 .h-tip label{display: inline-block;float: left;height: 0.3rem;line-height: 0.3rem;position: relative;}
 .h-tip label i{
-	font-style: normal;font-size: 0.2rem;font-weight: 300;border-radius: 3px;background-color: #FF0000;color: #fff;position: absolute;top: -0.1rem;right: -0.24rem;
+	font-style: normal;font-size: 0.2rem;font-weight: 300;border-radius: 3px;background-color: #FF0000;color: #fff;position: absolute;top: -0.1rem;left: 0.56rem;
 	display: block;
-	    max-width: 0.36rem;
-			padding: 0 0.08rem;
+			min-width: 0.3rem;
+			max-width: 0.5rem;
 	    height: 0.24rem;
 	    text-align: center;
 	    line-height: 0.24rem;
 	}
 .h-tip span{display: inline-block;width: 5rem;color: #999;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;border-left: 1px solid #999;height: 0.3rem;line-height: 0.3rem;margin-left: 0.3rem;padding-left: 0.2rem;float: left;font-size: 0.26rem;}
-.sclose{display: block;width: 0.64rem;height: 0.64rem;position: fixed;bottom: 22%;left: 3.4rem;background: url(../assets/img/nClose.png) center no-repeat;background-size: 60%;z-index: 96;border: 1px solid #fff;border-radius: 50%;animation: bh 0.5s 1 forwards;}
+.sclose{display: block;width: 0.64rem;height: 0.64rem;position: fixed;bottom: 18%;left: 3.4rem;background: url(../assets/img/nClose.png) center no-repeat;background-size: 60%;z-index: 96;border: 1px solid #fff;border-radius: 50%;animation: bh 0.5s 1 forwards;}
 .hsTip{font-size: 0.24rem;color: #F4472D;font-style: normal;position: absolute;right: 5px;top: -0.15rem;font-weight: bold;}
 
 /* 回馈活动弹框 */
@@ -890,4 +1075,16 @@ box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 	from{transform: scale(1);}
 	to{transform: scale(0);right: -375px;bottom: -400px;}
 } */
+.nut-hor-list-item{
+	width: 0.98rem;
+	text-align: center;color: #666;font-size: 0.24rem;display: inline-block;
+}
+.nut-hor-list-item img{width: 0.65rem;height: 0.8rem;margin-bottom: 0.1rem;}
+.iderBj{
+	background: url(../../public/model/model.png) center bottom no-repeat;
+	background-size: 6rem;
+	margin-top: -3.8rem;
+	padding: 0.5rem 0 3em;
+}
 </style>
+

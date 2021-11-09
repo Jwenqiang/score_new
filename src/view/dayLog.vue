@@ -24,7 +24,7 @@
 				<div class="sUp" @click="item.show=false"> —— 收起 —— </div>
 			</div>
 		</div>
-		<p class="noList" @click="pSize+=10" v-if="count>pSize">正在加载</p>
+		<p class="noList" v-if="count>pSize">正在加载</p>
 		<p class="noList" v-else-if="count<=pSize&&loadOver"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
 	</div>		
 </template>
@@ -59,10 +59,11 @@
 				var height = document.getElementsByClassName('dayLog')[0].scrollHeight;
 				let sTop = document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;//滚动的高度
 				let clientHeight=window.screen.height;//屏幕的高度
+				console.log(newValue)
 				if(this.count>this.pSize){
 					if(sTop>0){
 						if(height-100<sTop+clientHeight&&this.load){
-							  // console.log('监听成功','到达底部')
+							  console.log('监听成功','到达底部')
 							if(this.pSize<this.count){
 								this.pSize=Number(this.pSize)+10; 
 							}
@@ -75,6 +76,11 @@
 					setTimeout(()=>{
 						this.loadOver=true
 					},1000)
+				}
+			},
+			pSize(){
+				if(this.pSize<31){
+					this.getData()
 				}
 			},
 		},

@@ -879,21 +879,21 @@
 							headers:this.header_token,
 							data:{
 								  "AdName": this.childMsg[0].AdName,
-								    "RoomCount": this.sHouse.RoomCount,
-								    "HallCount": this.sHouse.HallCount,
-								    "EstateCode": this.sHouse.EstateCode,
-								    "Garea": this.sHouse.Garea,
-								    "SalePrice": this.sHouse.SalePrice,
-								    "AdType": this.type,
-								    "AdPlace": adplace,
-								    "AdPositionId": this.adId,
-								    "CurrentYuanBaoNum": this.mainNum,
-								    "PropId": this.sHouse.PropId,
-								    "PropName": this.sHouse.Title,
-								    "AdsNo": this.sHouse.AdsNo,
-								    "PostId": this.sHouse.PostId,
-								    "PropUrl": "",
-								    "EstateName": EstateName,
+									"RoomCount": this.sHouse.RoomCount,
+									"HallCount": this.sHouse.HallCount,
+									"EstateCode": this.sHouse.EstateCode,
+									"Garea": this.sHouse.Garea,
+									"SalePrice": this.sHouse.SalePrice,
+									"AdType": this.type,
+									"AdPlace": adplace,
+									"AdPositionId": this.adId,
+									"CurrentYuanBaoNum": this.mainNum,
+									"PropId": this.sHouse.PropId,
+									"PropName": this.sHouse.Title,
+									"AdsNo": this.sHouse.AdsNo,
+									"PostId": this.sHouse.PostId,
+									"PropUrl": "",
+									"EstateName": EstateName,
 									"VerifyCode":this.pCode,
 									"empNo":this.empNo||'',
 									"AdTimeType":this.hasWeek?'2':'1'
@@ -905,9 +905,52 @@
 								if(res.data.data.IsSuccess){
 									this.showCode=false;
 									Toast("出价成功,您将有机会竞得该位置~");
+									// 埋点
+									let ggwLx="";
+									if(this.type=="1"){
+										ggwLx="首页广告位";
+									}else if(this.type=="2"){
+										ggwLx="经纪人广告位";
+									}else if(this.type=="3"){
+										ggwLx="区域广告位";
+									}else if(this.type=="4"){
+										ggwLx="小区广告位";
+									}
+									// 神策
+									this.$sensors.track('sc_advertising_bidding', {
+										sc_bidding_price:this.mainNum,
+										sc_is_success:true,
+										sc_failure_reason:"",
+										sc_advertising_type:ggwLx,
+										sc_advertising_name:this.childMsg[0].AdName,
+										sc_advertising_id:this.adId,
+										sc_advertising_cycle:this.hasWeek?'包周':'包日'
+									});
+									
 								}else{
 									Toast(res.data.data.Reamark);
 									this.getImgCode();
+									// 埋点
+									let ggwLx="";
+									if(this.type=="1"){
+										ggwLx="首页广告位";
+									}else if(this.type=="2"){
+										ggwLx="经纪人广告位";
+									}else if(this.type=="3"){
+										ggwLx="区域广告位";
+									}else if(this.type=="4"){
+										ggwLx="小区广告位";
+									}
+									// 神策
+									this.$sensors.track('sc_advertising_bidding', {
+										sc_bidding_price:this.mainNum,
+										sc_is_success:false,
+										sc_failure_reason:res.data.data.Reamark,
+										sc_advertising_type:ggwLx,
+										sc_advertising_name:this.childMsg[0].AdName,
+										sc_advertising_id:this.adId,
+										sc_advertising_cycle:this.hasWeek?'包周':'包日'
+									});
 								}
 								this.getChild();
 							}else{
@@ -920,6 +963,14 @@
 				})
 			},
 			search(){
+				let id=this.adsNo.length>17;
+				this.$sensors.track('sc_click_search', {
+					sc_business_type:"second_hand_house",
+					sc_srh_word:this.adsNo,
+					sc_house_id:id?this.adsNo:'',
+					sc_srh_type:"手动搜索",
+					sc_source_page:"首页_竞拍房源页"
+				});
 				Indicator.open();
 				return new Promise((resolve)=>{
 						this.$axios({

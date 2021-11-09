@@ -459,7 +459,34 @@ var router = new Router({
 				title:'早安分享',
 				keepAlive:false
 			}			
-		},				
+		},	
+		{
+			path:'/payList',
+			name:"payList",
+			component:() =>import ('@/view/pay/payList'),
+			meta:{
+				title:'租房佣金支付',
+				keepAlive:false
+			}			
+		},
+		{
+			path:'/payInfo/:id',
+			name:"payInfo",
+			component:() =>import ('@/view/pay/payInfo'),
+			meta:{
+				title:'租房佣金支付详情',
+				keepAlive:false
+			}			
+		},
+		{
+			path:'/paySend',
+			name:"paySend",
+			component:() =>import ('@/view/pay/paySend'),
+			meta:{
+				title:'发起租房佣金支付',
+				keepAlive:false
+			}			
+		},
 		// {
 		// 	path:'/User',
 		// 	name:"user",
@@ -492,7 +519,7 @@ if(u.indexOf('aplus') < 0){
 		}
 		if(to.name == 'error'){
 			 next(); // 跳转
-		}else if(to.name == 'days'||to.name == 'hh'||to.name == 'h5New'||to.name == 'school'||to.name == 'schoolAll'||to.name == 'call'||to.name == 'callM'||to.name == 'zxInfo'||to.name == 'rules'||to.name == 'rulesAll'){
+		}else if(to.name == 'days'||to.name == 'hh'||to.name == 'h5New'||to.name == 'school'||to.name == 'schoolAll'||to.name == 'call'||to.name == 'callM'||to.name == 'zxInfo'||to.name == 'rules'||to.name == 'rulesAll'||to.name.indexOf('pay')>-1){
 			 next(); // 跳转
 		}else if (!token && to.name !== LOGIN_PAGE_NAME) {
 		  // 未登录且要跳转的页面不是登录页  并且不是查看头像审核页

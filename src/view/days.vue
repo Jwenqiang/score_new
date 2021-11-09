@@ -19,13 +19,13 @@
 			<img src="../assets/img/day6.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==7">
-			<img src="../assets/img/day7.png" width="100%"/>
+			<img src="../assets/img/day7.png?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==8">
-			<img src="../assets/img/day8.png" width="100%"/>
+			<img src="../assets/img/day8.png?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==9">
-			<img src="../assets/img/day9.png" width="100%"/>
+			<img src="../assets/img/day9.png?v=1" width="100%"/>
 		</div>	
 		<div class="imgMsg" v-else-if="id==0">
 			<img src="../assets/img/dayS.png" width="100%"/>
@@ -67,10 +67,10 @@
 			<img src="../assets/img/days27.png" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="$route.params.id==24" @click="$router.replace({name:'days',params:{id:'26'}})">
-			<img src="../assets/img/days24.jpg?v=7" width="100%"/>
+			<img src="../assets/img/days24.jpg?v=8" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg2':''" v-else-if="$route.params.id==26">
-			<img src="../assets/img/days26.png?v=7" width="100%"/>
+			<img src="../assets/img/days26.png?v=8" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==25">
 			<img src="../assets/img/days25.jpg" width="100%"/>
@@ -83,7 +83,13 @@
 		</div>
 		<div class="imgMsg" v-else-if="id==31">
 			<img src="../assets/img/days31.png" width="100%"/>
-		</div>		
+		</div>
+		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==32">
+			<img src="../assets/img/days32.jpg" width="100%"/>
+		</div>
+		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==33">
+			<img src="../assets/img/days33.jpg?v=1" width="100%"/>
+		</div>
 	</div>
 </template>
 
@@ -132,7 +138,8 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
+	img{display: block;}
 	.imgMsg{padding: 0.5rem 0.2rem 0.7rem;}
 	.imgMsg1{padding: 0;}
 	.imgMsg2{background-color: #09136d;}

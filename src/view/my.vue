@@ -52,27 +52,29 @@
 			<div class="nineTop">
 				<p>用户中心</p>
 				<div class="nineC">
-					<label @click="$router.push({name:'record'})">竞拍记录</label>
+					<label @click="goIcon('record','竞拍记录','','','','(1,1)')">竞拍记录</label>
 					<!-- <label @click="$router.push({name:'cars'})">收藏夹</label> -->
-					<label @click="$router.push({name:'myPrize'})">我的奖品</label>
-					<label @click="$router.push({name:'message'})">消息中心</label>
+					<label @click="goFail">纠错有奖</label>
+					<label @click="goIcon('message','消息中心','','','','(1,3)')">消息中心</label>
 					<label @click="goDay">管理日报</label>
 				</div>
 			</div>
 			<div class="nineTop">
 				<p>分享中心</p>
 				<div class="ninesC">
-					<label @click="$router.push({name:'hb',query:{id:'0'}})">名片海报</label>
-					<label @click="$router.push({name:'hbHouse',query:{jjr:jjrNum,cityName:cityName}})">房源海报</label>
-					<label @click="$router.push({name:'hb',query:{id:'2'}})">招聘海报<!-- <span v-if="showZp"></span> --><!-- <i>new</i> --></label>
-					<label @click="$router.push({name:'hb',query:{id:'3'}})">节日海报<!-- <span v-if="showJr"></span> --><!-- <i>new</i> --></label>
-					<label @click="$router.push({name:'hb',query:{id:'4'}})">正能量海报</label>
-					<label @click="$router.push({name:'hb',query:{id:'5'}})">App下载海报</label>
-					<label @click="$router.push({name:'hb',query:{id:'7'}})">成交战报</label>
-					<label @click="$router.push({name:'hbZx',query:{jjr:jjrNum}})">分享资讯</label>
-					<label @click="$router.push({name:'schoolList',query:{jjr:jjrNum}})">分享学校</label>
-					<label @click="$router.push({name:'hbHouseNew',query:{jjr:jjrNum}})">新盘入市</label>
-					<label @click="$router.push({name:'morning'})">早安分享</label>
+					<label @click="goIcon('hb','名片海报','0','','','(2,1)')">名片海报</label>
+					 <!-- @click="$router.push({name:'hbHouse',query:{jjr:jjrNum,cityName:cityName}})" -->
+					<label @click="goIcon('hbHouse','房源海报',jjrNum,'jjr',cityName,'(2,2)')">房源海报</label>
+					<label @click="goIcon('hb','招聘海报','2','','','(2,3)')">招聘海报<!-- <span v-if="showZp"></span> --><!-- <i>new</i> --></label>
+					<label @click="goIcon('hb','节日海报','3','','','(2,4)')">节日海报<!-- <span v-if="showJr"></span> --><!-- <i>new</i> --></label>
+					<label @click="goIcon('hb','正能量海报','4','','','(3,1)')">正能量海报</label>
+					<label @click="goIcon('hb','App下载海报','5','','','(3,2)')">App下载海报</label>
+					<label @click="goIcon('hb','成交战报','7','','','(3,3)')">成交战报</label>
+					<label @click="goIcon('hbZx','分享资讯',jjrNum,'jjr','','(3,4)')">分享资讯</label>
+					<label @click="goIcon('schoolList','分享学校',jjrNum,'jjr','','(4,1)')">分享学校</label>
+					<label @click="goIcon('hbHouseNew','新盘入市',jjrNum,'jjr','','(4,2)')">新盘入市</label>
+					<label @click="goIcon('morning','早安分享','','','','(4,3)')">早安分享</label>
+					<label @click="goIcon('hb','小贴士','11','','','(4,4)')">小贴士</label>
 				</div>
 			</div>
 			<nut-popup v-model="show">
@@ -233,14 +235,52 @@
 			 }
 		},
 		methods:{
+			goFail(){
+				this.$sensors.track('sc_click_icon', {
+					sc_business_type:'other',
+					sc_current_page:"我的",
+					sc_icon_name:"纠错有奖",
+					sc_icon_position:'(1,2)'
+				});
+				this.$router.push({name:'fail',query:{'userName':this.userInfo.EmpCnName,'emNum':this.userInfo.EmpNo}})
+			},
+			// icon跳转 神策
+			goIcon(r,n,num,jjr,cName,position){
+				if(jjr){
+					if(cName){
+						this.$router.push({'name':r,query:{jjr:num,cityName:cName}});
+					}else{
+						this.$router.push({'name':r,query:{jjr:num}});
+					}
+				}
+				else if(num){
+					this.$router.push({'name':r,query:{id:num}});
+				}else{
+					this.$router.push({'name':r});
+				}
+				this.$sensors.track('sc_click_icon', {
+					sc_business_type:'other',
+					sc_current_page:"我的",
+					sc_icon_name:n+"icon",
+					sc_icon_position:position
+				});
+			},
 			vip(){
 				var arrVip=this.empArr;
 				arrVip.push('121728');
 				arrVip.push('63119');
 				arrVip.push('119141');
 				arrVip.push('103524');
+				arrVip.push('139016');
+				arrVip.push('137476');
 			},
 			goDay(){
+				this.$sensors.track('sc_click_icon', {
+					sc_business_type:'other',
+					sc_current_page:"我的",
+					sc_icon_name:"管理日报icon",
+					sc_icon_position:'(1,4)'
+				});
 				// 0830  6896  0710  0034  2963
 				let isManger=this.userInfo.RoleName=='总经理'||this.userInfo.RoleName=='大战区合伙人'||this.userInfo.RoleName=='小战区合伙人'||this.userInfo.RoleName=='店董'||this.userInfo.EstateName=='网络运营部'||this.userInfo.EmpNo=="0830"||this.userInfo.EmpNo=="6896"||this.userInfo.EmpNo=="0710"||this.userInfo.EmpNo=="0034"||this.userInfo.EmpNo=="2963"
 				if(isManger){
@@ -330,7 +370,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.my{background-color: #F5F5F5;padding-bottom: 2rem;min-height: 100vh;}
 	.myTop{position: relative;height: 3.2rem;width: 100%;background: url(../assets/img/myBj.png) center bottom no-repeat;background-size: 100%;padding: 0.6rem 0.3rem 0.4rem;}
 	.mtSet{width: 0.8rem;height: 0.8rem;background: url(../assets/img/m-set.png) right top no-repeat;background-size: 0.42rem;position: absolute;right: 0.3rem;top: 0.4rem;}
@@ -382,7 +422,7 @@
 	.nineC label i,.ninesC label i{position: absolute;top: 0.2rem;right: 0.35rem;color: #FF0000;font-size: 0.24rem;font-style: normal;font-weight: bold;}
 	.nineC label:first-child{background: url(../assets/img/nine-jp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	/* .nineC label:nth-of-type(2){background: url(../assets/img/nine-sc.png) center 0.4rem no-repeat;background-size: 0.48rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;} */
-	.nineC label:nth-of-type(2){background: url(../assets/img/nine-prize.png) center 0.4rem no-repeat;background-size: 0.48rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;}
+	.nineC label:nth-of-type(2){background: url(../assets/img/h-jc.png) center 0.4rem no-repeat;background-size: 0.52rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;}
 	.nineC label:nth-of-type(3){background: url(../assets/img/nine-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;border-right: 1px solid #eee;}
 	.nineC label:nth-of-type(4){background: url(../assets/img/nine-rb.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.ninesC label{border:  1px solid #eee;border-top: 0;border-left: 0;}
@@ -397,7 +437,8 @@
 	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.ninesC label:nth-of-type(11){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.56rem;}
-	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;}
+	.ninesC label:nth-of-type(12){background: url(../assets/img/m-icon-ts.png) center 0.4rem no-repeat;background-size: 0.36rem;}
+	.myIntr{width: 6.2rem;height: 5.4rem;background-color: #fff;border-radius: 0.2rem;}
 	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
 	.miContent{padding: 0.3rem;}
 	.miContent textarea{width: 100%;height: 2rem;background-color: #eee;border: 1px solid #ddd;padding: 0.2rem;}

@@ -79,7 +79,11 @@
 </script>
 
 <style scoped>
-	.foot{width: 100%;margin: 0 auto; height: 1rem;position: fixed;bottom: 0;left: 0;z-index: 9;background-color: #fff;display: flex;box-shadow: 0 -2px 6px #f5f5f5;}
+	.foot{width: 100%;margin: 0 auto; height: 1rem;position: fixed;bottom: 0;left: 0;z-index: 9;background-color: #fff;display: flex;box-shadow: 0 -2px 6px #f5f5f5;
+		box-sizing: content-box;
+		padding-bottom: constant(safe-area-inset-bottom);
+	  padding-bottom:env(safe-area-inset-bottom);
+	}
 	.footBar{flex: 1;text-align: center;}
 	.footBar img{width: 0.56rem;margin-top: 0.08rem;}
 	.footBar p{font-size: 0.2rem;line-height: 1;}
