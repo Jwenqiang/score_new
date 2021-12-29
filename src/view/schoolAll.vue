@@ -15,7 +15,7 @@
 						<p class="newTag" v-if="item.UnitTags"><span v-if="item.UnitTags[0]">{{item.UnitTags[0]}}</span><label v-if="item.UnitTags[1]">{{item.UnitTags[1]}}</label><label v-if="item.UnitTags[2]">{{item.UnitTags[2]}}</label><label v-if="item.UnitTags[3]">{{item.UnitTags[3]}}</label></p>
 						</a>
 						<p>参考总价：<strong>{{item.GuidingSalePrice/10000 | fix}}</strong></p>
-						<a class="btnZx" :href="'tel:'+item.CallResult.BigCode+','+item.CallResult.ExtCode">我要咨询</a>
+						<a class="btnZx" :href="'tel:'+item.CallResult.BigCode+','+item.CallResult.ExtCode" @click="setSc('我要咨询',item.AdsNo,item.Title,`(${index+1},1)`)">我要咨询</a>
 					</div>
 				</div>
 				<p style="text-align: center;font-size: 0.24rem;color: #ccc;line-height: 1rem;" @click="pSize+=10" v-if="count>pSize">———— 点击查看更多 ————</p>
@@ -80,6 +80,18 @@
 			},
 		},
 		methods:{
+			// 神策电话埋点
+			setSc(name,id,houseName,p){
+				this.$sensors.track('sc_click_call', {
+					sc_business_type:"second_hand_house",
+					sc_button_name:name,
+					sc_click_page:"附近房源_房源列表",
+					sc_house_id:id,
+					sc_house_name:houseName,
+					sc_click_area:"学校详情页_附近房源_房源列表",
+					sc_button_position:p
+				});
+			},
 			getSchool(){
 				Indicator.open();
 				let data1={

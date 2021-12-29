@@ -177,6 +177,7 @@
 		link: shareLink,
 		imgUrl: "https://sz.centanet.com/partner/house/shareImg/logo.png",
 	};
+	import axios from 'axios'
 	import Swiper from 'swiper'
 	import { Toast,Indicator } from 'mint-ui';
 	import {
@@ -241,7 +242,6 @@
 				this.hbId=this.$route.query.myTemplateId;//二维码扫码获取
 			}
 			this.getList();
-			this.getInfo();
 		},
 		mounted(){
 			window.callback=this.callback;//暴露给public页
@@ -358,7 +358,18 @@
 					url:"/Poster/GetEmpCall",
 					params:{
 						empNo:this.empNo,
-						p:6
+						p:6,
+						// 神策渠道埋点
+						PlatformType:"chengzhangxitong",
+						BusinessType:"new_house",
+						SourceId:this.house.EstExtId,
+						SourceName:this.house.AdName,
+						HousingEstateCode:this.house.EstExtId,
+						HousingEstateName:this.house.BaseNewProp.EstName,
+						Sem:"",
+						Hmpl:"",
+						FirstQudao:"",
+						SecondQudao:""
 					}
 				})
 				.then(res=>{
@@ -416,7 +427,7 @@
 				})
 			},
 			getBanner(id){
-				this.$axios({
+				axios({
 					method:"get",
 					url:"https://apisz.centanet.com/v6/java/json/reply/GetPostImagesRequest",
 					params:{
@@ -538,6 +549,7 @@
 								Indicator.close();
 							},300)
 							resolve(res);
+							this.getInfo();
 						})
 						.catch(error=>{
 							Indicator.close();
@@ -550,7 +562,7 @@
 			},
 			// 微信分享
 			setShare(){//
-					this.$axios({
+					axios({
 						method:"get",
 						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
 					})

@@ -19,13 +19,16 @@
 					 @slideChangeEnd="handleChange"
 				>
 				<div  class="nut-swiper-slide gray" >
-				    <a @click="goPage('days','32','days/32','1')"><img src="../assets/img/banner1025.jpg"/></a>
+				    <a @click="goPage('days','322','days/322','0')"><img src="images/banner-year.png"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray" >
-				    <a href="https://mp.weixin.qq.com/s/oK1RbaZZCARxx6e6379ZDA" @click="goPage('','','https://mp.weixin.qq.com/s/oK1RbaZZCARxx6e6379ZDA','2')"><img src="images/banner1115.jpg"/></a>
+				    <a @click="goPage('days','321','days/321','1')"><img src="../assets/img/banner1025.jpg"/></a>
+				</div>
+				<div  class="nut-swiper-slide gray" >
+				    <a href="https://mp.weixin.qq.com/s/ZlJu9YzmXmhT8q-I-fMgBg" @click="goPage('','','https://mp.weixin.qq.com/s/ZlJu9YzmXmhT8q-I-fMgBg','2')"><img src="images/banner1130.jpg"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray_1" >
-					<a @click="goPage('days','24','days/24','3')"><img src="@/assets/static/banner1103.jpg"/></a>
+					<a @click="goPage('days','24','days/24','3')"><img src="images/banner1207.jpg"/></a>
 				</div>
 <!-- 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/6T75RV6uPknG4UCNK9pyHg" @click="goPage('','','https://mp.weixin.qq.com/s/6T75RV6uPknG4UCNK9pyHg','4')"><img src="images/banner1018.jpg"/></a>
@@ -243,13 +246,14 @@
 				<button @click="signed=false">我知道啦</button>
 		  </div>
 		</div>
-		<!-- 问卷调查 -->
-<!-- 		<div class="sModel mMsg" v-show="getIder">
+		<!-- 图片弹窗 -->
+		<div class="sModel mMsg" v-show="getIder">
 		  <div class="bj" @click="getIder=false"></div>
+			<label class="sclose" @click="getIder=false"></label>
 		  <div class="bRead iderBj" @click="setLocal">
-				<a href="https://www.wjx.cn/vj/OFKnawC.aspx" style="width: 100%;height: 100%;display: block;"></a>
+				<a @click="$router.push({name:'days',params:{'id':322}})" style="width: 100%;height: 100%;display: block;"></a>
 		  </div>
-		</div> -->
+		</div>
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
 			<img src="../assets/static/icon-week.png"/>
 		</div> -->
@@ -257,10 +261,10 @@
 			<img src="../assets/static/icon-rcj.png"/>
 		</div> -->
 		<!-- 回馈活动弹窗 :class="addCar?'animationCar':''"-->
-			<div class="hkShow">
+<!-- 			<div class="hkShow">
 				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
 				<Module :showOn="moduleNum" :prizeName="prizeName" @changeNum="changeModule"></Module>
-			</div>
+			</div> -->
 			<!-- 领取成功弹窗 -->
 <!-- 			<div class="hkShow" :class="addCar?'animationCar':''">
 				<div class="hkbj" v-if="addCarr" @click="addCar=false"></div>
@@ -372,9 +376,10 @@
 				//  this.getShareCode();
 			 // },500)
 			 // 中奖查询
-			 if(this.runNum<0.45){
-				 this.getPrize()
-			 }
+			 // if(this.runNum<0.45){
+				//  this.getPrize()
+			 // }
+			 
 		},
 		components: {
 		  Foot,
@@ -678,10 +683,10 @@
 							}
 							resolve(res);
 						})
-						.catch(error=>{
-							Indicator.close();
-							Toast("网络错误，请稍后再试");
-						})
+						// .catch(error=>{
+						// 	Indicator.close();
+						// 	Toast("网络错误，请稍后再试");
+						// })
 				})
 			},
 			setSign(){
@@ -1081,9 +1086,9 @@ box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 }
 .nut-hor-list-item img{width: 0.65rem;height: 0.8rem;margin-bottom: 0.1rem;}
 .iderBj{
-	background: url(../../public/model/model.png) center bottom no-repeat;
-	background-size: 6rem;
-	margin-top: -3.8rem;
+	background: url(../images/m-year.png) center bottom no-repeat;
+	background-size: 5.6rem;
+	margin-top: -4.6rem;
 	padding: 0.5rem 0 3em;
 }
 </style>

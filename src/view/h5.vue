@@ -154,6 +154,7 @@
 		imgUrl: "https://sz.centanet.com/partner/house/shareImg/logo.png",
 	};
 	import { Toast,Indicator } from 'mint-ui';
+	import axios from 'axios'
 	import {
 	  uToken,
 	} from "@/global/token.js";
@@ -215,7 +216,6 @@
 				this.hbId=this.$route.query.myTemplateId;//二维码扫码获取
 			}
 			this.getList();
-			this.getInfo();
 
 		},
 		mounted(){
@@ -322,7 +322,18 @@
 					url:"/Poster/GetEmpCall",
 					params:{
 						empNo:this.empNo,
-						p:1
+						p:1,
+						// 神策渠道埋点
+						PlatformType:"chengzhangxitong",
+						BusinessType:"second_hand_house",
+						SourceId:this.house.AdsNo,
+						SourceName:this.house.EstateName,
+						HousingEstateCode:this.house.EstateCode,
+						HousingEstateName:this.house.EstateName,
+						Sem:"",
+						Hmpl:"",
+						FirstQudao:"",
+						SecondQudao:""
 					}
 				})
 				.then(res=>{
@@ -335,30 +346,33 @@
 				})
 			},
 			getBanner(id){
-				this.$axios({
-					method:"get",
-					url:"https://apisz.centanet.com/v6/java/json/reply/GetPostImagesRequest",
-					params:{
-						PostId:id,
-						ImageWidth:'750',
-						ImageHeight:'500',
-						cityen:'sz',
-						platform:'wap'
-					},
-				})
-				.then(res=>{
-					console.log(res);
-					let arr=res.data.Result;
-					for(var v of arr){
-						if(v.ImageDescription=="户型图"){
-							this.imgArrHx.push(v);
-						}else{
-							this.imgArrDy.push(v);
+				return new Promise(resolve=>{
+					axios({
+						method:"get",
+						url:"https://apisz.centanet.com/v6/java/json/reply/GetPostImagesRequest",
+						params:{
+							PostId:id,
+							ImageWidth:'750',
+							ImageHeight:'500',
+							cityen:'sz',
+							platform:'wap'
+						},
+					})
+					.then(res=>{
+						console.log(res);
+						let arr=res.data.Result;
+						for(var v of arr){
+							if(v.ImageDescription=="户型图"){
+								this.imgArrHx.push(v);
+							}else{
+								this.imgArrDy.push(v);
+							}
 						}
-					}
-					this.imgHxIdx=this.imgArrDy.length+1;
-					this.imgArr=this.imgArrDy.concat(this.imgArrHx);
-					this.$previewRefresh();
+						this.imgHxIdx=this.imgArrDy.length+1;
+						this.imgArr=this.imgArrDy.concat(this.imgArrHx);
+						this.$previewRefresh();
+						resolve(res);
+					})
 				})
 			},
 			getYz(id){
@@ -463,6 +477,7 @@
 								Indicator.close();
 							},300)
 							resolve(res);
+							this.getInfo();
 						})
 						.catch(error=>{
 							Indicator.close();
@@ -475,11 +490,12 @@
 			},
 			// 微信分享
 			setShare(){//
-					this.$axios({
+					axios({
 						method:"get",
 						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
 					})
 					.then(res=>{
+						console.log(res)
 						let data=JSON.parse(res.data.replace('(','').replace(')',''));
 						if (data) {
 						    wx.config({

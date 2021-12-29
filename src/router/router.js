@@ -465,7 +465,7 @@ var router = new Router({
 			name:"payList",
 			component:() =>import ('@/view/pay/payList'),
 			meta:{
-				title:'租房佣金支付',
+				title:'租房佣金线上支付',
 				keepAlive:false
 			}			
 		},
@@ -474,7 +474,7 @@ var router = new Router({
 			name:"payInfo",
 			component:() =>import ('@/view/pay/payInfo'),
 			meta:{
-				title:'租房佣金支付详情',
+				title:'租房佣金线上支付详情',
 				keepAlive:false
 			}			
 		},
@@ -483,7 +483,7 @@ var router = new Router({
 			name:"paySend",
 			component:() =>import ('@/view/pay/paySend'),
 			meta:{
-				title:'发起租房佣金支付',
+				title:'发起租房佣金线上支付',
 				keepAlive:false
 			}			
 		},
@@ -519,7 +519,7 @@ if(u.indexOf('aplus') < 0){
 		}
 		if(to.name == 'error'){
 			 next(); // 跳转
-		}else if(to.name == 'days'||to.name == 'hh'||to.name == 'h5New'||to.name == 'school'||to.name == 'schoolAll'||to.name == 'call'||to.name == 'callM'||to.name == 'zxInfo'||to.name == 'rules'||to.name == 'rulesAll'||to.name.indexOf('pay')>-1){
+		}else if(to.name == 'days'||to.name == 'hh'||to.name == 'h5New'||to.name == 'school'||to.name == 'schoolAll'||to.name == 'call'||to.name == 'callM'||to.name == 'zxInfo'||to.name == 'rules'||to.name == 'rulesAll'){
 			 next(); // 跳转
 		}else if (!token && to.name !== LOGIN_PAGE_NAME) {
 		  // 未登录且要跳转的页面不是登录页  并且不是查看头像审核页

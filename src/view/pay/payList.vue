@@ -1,5 +1,6 @@
 <template>
-	<div class="payList">
+	<div class="payList" v-show="ready">
+		<template v-if="active">
 		<!-- 店董 -->
 		<div class="payBox payMan" v-if="isManger">
 			<nut-noticebar
@@ -16,9 +17,6 @@
 					<label :class="listIdx==4?'on':''" @click="getList(4)">已支付</label>
 					<label :class="listIdx==5?'on':''" @click="getList(5)">被拒绝</label>
 				</div>
-				<div class="goTop" @click="goTop" v-if="scrollTop>0">
-					顶部
-				</div>
 				<div class="content">
 					<template v-if="list.length>0">
 					<div class="list" v-for="item in list" :key="item.Id">
@@ -27,13 +25,13 @@
 						</div>
 						<i class="status">{{item.PayStatus | status}}</i>
 						<p>{{item.UpdateTime}}</p>
-						<p><label>订单编号：</label>{{item.OrderNo}}</p>
-						<p><label>付款角色：</label>{{item.CustomerType | cType}}</p>
-						<p><label>{{item.CustomerType | cType}}姓名：</label>{{item.CustomerName}}</p>
-						<p><label>{{item.CustomerType | cType}}手机号：</label>{{item.CustomerMobile}}</p>
-						<p><label>付款金额：</label>{{item.TotalFee}}元</p>
-						<p v-if="item.EmpCnName"><label>经纪人姓名：</label>{{item.EmpCnName}}</p>
-						<p v-if="item.CnPath"><label>经纪人门店：</label>{{item.CnPath}}</p>
+						<p><label>订单编号:</label><span>{{item.OrderNo}}</span></p>
+						<p><label>付款角色:</label><span>{{item.CustomerType | cType}}</span></p>
+						<p><label>{{item.CustomerType | cType}}姓名:</label><span>{{item.CustomerName}}</span></p>
+						<p><label>{{item.CustomerType | cType}}手机号:</label><span>{{item.CustomerMobile}}</span></p>
+						<p><label>付款金额:</label><span>{{item.TotalFee}}元</span></p>
+						<p v-if="item.EmpCnName"><label>经纪人姓名:</label><span>{{item.EmpCnName}}</span></p>
+						<p v-if="item.CnPath"><label>经纪人门店:</label><span>{{item.CnPath}}</span></p>
 						<div class="btn" v-if="item.PayStatus==2">
 							<button @click="judgeStatus(item.Id,3)">审核通过</button>
 							<button @click="judgeStatus(item.Id,5)">拒绝通过</button>
@@ -57,9 +55,6 @@
 				发起租房佣金支付
 				<label>点击发起</label>
 			</div>
-			<div class="goTop" @click="goTop" v-if="scrollTop>0">
-				顶部
-			</div>
 			<div class="content">
 				<template v-if="list.length>0">
 					<div class="list" v-for="item in list" :key="item.Id">
@@ -68,12 +63,12 @@
 						</div>
 						<i class="status">{{item.PayStatus | status}}</i>
 						<p>{{item.UpdateTime}}</p>
-						<p><label>订单编号：</label>{{item.OrderNo}}</p>
-						<p><label>付款角色：</label>{{item.CustomerType | cType}}</p>
-						<p><label>{{item.CustomerType | cType}}姓名：</label>{{item.CustomerName}}</p>
-						<p><label>{{item.CustomerType | cType}}手机号：</label>{{item.CustomerMobile}}</p>
-						<p><label>付款金额：</label>{{item.TotalFee}}元</p>
-						<p v-if="item.ReviewCnName"><label>审核人：</label>{{item.ReviewCnName}}</p>
+						<p><label>订单编号:</label><span>{{item.OrderNo}}</span></p>
+						<p><label>付款角色:</label><span>{{item.CustomerType | cType}}</span></p>
+						<p><label>{{item.CustomerType | cType}}姓名:</label><span>{{item.CustomerName}}</span></p>
+						<p><label>{{item.CustomerType | cType}}手机号:</label><span>{{item.CustomerMobile}}</span></p>
+						<p><label>付款金额:</label><span>{{item.TotalFee}}元</span></p>
+						<p v-if="item.ReviewCnName"><label>审核人:</label><span>{{item.ReviewCnName}}</span></p>
 							<div class="btn" v-if="item.PayStatus==1">
 								<button @click="goInfo(item.Id)">查看详情</button>
 								<button @click="changeSend(item.Id)">修改</button>
@@ -96,6 +91,13 @@
 					暂无线上租房佣金支付，<span style="color: #65ACFF;" @click="$router.push({name:'paySend'})">去创建</span>
 				</div>
 			</div>
+		</div>
+		<div class="goTop" @click="reload()">
+			刷新
+		</div>
+		</template>
+		<div class="anone" v-else>
+			非常抱歉，您暂无该应用权限
 		</div>
 		
 		<!-- 提示框 撤销 -->
@@ -173,7 +175,8 @@
 				ready:false,
 				listId:"",
 				listStatus:"",
-				judgeNum:0
+				judgeNum:0,
+				active:false
 			}
 		},
 		created() {
@@ -245,11 +248,21 @@
 			// },
 		},
 		methods:{
+			reload(){
+				this.loading=this.$toast.loading('',{
+				    cover: false
+				});
+				this.getList();
+			},
 			getList(idx){
 				if(idx==undefined){
 					idx=0;
 				}
+				if(!this.header_token.token){
+					this.header_token={'token':this.$route.query.token}
+				}
 				this.listIdx=idx;
+				console.log(this.$route.query.token);
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"post",
@@ -267,6 +280,7 @@
 								this.judgeNum=res.data.data.ReviewCount;
 								this.isManger=res.data.data.isReview;
 								this.list=res.data.data.list;
+								this.active=res.data.data.isOpen
 							}else{
 								this.$toast.text(res.data.msg);
 							}
@@ -367,6 +381,21 @@
 <style lang="less" scoped>
 	@color:#F42C1D;
 	@border:1px solid #E5E5E5;
+	.goTop{
+		width: 0.9rem;
+		height: 0.9rem;
+		border-radius: 50%;
+		background: #fff url("../images/reload.png") center 20% no-repeat;
+		background-size: 0.26rem;
+		padding-top: 0.48rem;
+		text-align: center;
+		font-size: 0.22rem;
+		position: fixed;
+		right: 0;
+		bottom: 20%;
+		box-shadow: 0px 0px 10px 1px rgba(221, 221, 221, 0.5);
+		z-index: 9;
+	}
 	.payBox{
 		min-height: 100vh;
 		padding: 0.2rem 0.3rem 0.5rem;
@@ -397,21 +426,6 @@
 					}
 				}
 			}
-		}
-		.goTop{
-			width: 0.9rem;
-			height: 0.9rem;
-			border-radius: 50%;
-			background: #fff url("~@/assets/img/t-top.png") center 23% no-repeat;
-			background-size: 0.3rem;
-			padding-top: 0.45rem;
-			text-align: center;
-			font-size: 0.24rem;
-			position: fixed;
-			right: 0;
-			bottom: 20%;
-			box-shadow: 0px 0px 10px 1px rgba(221, 221, 221, 0.5);
-			z-index: 9;
 		}
 		.top{
 			width: 100%;
@@ -459,6 +473,9 @@
 					strong{
 						font-size: 0.36rem;
 						flex: 1;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 					a{
 						flex: 1;
@@ -482,12 +499,25 @@
 					top: 1.38rem;
 				}
 				p{
-					line-height: 0.6rem;
+					padding: 0.12rem 0;
 					font-size: 0.28rem;
-				}
-				label{
+					display: flex;
+					width: 100%;
 					color: #999;
+					span{
+						flex: 1;
+						width: 4.7rem;
+						text-align: left;
+						word-break: break-all;
+						word-wrap: break-word;
+						color: #333;
+					}
+					label{
+						color: #999;
+						width: 1.68rem;
+					}
 				}
+				
 				.btn {
 					margin-top: 0.2rem;
 					padding-top: 0.3rem;
@@ -550,6 +580,14 @@
 			right: -2.8rem;
 			top: 0.1rem;
 		}
+	}
+	.anone{
+		background: url(../images/pay/dd-none.png) center no-repeat;
+		background-size: 6.4rem;
+		text-align: center;
+		height: 8rem;
+		padding-top: 6rem;
+		color: #BAB7B7;
 	}
 	.payTip{overflow: visible;border-radius: 0.2rem;}
 	.payTitle{height: 1.52rem;width: 100%;background: url(../images/pay/mtBj.png) center no-repeat;background-size: 1.52rem;position: relative;top: -0.7rem;}

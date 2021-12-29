@@ -7,6 +7,7 @@ module.exports = {
     requireModuleExtension: true,
     loaderOptions: {
       css: {
+				// 为了图片用../images 不经过打包构建
         url: src => !src.startsWith('../images'),
         modules: {
           localIdentName:

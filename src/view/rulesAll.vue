@@ -60,6 +60,7 @@
 		link: shareLink,
 		imgUrl: "https://sz.centanet.com/partner/house/shareImg/share-zj.jpg",
 	};
+	import axios from 'axios'
 	import { Toast,Indicator } from 'mint-ui';
 	import {
 	  uToken,
@@ -103,7 +104,7 @@
 			getData(){
 				Indicator.open();
 				return new Promise((resolve)=>{
-						this.$axios({
+						axios({
 							method:"get",
 							url:"https://sz.centanet.com/partner/huihansubmit/api/wangluozhijian/getlist",
 							params:{
@@ -170,7 +171,7 @@
 			},
 			// 微信分享
 			wxShare(){//
-					this.$axios({
+					axios({
 						method:"get",
 						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
 					})

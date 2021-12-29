@@ -345,6 +345,7 @@
 
 <script>
 	import Vue from 'vue';
+	import axios from 'axios'
 	import {
 		Toast,
 		Indicator
@@ -682,7 +683,7 @@
 				this.imgArr = [];
 				this.imgArrHx = [];
 				this.imgArrDy = [];
-				this.$axios({
+				axios({
 						method: "get",
 						url: "https://apisz.centanet.com/v6/java/json/reply/GetPostImagesRequest",
 						params: {
@@ -1137,7 +1138,7 @@
 						this.bigName=this.bigName;
 						this.getShareLog(item);
 					}, 500)
-					if(item=="saveImg"){
+					if(item=="saveImage"){
 						// 神策
 						this.$sensors.track('sc_poster_save', {
 							sc_poster_type:this.hbName

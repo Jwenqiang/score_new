@@ -152,8 +152,9 @@
 <!-- 			<div class="logOut" @click="logOut">
 				退出登录
 			</div> -->
-			<div class="logOut" v-if="hasTest">
+			<div class="logOut" v-if="userInfo.EstateName=='网络运营部'">
 				<a href="https://sz.centanet.com/partner/house/test/aplus/">成长系统新功能测试</a>
+				<a href="https://sz.centanet.com/partner/house/aplus/#/payList" style="margin-bottom: 0.4rem;">租房订单测试</a>
 			</div>
 		</div>
 		<foot tab4='1'></foot>	
@@ -205,6 +206,10 @@
 			}
 		},
 		created(){
+			this.helloAsync().then(v=>{
+			   console.log(v);         // helloAsync
+			   console.log('then');         // helloAsync
+			})
 			this.vip();
 			document.title="我的";
 			var u = navigator.userAgent;
@@ -235,6 +240,18 @@
 			 }
 		},
 		methods:{
+			async helloAsync(){
+				var a=[1,2,3]
+				var b=[];
+				for(let i of a){
+					if(i==2)
+						break;
+					i++
+					b.push(i)
+				}
+			    return b;
+			},
+				
 			goFail(){
 				this.$sensors.track('sc_click_icon', {
 					sc_business_type:'other',
@@ -412,8 +429,8 @@
 	.myList .myliL{line-height: 1rem;}
 	.myliL span{color: #FFC323;font-size: 0.46rem;margin-left: 0.2rem;font-weight: bold;position: relative;top: 0.04rem;}
 	.myliR{width: 3.6rem;padding-right: 0.3rem;display: block;height: 1rem;line-height: 1rem;color: #999;font-size: 0.24rem;text-align: right;background: url(../assets/img/icon-right.png) right center no-repeat;background-size: 0.12rem;float: right;}
-	.logOut{width: 100%;height: 1rem;line-height: 1rem;text-align: center;background-color: #fff;margin-top: 0.2rem;font-size: 0.32rem;color: #F45048;}
-	.logOut a{color: #F45048;display: block;width: 100%;font-weight: 550;}
+	.logOut{}
+	.logOut a{width: 100%;height: 1rem;line-height: 1rem;text-align: center;background-color: #fff;margin-top: 0.2rem;font-size: 0.32rem;color: #F45048;display: block;font-weight: 550;}
 	.nineTop{background-color: #fff;margin-bottom: 0.2rem;}
 	.nineTop p{line-height: 0.6rem;padding-left: 0.3rem;font-size: 0.26rem;color: #333;border-bottom: 1px solid #eee;}
 	.nineC,.ninesC{display: flex;flex-wrap: wrap;}

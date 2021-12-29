@@ -17,6 +17,7 @@
 						<nut-textinput 
 						    v-model="userName"
 						    placeholder="请填写付款人姓名"
+								maxlength="10"
 						    :clearBtn="false"
 						    :disabled="false"
 						/>
@@ -27,7 +28,9 @@
 					<span>
 						<nut-textinput 
 						    v-model="mobile"
+								type="number"
 						    placeholder="请填写付款人手机号"
+								maxlength="11"
 						    :clearBtn="false"
 						    :disabled="false"
 						/>
@@ -35,10 +38,11 @@
 				</li>
 				<li>
 					<label>付款备注</label>
-					<span>
+					<span style="width: 5.5rem;">
 						<nut-textinput 
 						    v-model="msg"
-						    placeholder="请填写房屋信息，xx小区xx单元xx号_房屋租赁合同"
+						    placeholder="请填写:xx小区xx单元xx号_房屋租赁合同"
+								maxlength="30"
 						    :clearBtn="false"
 						    :disabled="false"
 						/>

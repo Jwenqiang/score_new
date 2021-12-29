@@ -60,7 +60,18 @@
 							url:"/Poster/GetEmpCall",
 							params:{
 								empNo:this.userNum,
-								p:this.ptype
+								p:this.ptype,
+								// 400神策渠道新增字段埋点
+								PlatformType:"chengzhangxitong",
+								BusinessType:"other",
+								SourceId:"",
+								SourceName:"",
+								HousingEstateCode:"",
+								HousingEstateName:"成长系统海报",
+								Sem:"",
+								Hmpl:"",
+								FirstQudao:"",
+								SecondQudao:""
 							}
 						})
 						.then(res=>{

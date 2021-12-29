@@ -84,13 +84,13 @@
 			if(this.$route.query.jjr){
 				this.jjrNum=this.$route.query.jjr
 			}
-			this.getHouse();
+			// this.getHouse();
 		},
 		// 注意：只有当组件在 <keep-alive> 内被切换，才会有activated 和 deactivated 这两个钩子函数
 		 activated() {//在vue对象存活的情况下，进入当前存在activated()函数的页面时，一进入页面就触发；可用于初始化页面数据等
 		    // 全局绑定滚动事件，
 		    window.addEventListener("scroll", this.scrollT);
-			this.getHouse();
+				this.getHouse();
 		  },
 		  deactivated() {
 		    // 组件消失，解绑scroll事件
@@ -108,7 +108,6 @@
 		},
 		watch:{
 			scrollTop(newValue, oldValue) {//滚动分页
-			console.log(newValue)
 				// setTimeout(()=>{
 				// 	if(newValue == window.scrollY) 
 						var height = document.getElementsByClassName('schoolList')[0].scrollHeight;

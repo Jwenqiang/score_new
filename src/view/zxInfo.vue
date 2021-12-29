@@ -37,6 +37,7 @@
 		link: shareLink,
 		imgUrl: "https://sz.centanet.com/partner/house/shareImg/logo.png",
 	};
+	import axios from 'axios'
 	import { Toast,Indicator } from 'mint-ui';
 	import {
 	  uToken,
@@ -171,7 +172,7 @@
 			},
 			// 微信分享
 			wxShare(){//
-					this.$axios({
+					axios({
 						method:"get",
 						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
 					})
@@ -223,7 +224,18 @@
 					url:"/Poster/GetEmpCall",
 					params:{
 						empNo:this.$route.params.empNo,
-						p:1
+						p:1,
+						// 神策渠道埋点
+						PlatformType:"chengzhangxitong",
+						BusinessType:"information",
+						SourceId:"",
+						SourceName:"",
+						HousingEstateCode:"",
+						HousingEstateName:"",
+						Sem:"",
+						Hmpl:"",
+						FirstQudao:"",
+						SecondQudao:""
 					}
 				})
 				.then(res=>{

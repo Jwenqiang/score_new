@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from './axiosConfig.js'
 export const $get=(url,data,token)=>{
 	return axios({
 		method:'get',

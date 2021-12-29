@@ -15,6 +15,7 @@
 					<p><label>金额：</label><span>{{list.TotalFee}}元</span></p>
 					<p v-if="list.FeeType==1"><label>费用类别：</label><span>佣金</span></p>
 					<p v-if="list.Payee"><label>收款方：</label><span>中原地产代理（深圳）有限公司</span></p>
+					<p v-if="list.AuditTime"><label>审核时间：</label><span>{{list.AuditTime}}</span></p>
 					<p v-if="list.PayType>0"><label>支付方式：</label><span v-if="list.PayType==1">微信支付</span><span v-else-if="list.PayType==2">支付宝支付</span></p>
 					<p v-if="list.PayTime"><label>支付时间：</label><span>{{list.PayTime}}</span></p>
 				</div>
@@ -264,6 +265,9 @@
 					strong{
 						font-size: 0.36rem;
 						flex: 1;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 					a{
 						flex: 1;
@@ -291,16 +295,18 @@
 					font-size: 0.28rem;
 					display: flex;
 					align-items: baseline;
-					justify-content: space-between;
+					justify-content: flex-start;
 					span{
 						line-height: 0.4rem;
 						font-weight: 500;
+						width: 4.7rem;
 					}
-				}
-				label{
-					color: #999;
-					line-height: 0.4rem;
-					white-space: nowrap;
+					label{
+						color: #999;
+						line-height: 0.4rem;
+						white-space: nowrap;
+						width: 1.68rem;
+					}
 				}
 				.btn {
 					margin-top: 0.2rem;

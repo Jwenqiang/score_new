@@ -57,10 +57,11 @@
 		<nut-popup v-model="show" style="border-radius: 0.1rem;">
 			<div class="bigHb" v-show="showHb">
 				<p class="bigF">{{title}}</p>
-				<p class="bigS"><span></span> {{ inApp ? '点击图片分享' : '长按图片保存' }} <span></span></p>
+				<p class="bigS"><span></span> {{ inApp ? '点击图片分享' : '长按图片保存' }}<span></span></p>
 				<div class="bigHc">
 					<img :src="bigImg + '&fmt=jpg'" width="100%" @click="share(bigImg)"/>
 				</div>
+				
 				<label @click="show=false"></label>
 			</div>
 		</nut-popup>
@@ -70,6 +71,15 @@
 				<label @click="showSuc=false"></label>
 			</div>
 		</nut-popup>
+		<!-- 分享弹窗 -->
+		<nut-popup v-model="showShare">
+			<div class="sucShare">
+				<h4>分享结果</h4>
+				<p>您是否已经分享成功？</p>
+				<p><button @click="showShare=false">我已分享成功</button></p>
+			</div>
+		</nut-popup>
+
 	</div>
 </template>
 
@@ -125,8 +135,9 @@
 				showSuc:false,
 				info:"",
 				yb:"",
-				title:"早安你好",
-				test:"--"
+				title:"早安·你好",
+				test:"--",
+				showShare:false
 			}
 		},
 		computed: {
@@ -152,6 +163,11 @@
 			// 	  // this.getTip();
 			//     }
 			//  }
+			// show(){
+			// 	if(!this.show){
+			// 		this.title="早安你好0"
+			// 	}
+			// }
 
 		},
 		methods:{
@@ -184,9 +200,15 @@
 			},
 			setImg(){
 				var time=new Date().getHours();
-				console.log(time);
-				if(time<4||time>7){
-					this.$toast.text("早安海报分享4点-8点开放");
+				if(!this.inApp){
+					this.$toast.text("请去A+或者小程序抽取分享",{ 
+					  duration:3000
+					});
+					return false;
+				}else if(time<4||time>7){
+					this.$toast.text("早安海报分享4点-8点开放",{ 
+					  duration:3000
+					});
 					return false;
 				}
 				this.dh=true;
@@ -235,6 +257,9 @@
 							method:"get",
 							url:"/MorningShare/RandomPoster",
 							headers:this.header_token,
+							params:{
+								source:this.inApp?'移动A+':''
+							}
 						})
 						.then(res=>{
 							console.log(res.data);
@@ -243,11 +268,10 @@
 							}else{
 								this.$toast.text("图片加载失败，请稍后重试");
 							}
-							
 							resolve(res);
 						})
 						.catch(error=>{
-							this.$toast.text("网络错误，请稍后再试");
+							this.$toast.text("服务器开小差，请稍后再试");
 						})
 				})
 			},
@@ -267,11 +291,8 @@
 
 			// A+分享回调
 			callback(item) {
-				setTimeout(() => {
-					this.title="早安 你好"
 					this.setShare();
-				}, 500)
-				// window.callback = null
+					// window.callback = null
 				// if (item=="wxImage"||item=="wxMomentsImage") {
 				// 	setTimeout(() => {
 				// 		this.title="早安 你好"
@@ -289,14 +310,18 @@
 						})
 						.then(res => {
 							console.log(res);
-							resolve(res);
 							if (res.data.code == 0) {
 								this.info=res.data.data;
 								this.arr=res.data.data.Progress;
-								this.$toast.text("分享成功");
+								// this.$toast.text("分享成功");
+								setTimeout(()=>{
+									this.show=false;
+									this.showShare=true;
+								},1500)
 							}else{
 								this.$toast.text("早安海报分享4点-8点开放");
 							}
+							resolve(res);
 						})
 						.catch(error => {
 							this.$toast.text("网络错误，请稍后再试");
@@ -490,7 +515,7 @@
 		font-size: 0.32rem;
 		font-weight: 600;
 		text-align: center;
-		margin-bottom: 0.1rem;
+		margin-bottom: 0.15rem;
 	}
 
 	.bigS {
@@ -500,13 +525,13 @@
 		color: #666;
 		margin-bottom: 0.2rem;
 		span{
-			height: 1px;
+			height: 0.5px;
 			background-color: #999;
-			width: 1.2rem;
+			width: 0.8rem;
 			display: inline-block;
 			position: relative;
 			top: -0.08rem;
-			margin: 0 3px;
+			margin: 0 5px;
 		}
 	}
 	.success{
@@ -550,6 +575,28 @@
 	@keyframes big{
 		from{transform: scale(0);}
 		to{transform: scale(1);}
+	}
+	.sucShare{
+		width: 5rem;height: 3.8rem;background-color: #fff;padding: 0.6rem 0.3rem 0;text-align: center;border-radius: 0.12rem;
+		h4{
+			font-size: 0.4rem;
+			font-weight: 550;
+			margin-bottom: 0.2rem;
+		}
+		p{
+			font-size: 0.32rem;
+			color: #666;
+			margin-bottom: 0.4rem;
+			button{
+				margin-top: 0.2rem;
+				height: 0.8rem;
+				width: 3rem;
+				background-color: #FA4D32;
+				color: #fff;
+				font-size: 0.32rem;
+				border-radius: 0.1rem;
+			}
+		}
 	}
 </style>
 <style>

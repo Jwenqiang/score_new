@@ -72,13 +72,13 @@
 							<p class="newTag" v-if="item.UnitTags"><span v-if="item.UnitTags[0]">{{item.UnitTags[0]}}</span><label v-if="item.UnitTags[1]">{{item.UnitTags[1]}}</label><label v-if="item.UnitTags[2]">{{item.UnitTags[2]}}</label><label v-if="item.UnitTags[3]">{{item.UnitTags[3]}}</label></p>
 							</a>
 							<p>参考总价：<strong>{{item.GuidingSalePrice/10000 | fix}}</strong></p>
-							<a :href="'tel:'+item.CallResult.BigCode+','+item.CallResult.ExtCode" class="btnZx">我要咨询</a>
+							<a :href="'tel:'+item.CallResult.BigCode+','+item.CallResult.ExtCode" class="btnZx" @click="setSc('我要咨询',item.AdsNo,item.Title,`(${index+1},1)`)">我要咨询</a>
 						</div>
 					</div>
 				</template>
 				<div v-else>暂无信息</div>
 			</div>
-			<a :href="'tel:'+user.Mobile" class="callMore">咨询更多房源</a>
+			<a :href="'tel:'+user.Mobile" class="callMore" @click="setSc('咨询更多房源')">咨询更多房源</a>
 		</div>
 		<div class="top3">
 			<h5 style="margin-bottom: 0.4rem;">学校信息</h5>
@@ -112,10 +112,10 @@
 				<span>{{user.PositionName}}</span>
 			</label>
 			<div class="appBtn" v-if="inApp">
-				<a :href="'tel:'+user.Mobile">电话咨询</a>
+				<a :href="'tel:'+user.Mobile" @click="setSc('电话咨询')">电话咨询</a>
 				<a @click="share()">分享</a>
 			</div>
-			<a :href="'tel:'+user.Mobile" v-else>电话咨询<p>隐藏号码</p></a>
+			<a :href="'tel:'+user.Mobile" @click="setSc('电话咨询')" v-else>电话咨询<p>隐藏号码</p></a>
 			
 		</div>
 		<!-- 弹窗 -->
@@ -145,6 +145,7 @@
 		link: shareLink,
 		imgUrl: "https://sz.centanet.com/partner/house/shareImg/logo.png",
 	};
+	import axios from 'axios'
 	import { Toast,Indicator } from 'mint-ui';
 	import {
 	  uToken,
@@ -211,7 +212,6 @@
 				this.schoolId=this.$route.query.schoolId;
 			}
 			this.getSchoolBanner();
-			this.getInfo();
 			this.getSchool();
 		},
 		mounted(){
@@ -248,6 +248,30 @@
 			}
 		},
 		methods:{
+			// 神策电话埋点
+			setSc(name,id,houseName,p){
+				if(name=="我要咨询"){
+					this.$sensors.track('sc_click_call', {
+						sc_business_type:"second_hand_house",
+						sc_button_name:name,
+						sc_click_page:"房源海报_学校详情页",
+						sc_house_id:id,
+						sc_house_name:houseName,
+						sc_click_area:"学校详情页_附近房源区域",
+						sc_button_position:p
+					});
+					return;
+				}
+				this.$sensors.track('sc_click_call', {
+					sc_business_type:"school",
+					sc_button_name:name,
+					sc_click_page:"房源海报_学校详情页",
+					sc_house_id:this.schoolId,
+					sc_house_name:document.title,
+					sc_click_area:"底部区域",
+					sc_button_position:""
+				});
+			},
 			toggle(idx){
 				console.log(this.all)
 				if(this.all=='-1'){
@@ -321,7 +345,7 @@
 					if(res.data.code==0){
 						this.ready=true
 						this.house=res.data.data.Result
-						
+						this.getInfo();
 						// 微信分享
 						document.title=res.data.data.Result.SchoolName;
 						shareObj.title=res.data.data.Result.SchoolName;
@@ -397,7 +421,18 @@
 					url:"/Poster/GetEmpCall",
 					params:{
 						empNo:this.$route.query.empNo,
-						p:1
+						p:1,
+						// 神策渠道埋点
+						PlatformType:"chengzhangxitong",
+						BusinessType:"school",
+						SourceId:this.house.SchoolId,
+						SourceName:this.house.SchoolName,
+						HousingEstateCode:"",
+						HousingEstateName:"",
+						Sem:"",
+						Hmpl:"",
+						FirstQudao:"",
+						SecondQudao:""
 					}
 				})
 				.then(res=>{
@@ -409,7 +444,7 @@
 				})
 			},
 			getBanner(id){
-				this.$axios({
+				axios({
 					method:"get",
 					url:"https://apisz.centanet.com/v6/java/json/reply/GetPostImagesRequest",
 					params:{
@@ -486,70 +521,10 @@
 					this.xq=res.data.data;
 				})
 			},
-			// getList(){
-			// 	Indicator.open();
-			// 	return new Promise((resolve)=>{
-			// 			this.$axios({
-			// 				method:"post",
-			// 				url:"/ZhongyuanHouseV2/GetEstateByAdsNoV2",
-			// 				data:{
-			// 					adsNo:this.houseId,
-			// 					myTemplateId :this.hbId,
-			// 					empNo:this.empNo
-			// 				}
-			// 			})
-			// 			.then(res=>{
-							
-			// 				if(res.data.code==0){
-			// 					// 微信分享
-			// 					document.title=res.data.data.Title;
-			// 					shareObj.title="【好房推荐】"+res.data.data.Title;
-			// 					if(res.data.data.RoomCount>0&&res.data.data.Garea>0&&res.data.data.HallCount>0){
-			// 						shareObj.desc=res.data.data.EstateName+"丨"+res.data.data.RoomCount+"室"+res.data.data.HallCount+"厅丨"+res.data.data.Garea+"㎡";
-			// 					}else if(res.data.data.RoomCount>0&&res.data.data.Garea>0){
-			// 						shareObj.desc=res.data.data.EstateName+"丨"+res.data.data.RoomCount+"室丨"+res.data.data.Garea+"㎡";
-			// 					}else if(res.data.data.EstateName&&res.data.data.Garea>0){
-			// 						shareObj.desc=res.data.data.EstateName+"丨"+res.data.data.Garea+"㎡";
-			// 					}else{
-			// 						shareObj.desc="用中原找房，安心选好房"
-			// 					}
-			// 					shareObj.imgUrl=res.data.data.FullImagePath;
-			// 					this.setShare();//微信分享
 
-			// 					this.getBanner(res.data.data.PostId);
-			// 					this.getYz(res.data.data.PropId);
-			// 					this.getDk(res.data.data.PropId);
-			// 					this.getGz(res.data.data.PostId);
-			// 					this.getXq(res.data.data.EstateCode);
-			// 					this.house=res.data.data;
-			// 					this.houseName=res.data.data.Title;
-			// 					this.banner=res.data.data.FullImagePath;
-			// 					if(res.data.data.PlainDescription){
-			// 						this.hTs=res.data.data.PlainDescription.replace(/\\n/g,'<div></div>').split('Ď')[0];
-			// 						this.xqgk=res.data.data.PlainDescription.replace(/\\n/g,'<div></div>').split('Ď')[1];
-			// 						this.zbpt=res.data.data.PlainDescription.replace(/\\n/g,'<div></div>').split('Ď')[2];
-			// 					}
-			// 					this.ready=true;
-			// 				}else{
-			// 					Toast(res.data.msg);
-			// 				}
-			// 				setTimeout(()=>{
-			// 					Indicator.close();
-			// 				},300)
-			// 				resolve(res);
-			// 			})
-			// 			.catch(error=>{
-			// 				Indicator.close();
-			// 				Toast("网络错误，请稍后再试");
-			// 			})
-			// 	})
-			// 	setTimeout(()=>{
-			// 		Indicator.close()
-			// 	},500)
-			// },
 			// 微信分享
 			setShare(xq,zs){//
-					this.$axios({
+					axios({
 						method:"get",
 						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
 					})
@@ -815,7 +790,7 @@
 		.newHouse .hbhBtn{text-align: right;}
 		.jrr h4 strong{display: inline-block;width: 2.3rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 		.jrr h4 i{font-style: normal;font-weight: 500;color: #f53218;position: absolute;right: 0;top: 0.04rem;font-size: 0.28rem;}
-		.btnZx{width: 1.48rem;height: 0.48rem;display: block;border: 1px solid #F73342;font-size: 0.24rem;color: #FF2D19;position: absolute;bottom: 0.4rem;right: 0;text-align: center;line-height: 0.46rem;background: url(../assets/static/icon-call.png) 0.08rem center no-repeat;background-size: 0.25rem;padding-left: 0.3rem;border-radius: 3px;}
+		.btnZx{width: 1.48rem;height: 0.48rem;display: block;border: 1px solid #F73342;font-size: 0.24rem;color: #FF2D19;position: absolute;bottom: 0.2rem;right: 0;text-align: center;line-height: 0.46rem;background: url(../assets/static/icon-call.png) 0.08rem center no-repeat;background-size: 0.25rem;padding-left: 0.3rem;border-radius: 3px;}
 		.t3T{margin-bottom: 0.2rem;width: 100%;}
 		.t3T label{display: block; width: 1.76rem;height: 0.54rem; line-height: 0.5rem;text-align: center;padding: 0;border: 1px solid #999;border-radius: 0.3rem;color: #999;}
 		.t3content{margin-top: 0.3rem;}

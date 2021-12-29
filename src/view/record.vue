@@ -343,6 +343,7 @@
 			    var today = new Date();
 			    var targetday_milliseconds=today.getTime() + 1000*60*60*24*day;
 			    today.setTime(targetday_milliseconds); //注意，这行是关键代码
+					console.log(today)
 			    var tYear = today.getFullYear();
 			    var tMonth = today.getMonth();
 			    var tDate = today.getDate();

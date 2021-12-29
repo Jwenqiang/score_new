@@ -157,7 +157,7 @@
 							查看拨打和反馈记录
 						</div>
 						<div class="ccBtn" style="color: #999;" v-else>
-							该商机超半小时未电话跟进，已重新分配
+							半小时未拨通或1小时未反馈，已重新分配
 						</div>
 					</div>
 					<p class="noList" v-if="countMy>pSizeMy">正在加载</p>
@@ -265,6 +265,17 @@
 		</nut-popup>
 		<foot tab5='1'></foot>
 		
+		<div class="showModel" v-if="tip">
+		  <div class="bj"></div>
+		  <div class="showMsg">
+		    <label class="modelClose" @click="tip=false"></label>
+			<h3>温馨提示</h3>
+			<p>竞拍商机后请及时填写反馈内容，1小时未反馈，自动拉黑1天；累计≥3次未反馈，拉黑7天。(ps:拉黑后无法接收商机哦)</p>
+			<!-- <p style="margin-top: 0.1rem;"><span style="color: #999;font-size: 0.24rem;"> </span></p> -->
+			<mt-button type="primary" class="carBtn" @click="tip=false">我知道了</mt-button>
+		  </div>
+		</div>
+		
 		<!-- 回馈活动弹窗-->
 			<div class="hkShow">
 				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
@@ -296,6 +307,7 @@
 		data(){
 			return{
 				header_token:{"token": uToken()},
+				tip:false,
 				inApp:false,
 				cType:1,
 				show:false,
@@ -356,9 +368,9 @@
 			setTimeout(()=>{
 				this.getCommt();
 			},500)
-			if(this.runNum<0.35){
-				this.getPrize()
-			}
+			// if(this.runNum<0.35){
+			// 	this.getPrize()
+			// }
 		},
 		beforeDestroy() {
 			// 组件消失，解绑scroll事件
@@ -590,6 +602,9 @@
 			},
 			changeTag(n){
 				this.cType=n;
+				if(n==2){
+					this.tip=true;
+				}
 				window.scroll(0, 0);
 			},
 			scrollT(){
@@ -921,4 +936,19 @@
 	.overAll{background-color: #f5f5f5 !important;}
 	.payTip{overflow: visible;border-radius: 0.2rem;}
 	.payTitle{height: 1.52rem;width: 100%;background: url(../assets/img/icon-pay.png) center no-repeat;background-size: 1.52rem;position: relative;top: -0.7rem;}
+
+	.showModel{
+	  position: fixed;
+	  width: 100%;
+	  height: 100%;
+	  z-index: 90;
+	}
+	.bj{position: fixed;background: #000;opacity: 0.5;width: 100%;height: 100%;left: 0;top: 0;z-index: 91;}
+	.showMsg{text-align: left;font-size: 16px; position: fixed;left: 50%;top: 50%;transform: translate(-50%,-50%);width: 5.8rem;height: 4.8rem; background: #fff;z-index: 92;padding: 0.5rem 0.4rem;border-radius: 8px;}
+		.showMsg h3{font-size: 0.32rem;font-weight: 550;text-align: center;color: #333;margin-bottom: 0.3rem;}
+		.showMsg p{font-size: 0.3rem;color: #666;margin-top: 0.1rem;}
+		.carBtn{width: 2.8rem;height: 0.8rem;margin: 0.5rem auto 0;display: block;line-height: 0.8rem;
+	background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);border-radius: 3px;font-size: 0.32rem;}
+		.modelClose{position: absolute;right: 0rem;top: 0rem;cursor: pointer;width: 0.8rem;height: 0.8rem;display: block;background: url(../assets/img/close.png) center no-repeat;background-size: 0.27rem;}
+	
 </style>
