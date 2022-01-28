@@ -276,6 +276,16 @@
 		  </div>
 		</div>
 		
+		<div class="showModel" v-if="isBlack">
+		  <div class="bj"></div>
+		  <div class="showMsg" style="height: 3.8rem;width: 6.1rem;">
+		    <label class="modelClose" @click="isBlack=false"></label>
+			<h3>温馨提示</h3>
+			<p>{{blackText}}</p>
+			<mt-button type="primary" class="carBtn" @click="isBlack=false">我知道了</mt-button>
+		  </div>
+		</div>
+		
 		<!-- 回馈活动弹窗-->
 			<div class="hkShow">
 				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
@@ -347,7 +357,9 @@
 				prizeName:"45元礼包",
 				runNum:Math.random(),
 				prizeId:"",
-				typeNum:1
+				typeNum:1,
+				isBlack:false,
+				blackText:"您的账号被封禁15天，请及时对商机进行反馈"
 			}
 		},
 		components: {
@@ -371,6 +383,7 @@
 			// if(this.runNum<0.35){
 			// 	this.getPrize()
 			// }
+			this.getBlack();
 		},
 		beforeDestroy() {
 			// 组件消失，解绑scroll事件
@@ -457,6 +470,31 @@
 					sc_click_area:"我的商机区域",
 					sc_button_position:""
 				});
+			},
+			// 
+			getBlack(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/MobileCompete/IsClosed",
+							headers:this.header_token,
+						})
+						.then(res=>{
+							console.log(res);
+							resolve(res);
+							if(res.data.code==0){
+								if(res.data.data.IsBlack==1){
+									this.isBlack=true;
+									this.blackText=res.data.data.Reason
+								}
+							}else{
+								throw new Error("获取经纪人是否拉黑接口code报错");
+							}
+						})
+						.catch(error=>{
+							console.log(error.message);//注意  throw new Error需要用error.message输出
+						})
+				})
 			},
 			// 经纪人回馈活动中奖查询
 			getPrize(){

@@ -24,14 +24,14 @@ instance.interceptors.response.use(
 			// console.log("成功返回")
 			return response;
 		}else{
-			if(res.code==500){//判断身份信息过期码
-				// localStorage.clear();
-				// var oldUrl=window.location.href;
-				// sessionStorage.setItem('toName',oldUrl);
-				// Toast("您的登录信息已过期");
-				// setTimeout(()=>{
-				// 	location.reload();
-				// },1000)
+			if(res.code==401){//判断身份信息过期码
+				localStorage.clear();
+				var oldUrl=window.location.href;
+				sessionStorage.setItem('toName',oldUrl);
+				Toast("您的登录信息已过期");
+				setTimeout(()=>{
+					location.reload();
+				},1000)
 				return response;
 			}
 			// console.log("成功错误")

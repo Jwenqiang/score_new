@@ -19,34 +19,34 @@
 					 @slideChangeEnd="handleChange"
 				>
 				<div  class="nut-swiper-slide gray" >
-				    <a @click="goPage('days','322','days/322','0')"><img src="images/banner-year.png"/></a>
+				    <a href="https://mp.weixin.qq.com/s/txNyuegIAJ6Y9o5CEgxaQg" @click="goPage('','','https://mp.weixin.qq.com/s/txNyuegIAJ6Y9o5CEgxaQg','2')"><img src="images/banner0117.png"/></a>
 				</div>
-				<div  class="nut-swiper-slide gray" >
+				<div  class="nut-swiper-slide gray_1" >
+					<a @click="goPage('days','24','days/24','2')"><img src="images/banner0106.jpg"/></a>
+				</div>
+<!-- 				<div  class="nut-swiper-slide gray" >
 				    <a @click="goPage('days','321','days/321','1')"><img src="../assets/img/banner1025.jpg"/></a>
 				</div>
 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/ZlJu9YzmXmhT8q-I-fMgBg" @click="goPage('','','https://mp.weixin.qq.com/s/ZlJu9YzmXmhT8q-I-fMgBg','2')"><img src="images/banner1130.jpg"/></a>
-				</div>
-				<div  class="nut-swiper-slide gray_1" >
-					<a @click="goPage('days','24','days/24','3')"><img src="images/banner1207.jpg"/></a>
-				</div>
+				</div> -->
 <!-- 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/6T75RV6uPknG4UCNK9pyHg" @click="goPage('','','https://mp.weixin.qq.com/s/6T75RV6uPknG4UCNK9pyHg','4')"><img src="images/banner1018.jpg"/></a>
 				</div> -->
 				<div  class="nut-swiper-slide gray_1" >
-				    <a @click="goPage('rules','','rules','5')"><img src="../assets/img/banner_zj.jpg"/></a>
+				    <a @click="goPage('rules','','rules','3')"><img src="../assets/img/banner_zj.jpg"/></a>
 				</div>
 <!-- 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/oIL_NKl1OF7qJHoloGYiXg" @click="goPage('','','网络王','6')"><img src="images/banner0917.jpg"/></a>
 				</div> -->
 					<div  class="nut-swiper-slide gray" >
-					    <a @click="goPage('houseList','','houseList','6')"><img src="@/assets/static/banner-bz.png"/></a>
+					    <a @click="goPage('houseList','','houseList','4')"><img src="@/assets/static/banner-bz.png"/></a>
 					</div>
 				    <div  class="nut-swiper-slide gray" >
-				        <a @click="goPage('days','30','days/30','7')"><img src="@/assets/static/banner0531.png"/></a>
+				        <a @click="goPage('days','30','days/30','5')"><img src="@/assets/static/banner0531.png"/></a>
 				    </div>
 				    <div  class="nut-swiper-slide gray_1" >
-				        <a @click="goPage('days','27','days/27','8')"><img src="@/assets/img/banner0222.jpg?v=1"/></a>
+				        <a @click="goPage('days','27','days/27','6')"><img src="@/assets/img/banner0222.jpg?v=1"/></a>
 				    </div>
 				</nut-swiper>
 			</div>
@@ -247,13 +247,13 @@
 		  </div>
 		</div>
 		<!-- 图片弹窗 -->
-		<div class="sModel mMsg" v-show="getIder">
+<!-- 		<div class="sModel mMsg" v-show="getIder">
 		  <div class="bj" @click="getIder=false"></div>
 			<label class="sclose" @click="getIder=false"></label>
 		  <div class="bRead iderBj" @click="setLocal">
 				<a @click="$router.push({name:'days',params:{'id':322}})" style="width: 100%;height: 100%;display: block;"></a>
 		  </div>
-		</div>
+		</div> -->
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
 			<img src="../assets/static/icon-week.png"/>
 		</div> -->
@@ -673,7 +673,7 @@
 								
 							}else{
 								Toast(res.data.msg);
-								if(res.data.code==500){
+								if(res.data.code==401){
 									// 重新登陆
 									this.$store.dispatch('logout');
 									setTimeout(()=>{

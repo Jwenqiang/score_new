@@ -465,7 +465,7 @@ var router = new Router({
 			name:"payList",
 			component:() =>import ('@/view/pay/payList'),
 			meta:{
-				title:'租房佣金线上支付',
+				title:'租房佣金支付',
 				keepAlive:false
 			}			
 		},
@@ -474,7 +474,7 @@ var router = new Router({
 			name:"payInfo",
 			component:() =>import ('@/view/pay/payInfo'),
 			meta:{
-				title:'租房佣金线上支付详情',
+				title:'租房佣金支付',
 				keepAlive:false
 			}			
 		},
@@ -483,7 +483,7 @@ var router = new Router({
 			name:"paySend",
 			component:() =>import ('@/view/pay/paySend'),
 			meta:{
-				title:'发起租房佣金线上支付',
+				title:'租房佣金支付',
 				keepAlive:false
 			}			
 		},
@@ -557,6 +557,9 @@ if(u.indexOf('aplus') < 0){
 router.afterEach((to, from)=>{
 	//每次切换页面的时候，让页面滚动到最顶部
 	window.scroll(0, 0);
+	if(to.meta.title){
+		document.title=to.meta.title
+	}
 })
 export default router
 

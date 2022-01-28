@@ -488,30 +488,28 @@
 					Indicator.close()
 				},500)
 			},
-			// 微信分享
+			// 微信及企业微信分享
 			setShare(){//
 					axios({
 						method:"get",
-						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
+						url: "https://m.sz.centanet.com/partner/weixin/qyweixinjssdkjsonp?url="+ encodeURIComponent(window.location.href.split('#')[0])
 					})
 					.then(res=>{
 						console.log(res)
 						let data=JSON.parse(res.data.replace('(','').replace(')',''));
+						shareObj.link=window.location.href;
 						if (data) {
 						    wx.config({
 						        debug: false,
-						        appId: data.AppId,
+						        appId: "wx2730a10487f9df56",
 						        timestamp: data.Timestamp,
 						        nonceStr: data.NonceStr,
 						        signature: data.Signature,
-						        jsApiList: [
-									'updateAppMessageShareData',
-									'updateTimelineShareData'
-						        ]
+						        jsApiList: ['onMenuShareAppMessage',  'onMenuShareTimeline', 'onMenuShareWechat']
 						    });
 						    wx.ready(function () {
 						        //分享好友
-						        wx.updateAppMessageShareData({ 
+						        wx.onMenuShareAppMessage({ 
 						            title: shareObj.title,
 						            desc: shareObj.desc,
 						            link: shareObj.link,
@@ -521,15 +519,27 @@
 						            }
 						          });
 						        //分享朋友圈
-						        wx.updateTimelineShareData({
+						        wx.onMenuShareTimeline({
 						           title: shareObj.title,
-						           desc: shareObj.desc,
 						           link: shareObj.link,
 						           imgUrl: shareObj.imgUrl,
 						           success: function () {
 						             // 设置成功
 						           }
 						         });
+										// 获取“微信”按钮点击状态及自定义分享
+										wx.onMenuShareWechat({
+										    title: shareObj.title,
+										    desc: shareObj.desc,
+										    link: shareObj.link,
+										    imgUrl: shareObj.imgUrl,
+										    success: function(s) {
+										    	console.log('[ suc ]', s)
+										    },
+										    fail: (e) => {
+										    	console.log('[ err ]', e)
+										    }
+										}) 
 						    });
 						    wx.error(function (res) {});
 						}

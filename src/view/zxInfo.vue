@@ -174,47 +174,56 @@
 			wxShare(){//
 					axios({
 						method:"get",
-						url:"https://m.sz.centanet.com/partner/weixin/jssdkjsonp?url=" + encodeURIComponent(location.href)
+						url: "https://m.sz.centanet.com/partner/weixin/qyweixinjssdkjsonp?url="+ encodeURIComponent(window.location.href.split('#')[0])
 					})
 					.then(res=>{
+						console.log(res)
 						let data=JSON.parse(res.data.replace('(','').replace(')',''));
+						shareObj.link=window.location.href;
 						if (data) {
 						    wx.config({
 						        debug: false,
-						        appId: data.AppId,
+						        appId: "wx2730a10487f9df56",
 						        timestamp: data.Timestamp,
 						        nonceStr: data.NonceStr,
 						        signature: data.Signature,
-						        jsApiList: [
-									'updateAppMessageShareData',
-									'updateTimelineShareData'
-						        ]
+						        jsApiList: ['onMenuShareAppMessage',  'onMenuShareTimeline', 'onMenuShareWechat']
 						    });
-							setTimeout(()=>{
-								wx.ready(function () {
-								    //分享好友
-								    wx.updateAppMessageShareData({
-								        title: shareObj.title,
-								        desc: shareObj.desc,
-								        link: shareObj.link,
-								        imgUrl: shareObj.imgUrl,
-								        success: function () {
-								          // 设置成功
-								        }
-								      });
-								    //分享朋友圈
-								    wx.updateTimelineShareData({
-								       title: shareObj.title,
-								       desc: shareObj.desc,
-								       link: shareObj.link,
-								       imgUrl: shareObj.imgUrl,
-								       success: function () {
-								         // 设置成功
-								       }
-								     });
-								});
-								wx.error(function (res) {});
-							},500)
+						    wx.ready(function () {
+						        //分享好友
+						        wx.onMenuShareAppMessage({ 
+						            title: shareObj.title,
+						            desc: shareObj.desc,
+						            link: shareObj.link,
+						            imgUrl: shareObj.imgUrl,
+						            success: function () {
+						              // 设置成功
+						            }
+						          });
+						        //分享朋友圈
+						        wx.onMenuShareTimeline({
+						           title: shareObj.title,
+						           link: shareObj.link,
+						           imgUrl: shareObj.imgUrl,
+						           success: function () {
+						             // 设置成功
+						           }
+						         });
+										// 获取“微信”按钮点击状态及自定义分享
+										wx.onMenuShareWechat({
+										    title: shareObj.title,
+										    desc: shareObj.desc,
+										    link: shareObj.link,
+										    imgUrl: shareObj.imgUrl,
+										    success: function(s) {
+										    	console.log('[ suc ]', s)
+										    },
+										    fail: (e) => {
+										    	console.log('[ err ]', e)
+										    }
+										}) 
+						    });
+						    wx.error(function (res) {});
 						}
 					})
 			},

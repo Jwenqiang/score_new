@@ -30,6 +30,7 @@
 						<p><label>{{item.CustomerType | cType}}姓名:</label><span>{{item.CustomerName}}</span></p>
 						<p><label>{{item.CustomerType | cType}}手机号:</label><span>{{item.CustomerMobile}}</span></p>
 						<p><label>付款金额:</label><span>{{item.TotalFee}}元</span></p>
+						<p><label>入账分行:</label><span>{{item.Payee}}</span></p>
 						<p v-if="item.EmpCnName"><label>经纪人姓名:</label><span>{{item.EmpCnName}}</span></p>
 						<p v-if="item.CnPath"><label>经纪人门店:</label><span>{{item.CnPath}}</span></p>
 						<div class="btn" v-if="item.PayStatus==2">
@@ -68,6 +69,7 @@
 						<p><label>{{item.CustomerType | cType}}姓名:</label><span>{{item.CustomerName}}</span></p>
 						<p><label>{{item.CustomerType | cType}}手机号:</label><span>{{item.CustomerMobile}}</span></p>
 						<p><label>付款金额:</label><span>{{item.TotalFee}}元</span></p>
+						<p><label>入账分行:</label><span>{{item.Payee}}</span></p>
 						<p v-if="item.ReviewCnName"><label>审核人:</label><span>{{item.ReviewCnName}}</span></p>
 							<div class="btn" v-if="item.PayStatus==1">
 								<button @click="goInfo(item.Id)">查看详情</button>
@@ -262,7 +264,6 @@
 					this.header_token={'token':this.$route.query.token}
 				}
 				this.listIdx=idx;
-				console.log(this.$route.query.token);
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"post",

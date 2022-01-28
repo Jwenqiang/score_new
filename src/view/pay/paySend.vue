@@ -59,7 +59,29 @@
 						/>
 					</span>
 				</li>
+				<li>
+					<!-- @input="getCompay()" -->
+					<label>入账分行</label>
+					<span style="width: 4rem;">
+						<nut-textinput 
+						    v-model="company"
+						    placeholder="请输入并选择相应入账分行"
+						    :clearBtn="false"
+								@input="getCompay()"
+						/>
+					</span>
+				</li>
 			</ul>
+			<div class="companyList" v-show="showSelect">
+				<div class="b-mask"></div>
+				<ul>
+					<template v-if="comList.length>0">
+						<li v-for="item in comList" :key="item.MchId" @click="setCv(item.MchId,item.MchName)">{{item.MchName}}</li>
+					</template>
+					<li style="height:1.2rem;color: #999;line-height: 0.8rem;font-size: 0.24rem;" v-else>暂无匹配分行数据，请换关键词试试</li>
+					
+				</ul>
+			</div>
 		</div>
 		<div class="payTip">
 			<p>注意：</p>
@@ -72,6 +94,14 @@
 		<div class="sendBtn">
 			<button @click="sendInfo">保存</button>
 		</div>
+<!-- 		<nut-picker
+		  :is-visible="showSelect"
+		  :list-data="comList"
+		  title="请选择入账的分行名称"
+		  @close="closeSwitch('showSelect')"
+		  @confirm="confirm"
+			v-if="comList"
+		></nut-picker> -->
 	</div>
 </template>
 
@@ -84,6 +114,7 @@
 	import nutUI from '@nutui/nutui/dist/nutui.min.js';  // 加载构建后的JS
 	import '@nutui/nutui/dist/nutui.min.css';  //加载构建后的CSS
 	nutUI.install(Vue);
+	var lastInput = null;
 	export default{
 		name:"paySend",
 		data(){
@@ -93,19 +124,77 @@
 				userName:"",
 				mobile:"",
 				money:"",
-				msg:""
+				msg:"",
+				comList:[],
+				company:"",
+				companyId:"",
+				showSelect:false,
+
 			}
 		},
 		created() {
 			if(this.$route.query.id){
 				this.getList();
 			}
+			// this.getCompay();
 		},
 		beforeDestroy() {
 		},
-		watch:{
-		},
 		methods:{
+		 // openSwitch(param) {
+			// 	this[`${param}`] = true;
+			// },
+			// closeSwitch(param) {
+			// 	this[`${param}`] = false;
+			// },
+			// confirm(chooseData) {
+			// 	this.company = `${chooseData[0].value}`;
+			// 	this.companyId = `${chooseData[0].label}`;
+			// },
+			setCv(id,val){
+				this.company=val;
+				this.companyId=id;
+				this.showSelect=false;
+			},
+			getCompay(){
+				clearTimeout(lastInput);
+				lastInput=setTimeout(()=>{
+					return new Promise((resolve)=>{
+							this.$axios({
+								method:"post",
+								url:"/RentHouse/GetPayMchConfig",
+								headers:this.header_token,
+								data:{
+									name:this.company
+								}
+							})
+							.then(res=>{
+								console.log(res);
+								resolve(res);
+								if(res.data.code==0){
+									if(res.data.data&&res.data.data.length>0){
+										// let arr =	a.map((v)=>{
+										// 	let obj={};
+										// 	obj.label=v.MchId;
+										// 	obj.value=v.MchName;
+										// 	return obj;
+										// })
+										// this.comList=[arr];
+										this.comList=res.data.data;
+									}else{
+										this.comList=[];
+									}
+									this.showSelect=true;
+								}else{
+									this.$toast.text(res.data.msg);
+								}
+							})
+							.catch(error=>{
+								this.$toast.text("服务器繁忙，请稍后再试");
+							})
+					})
+				},500)
+			},
 			getList(){
 				this.loading=this.$toast.loading('',{
 				    cover: false
@@ -128,7 +217,9 @@
 								this.userName=res.data.data.CustomerName,
 								this.mobile=res.data.data.CustomerMobile,
 								this.money=res.data.data.TotalFee,
-								this.msg=res.data.data.OrderName
+								this.msg=res.data.data.OrderName,
+								this.company=res.data.data.Payee;
+								this.companyId=res.data.data.MchId;
 							}else{
 								this.$toast.text(res.data.msg);
 							}
@@ -155,6 +246,12 @@
 				}else if(this.money==""){
 					this.$toast.text('请填写付款金额');
 					return;
+				}else if(this.money<=0){
+					this.$toast.text('请输入大于0的金额');
+					return;
+				}else if(this.companyId==""){
+					this.$toast.text('请输入并选择相应入账分行');
+					return;
 				}
 				this.loading=this.$toast.loading('',{
 				    cover: false
@@ -170,7 +267,8 @@
 								"CustomerName": this.userName,
 								"CustomerMobile": this.mobile,
 								"TotalFee": this.money,
-								"OrderName":this.msg
+								"OrderName":this.msg,
+								"MchId":this.companyId
 							}
 						})
 						.then(res=>{
@@ -207,6 +305,7 @@
 		.payForm{
 			padding: 0 0.32rem;
 			background-color: #fff;
+			position: relative;
 			li{
 				display: flex;
 				width: 100%;
@@ -217,6 +316,7 @@
 				border-bottom: @border;
 				font-size: 0.3rem;
 				color: #333;
+				position: relative;
 				&:last-child{
 					border: 0;
 				}
@@ -225,6 +325,42 @@
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
+				}
+			}
+			.companyList{
+				position: absolute;
+				top: 6rem;
+				height: 6rem;
+				height: calc(100vh - 6rem);
+				left: 0;
+				width: 100%;
+				border-top: 1px solid #eee;
+				.b-mask{
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					background-color: #000;
+					opacity: 0.6;
+					left: 0;
+					top: 0;
+				}
+				ul{
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 100%;
+					max-height: 4.4rem;
+					overflow-y: auto;
+					background-color: #FDFDFD;
+					padding: 0 0.32rem;
+					li{
+						display: block;
+						height: 0.8rem;
+						border-bottom: 1px solid #eee;
+						color: #666;
+						text-align: center;
+						font-size: 0.26rem;
+					}
 				}
 			}
 		}
@@ -237,7 +373,7 @@
 			}
 		}
 		.sendBtn{
-			margin-top: 1.8rem;
+			margin-top: 1.4rem;
 			padding: 0 0.6rem;
 			button{
 				width: 100%;
@@ -250,17 +386,26 @@
 				border-radius: 0.08rem;
 			}
 		}
+		/deep/.nut-textinput-disabled{
+			input{
+				background: none;
+				color: #333;
+			}
+		}
+		/deep/.nut-textinput{
+			input{
+				border: 0;
+				text-align: right;
+				padding-right: 0 !important;
+				font-size: 0.28rem;
+			}
+		} 
+		/deep/.nut-radio{
+			line-height: 0.4rem;
+			margin-left: 0.5rem;
+			margin-right: 0;
+		}
+		
 	}
 </style>
-<style>
-	.paySend .nut-textinput input{
-		border: 0;
-		text-align: right;
-		padding-right: 0 !important;
-	}
-	.paySend .nut-radio{
-		line-height: 0.4rem;
-		margin-left: 0.5rem;
-		margin-right: 0;
-	}
-</style>
+
