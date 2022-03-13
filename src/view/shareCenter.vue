@@ -5,6 +5,7 @@
 				</div>
 				<div class="scBody">
 					<div class="nineC ninesC">
+						<label @click="goIcon('hb','委卖海报','12','','(1,0)')">委卖海报</label>
 						<label @click="goIcon('hb','名片海报','0','','(1,1)')">名片海报</label>
 						<label @click="goIcon('hbHouse','房源海报',jjrNum,'jjr','(1,2)')">房源海报</label>
 						<label @click="goIcon('hb','招聘海报','2','','(1,3)')">招聘海报<!-- <span v-if="showZp"></span> --><!-- <i>new</i> --></label>
@@ -259,24 +260,28 @@
 	.scBaner{width: 100%;height: 3.2rem;background: url(../../public/img/scBan.png) center no-repeat;background-size: 7.5rem;}
 	.scBody{padding: 0.3rem;}
 	.scBody .nineC{display: flex;flex-wrap: wrap;box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);background: #fff;border-radius: 0.08rem;}
-	.scBody .nineC label{height: 2rem;width: 33.3%;text-align: center;padding-top: 1.2rem;font-size: 0.3rem;color: #666;position: relative;}
+	.scBody .nineC label{height: 2rem;width: 33.3%;text-align: center;padding-top: 1.2rem;font-size: 0.3rem;color: #666;position: relative;border: 1px solid #eee;border-top: 0;border-left: 0;}
 	.nineC label span{width: 0.12rem;height: 0.12rem;display: block;background-color: #FF0000;position: absolute;top: 1.3rem;right: 0.45rem;border-radius: 50%;}
 	.nineC label i{position: absolute;top: 0.2rem;right: 0.35rem;color: #FF0000;font-size: 0.24rem;font-style: normal;font-weight: bold;}
 	.nineC label:first-child{background: url(../assets/img/nine-jp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.nineC label:nth-of-type(2){background: url(../assets/img/nine-sc.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-bottom: 0;}
+	.nineC label:nth-of-type(2){background: url(../assets/img/nine-sc.png) center 0.4rem no-repeat;background-size: 0.65rem;}
 	.nineC label:nth-of-type(3){background: url(../assets/img/nine-xx.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.ninesC label:first-child{background: url(../assets/img/hb-mp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.ninesC label:nth-of-type(2){background: url(../assets/img/hb-fy.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-top: 0;border-bottom: 0;}
-	.ninesC label:nth-of-type(3){background: url(../assets/img/hb-zp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
-	.ninesC label:nth-of-type(4){background: url(../assets/img/hb-jr.png) center 0.4rem no-repeat;background-size: 0.65rem;border-top: 1px solid #eee;}
-	.ninesC label:nth-of-type(5){background: url(../assets/img/hb-lz.png) center 0.4rem no-repeat;background-size: 0.65rem;border: 1px solid #eee;border-bottom: 0;}
-	.ninesC label:nth-of-type(6){background: url(../assets/img/hb-app.png) center 0.4rem no-repeat;background-size: 0.44rem;border-top: 1px solid #eee;}
-	.ninesC label:nth-of-type(7){background: url(../assets/img/hb-cj.png) center 0.4rem no-repeat;background-size: 0.54rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;}
-	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.64rem;border: 1px solid #eee;/* border-bottom: 0; */}
-	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.64rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;}
-	.scBody .ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.64rem;border-right: 1px solid #eee;}
-	.ninesC label:nth-of-type(11){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.64rem;border-right: 1px solid #eee;}
-	.ninesC label:nth-of-type(12){background: url(~@/assets/img/m-icon-ts.png) center 0.4rem no-repeat;background-size: 0.42rem;}
+	
+	.ninesC label{border-right: 1px solid #eee;}
+	.ninesC label:nth-of-type(1){background: url(../../public/images/m-icon-wm.png) center 0.4rem no-repeat;background-size: 0.65rem;}
+	.ninesC label:nth-of-type(2){background: url(../assets/img/hb-mp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
+	.ninesC label:nth-of-type(3){background: url(../assets/img/hb-fy.png) center 0.4rem no-repeat;background-size: 0.65rem;}
+	.ninesC label:nth-of-type(4){background: url(../assets/img/hb-zp.png) center 0.4rem no-repeat;background-size: 0.65rem;}
+	.ninesC label:nth-of-type(5){background: url(../assets/img/hb-jr.png) center 0.4rem no-repeat;background-size: 0.65rem;}
+	.ninesC label:nth-of-type(6){background: url(../assets/img/hb-lz.png) center 0.4rem no-repeat;background-size: 0.65rem;}
+	.ninesC label:nth-of-type(7){background: url(../assets/img/hb-app.png) center 0.4rem no-repeat;background-size: 0.44rem;}
+	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-cj.png) center 0.4rem no-repeat;background-size: 0.54rem;}
+	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.64rem;}
+	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.64rem;}
+	.scBody .ninesC label:nth-of-type(11){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.64rem;}
+	.ninesC label:nth-of-type(12){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.64rem;}
+	.ninesC label:nth-of-type(13){background: url(~@/assets/img/m-icon-ts.png) center 0.4rem no-repeat;background-size: 0.42rem;border-bottom: 0;}
+	.ninesC label:nth-of-type(3n){border-right: 0;}
 	.myIntr{width: 6.2rem;height: 5.6rem;background-color: #fff;}
 	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
 	.miContent{padding: 0.3rem;}

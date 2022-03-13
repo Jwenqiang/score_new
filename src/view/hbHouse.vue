@@ -168,7 +168,8 @@
 		},
 		// 注意：只有当组件在 <keep-alive> 内被切换，才会有activated 和 deactivated 这两个钩子函数
 		 activated() {//在vue对象存活的情况下，进入当前存在activated()函数的页面时，一进入页面就触发；可用于初始化页面数据等
-		    // 全局绑定滚动事件，
+		   this.header_token={"token": uToken()};
+				// 全局绑定滚动事件，
 		    window.addEventListener("scroll", this.scrollT);
 				if(this.hType=='S'&&!this.content)
 				this.getHouse();
@@ -266,6 +267,7 @@
 			}
 		},
 		mounted() {
+			
 		},
 		methods:{
 			closeCity(){
@@ -456,7 +458,12 @@
 									if(list.length>0){
 										for(let i in list){
 											this.$set(list[i],'loading',this.loadImg)
-											this.$set(list[i],'src',list[i].FullImagePath.split('.jpg')[0]+'_300x210_w.jpg')
+											if(list[i].FullImagePath.indexOf('.png')>-1){
+												this.$set(list[i],'src',list[i].FullImagePath.split('.png')[0]+'_300x210_w.jpg')
+											}else{
+												this.$set(list[i],'src',list[i].FullImagePath.split('.jpg')[0]+'_300x210_w.jpg')
+											}
+											
 										}
 										this.houseNew=list;
 									}

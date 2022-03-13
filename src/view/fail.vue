@@ -59,8 +59,9 @@
 			}
 		},
 		mounted() {
-			this.userName=this.$route.query.userName
-			this.userNum=this.$route.query.emNum
+			let user=JSON.parse(localStorage.getItem('user'));
+			this.userName=user.EmpCnName;
+			this.userNum=user.EmpNo;
 		},
 		components: {
 		},

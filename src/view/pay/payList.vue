@@ -24,7 +24,7 @@
 							<strong>{{item.OrderName}}</strong>
 						</div>
 						<i class="status">{{item.PayStatus | status}}</i>
-						<p>{{item.UpdateTime}}</p>
+						<p><label>订单时间:</label><span>{{item.UpdateTime}}</span></p>
 						<p><label>订单编号:</label><span>{{item.OrderNo}}</span></p>
 						<p><label>付款角色:</label><span>{{item.CustomerType | cType}}</span></p>
 						<p><label>{{item.CustomerType | cType}}姓名:</label><span>{{item.CustomerName}}</span></p>
@@ -33,6 +33,7 @@
 						<p><label>入账分行:</label><span>{{item.Payee}}</span></p>
 						<p v-if="item.EmpCnName"><label>经纪人姓名:</label><span>{{item.EmpCnName}}</span></p>
 						<p v-if="item.CnPath"><label>经纪人门店:</label><span>{{item.CnPath}}</span></p>
+						<p v-if="item.PayTime"><label>支付时间:</label><span>{{item.PayTime}}</span></p>
 						<div class="btn" v-if="item.PayStatus==2">
 							<button @click="judgeStatus(item.Id,3)">审核通过</button>
 							<button @click="judgeStatus(item.Id,5)">拒绝通过</button>
@@ -63,7 +64,7 @@
 							<strong>{{item.OrderName}}</strong>
 						</div>
 						<i class="status">{{item.PayStatus | status}}</i>
-						<p>{{item.UpdateTime}}</p>
+						<p><label>订单时间:</label><span>{{item.UpdateTime}}</span></p>
 						<p><label>订单编号:</label><span>{{item.OrderNo}}</span></p>
 						<p><label>付款角色:</label><span>{{item.CustomerType | cType}}</span></p>
 						<p><label>{{item.CustomerType | cType}}姓名:</label><span>{{item.CustomerName}}</span></p>
@@ -71,6 +72,7 @@
 						<p><label>付款金额:</label><span>{{item.TotalFee}}元</span></p>
 						<p><label>入账分行:</label><span>{{item.Payee}}</span></p>
 						<p v-if="item.ReviewCnName"><label>审核人:</label><span>{{item.ReviewCnName}}</span></p>
+						<p v-if="item.PayTime"><label>支付时间:</label><span>{{item.PayTime}}</span></p>
 							<div class="btn" v-if="item.PayStatus==1">
 								<button @click="goInfo(item.Id)">查看详情</button>
 								<button @click="changeSend(item.Id)">修改</button>

@@ -69,7 +69,7 @@
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="$route.params.id==24" @click="$router.replace({name:'days',params:{id:'26'}})">
 			<img src="images/days24.jpg?v=9" width="100%"/>
 		</div>
-		<div class="imgMsg" :class="id>14?'imgMsg2':''" v-else-if="$route.params.id==26">
+		<div class="imgMsg1" v-else-if="$route.params.id==26">
 			<img src="images/days26.png?v=9" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==25">

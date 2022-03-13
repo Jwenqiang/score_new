@@ -36,7 +36,7 @@
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'33'}})">如何完成</mt-button>
 				</div>
-				<div class="clear newList">
+<!-- 				<div class="clear newList">
 					<img src="../assets/img/mr9.png" class="nlT"/>
 					<div class="newM nDay">
 						<h4>签订业主独家委托<span>最高+200</span></h4>
@@ -51,7 +51,7 @@
 						<label>不限次数</label>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'8'}})">如何完成</mt-button>
-				</div>
+				</div> -->
 				<div class="clear newList">
 					<img src="../assets/img/mr7.png" class="nlT"/>
 					<div class="newM nDay">

@@ -612,6 +612,9 @@
 				}else if (this.hbId == '11') {
 					this.hbName = "小贴士";
 				}
+				else if (this.hbId == '12') {
+					this.hbName = "委卖海报";
+				}
 				document.title = this.hbName;
 			}
 		},

@@ -2,6 +2,8 @@ import axios from 'axios'
 // import { uToken } from './token.js'
 // import Base from './Global'
 import { Toast } from 'mint-ui';
+import router from '../router/router.js'
+console.log(router)
 const instance =axios.create({
 	baseURL : process.env.VUE_APP_URL,//.env.development开发环境  .env.production生产环境就是build后的  .env.test测试环境
 	timeout:20000
@@ -30,7 +32,9 @@ instance.interceptors.response.use(
 				sessionStorage.setItem('toName',oldUrl);
 				Toast("您的登录信息已过期");
 				setTimeout(()=>{
-					location.reload();
+					// 改成跳转到登陆
+					router.replace({name:"login"})
+					// location.reload();
 				},1000)
 				return response;
 			}

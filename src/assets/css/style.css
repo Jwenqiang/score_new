@@ -1,3 +1,7 @@
+@font-face {
+	font-family:"fz";
+	src: url("/fonts/fzzdhjt.TTF");
+}
 /*所有元素默认字体大小*/
 /* 字体图标 */
 @import url("//at.alicdn.com/t/font_1746649_e9zd9odyhri.css");

@@ -17,7 +17,7 @@
 				<div v-if="house.length>0" class="schoolList">
 					<div class="clear jjrL" v-for="item in house" :key="item.SchoolId" @click="shareHouse(item.SchoolId,jjrNum)">
 						<div class="jrl">
-							<img :src="item.ImagePath" width="100%"/>
+							<img :src="item.ImagePath | changeImg" width="100%"/>
 						</div>
 						<div class="jrr">
 							<h4 class="jrt">{{item.SchoolName}}</h4>
@@ -88,7 +88,8 @@
 		},
 		// 注意：只有当组件在 <keep-alive> 内被切换，才会有activated 和 deactivated 这两个钩子函数
 		 activated() {//在vue对象存活的情况下，进入当前存在activated()函数的页面时，一进入页面就触发；可用于初始化页面数据等
-		    // 全局绑定滚动事件，
+		    this.header_token={"token": uToken()};
+				// 全局绑定滚动事件，
 		    window.addEventListener("scroll", this.scrollT);
 				this.getHouse();
 		  },
@@ -103,7 +104,16 @@
 			},
 			changeImg(n){
 				let v=n.split('.jpg')[0];
-				return v+'_300x210_w.jpg';
+				if(n.indexOf('.jpeg')>-1){
+					v=n.split('.jpeg')[0];
+					return v+'_300x210_w.jpeg';
+				}else if(n.indexOf('.png')>-1){
+					v=n.split('.png')[0];
+					return v+'_300x210_w.png';
+				}else{
+					return v+'_300x210_w.jpg';
+				}
+				
 			}
 		},
 		watch:{

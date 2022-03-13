@@ -18,11 +18,11 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
-				<div  class="nut-swiper-slide gray" >
+<!-- 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/txNyuegIAJ6Y9o5CEgxaQg" @click="goPage('','','https://mp.weixin.qq.com/s/txNyuegIAJ6Y9o5CEgxaQg','2')"><img src="images/banner0117.png"/></a>
-				</div>
+				</div> -->
 				<div  class="nut-swiper-slide gray_1" >
-					<a @click="goPage('days','24','days/24','2')"><img src="images/banner0106.jpg"/></a>
+					<a @click="goPage('days','24','days/24','2')"><img src="images/banner0106.jpg?v=1"/></a>
 				</div>
 <!-- 				<div  class="nut-swiper-slide gray" >
 				    <a @click="goPage('days','321','days/321','1')"><img src="../assets/img/banner1025.jpg"/></a>

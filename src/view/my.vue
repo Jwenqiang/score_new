@@ -1,29 +1,32 @@
 <template>
 	<div class="my">
 		<div class="clear myTop">
-			<div class="mtSet" @click="$router.push({name:'set',query:{'userName':userInfo.EmpCnName,'emNum':userInfo.EmpNo}})">
+			<div class="mtSet" @click="$router.push({name:'set'})">
 			</div>
 			<div class="mtL">
 				<label>
 					<img :src="tx" onerror="this.src='https://sz.centanet.com/partner/house/userImg/tx_none.png'"/>
 				</label>
-				<span v-if="userInfo.JiFenGrade<4">
-					<img src="@/assets/img/grad1.png"/>
+				<span v-if="grade=='未评级'">
+					<img src="images/svg/grad0.svg"/>
 				</span>
-				<span v-else-if="userInfo.JiFenGrade<7">
-					<img src="@/assets/img/grad2.png"/>
+				<span v-else-if="grade=='新秀'">
+					<img src="images/svg/grad1.svg"/>
 				</span>
-				<span v-else-if="userInfo.JiFenGrade<10">
-					<img src="@/assets/img/grad3.png"/>
+				<span v-else-if="grade=='少侠'">
+					<img src="images/svg/grad2.svg"/>
 				</span>
-				<span v-else-if="userInfo.JiFenGrade<13">
-					<img src="@/assets/img/grad4.png"/>
+				<span v-else-if="grade=='大侠'">
+					<img src="images/svg/grad3.svg"/>
 				</span>
-				<span v-else-if="userInfo.JiFenGrade<16">
-					<img src="@/assets/img/grad5.png"/>
+				<span v-else-if="grade=='掌门'">
+					<img src="images/svg/grad4.svg"/>
 				</span>
-				<span v-else-if="userInfo.JiFenGrade>15">
-					<img src="@/assets/img/grad6.png"/>
+				<span v-else-if="grade=='宗师'">
+					<img src="images/svg/grad5.svg"/>
+				</span>
+				<span v-else-if="grade=='盟主'">
+					<img src="images/svg/grad6.svg"/>
 				</span>
 			</div>
 			<div class="mtR">
@@ -38,14 +41,13 @@
 			
 			<div class="myYb">
 				<div class="mybT" @click="$router.push({name:'yb'})">
-					<p>元宝余额</p>
-					<span>{{userInfo.YuanBaoEnable}}</span> 
+					<p>元宝余额：<span>{{userInfo.YuanBaoEnable}}</span> </p>
 				</div>
-				<span class="line-l"></span>
+<!-- 				<span class="line-l"></span>
 				<div class="mybT" @click="$router.push({name:'czc'})">
 					<p>成长值</p>
-					<span>{{userInfo.JiFenEnable}}</span> 
-				</div>
+					<span>{{userInfo.JiFenEnable}}</span>
+				</div> -->
 			</div>
 		</div>
 		<div class="myC">
@@ -62,6 +64,7 @@
 			<div class="nineTop">
 				<p>分享中心</p>
 				<div class="ninesC">
+					<label @click="goIcon('hb','委卖海报','12','','','(2,0)')">委卖海报</label>
 					<label @click="goIcon('hb','名片海报','0','','','(2,1)')">名片海报</label>
 					 <!-- @click="$router.push({name:'hbHouse',query:{jjr:jjrNum,cityName:cityName}})" -->
 					<label @click="goIcon('hbHouse','房源海报',jjrNum,'jjr',cityName,'(2,2)')">房源海报</label>
@@ -202,27 +205,28 @@
 				empArr:[],
 				showZp:true,
 				showJr:true,
-				cityName:""
+				cityName:"",
+				grade:""
 			}
 		},
 		created(){
-			this.helloAsync().then(v=>{
-			   console.log(v);         // helloAsync
-			   console.log('then');         // helloAsync
-			})
 			this.vip();
 			document.title="我的";
 			var u = navigator.userAgent;
 			if(u.indexOf('aplus') >-1){
 				this.inApp=true;
 			}
-			this.getUser()
+			this.getUser();
+			this.getModel();
 			if(localStorage.getItem('readZp')){
 				this.showZp=false;
 			}
 			if(localStorage.getItem('readJr')){
 				this.showJr=false;
 			}
+		},
+		mounted() {
+			//this.drawText();//加水印
 		},
 		beforeDestroy() {
 		},
@@ -240,18 +244,70 @@
 			 }
 		},
 		methods:{
-			async helloAsync(){
-				var a=[1,2,3]
-				var b=[];
-				for(let i of a){
-					if(i==2)
-						break;
-					i++
-					b.push(i)
-				}
-			    return b;
+			// 画水印背景
+				textBecomeImg(text,fontsize,fontcolor){
+					var canvas = document.createElement('canvas');
+					var $buHeight = 0;
+					if(fontsize <= 32){ $buHeight = 99; }
+					else if(fontsize > 32 && fontsize <= 60 ){ $buHeight = 2;}
+					else if(fontsize > 60 && fontsize <= 80 ){ $buHeight = 4;}
+					else if(fontsize > 80 && fontsize <= 100 ){ $buHeight = 6;}
+					else if(fontsize > 100 ){ $buHeight = 10;}
+					canvas.height=fontsize + $buHeight ;
+					canvas.padding=30;
+					var context = canvas.getContext('2d');
+					context.clearRect(0, 0, canvas.width*2, canvas.height);
+					context.textAlign = "center";
+			                canvas.width = 200;
+			                canvas.height = 100;
+			                context.fillStyle = fontcolor;
+			                context.font=fontsize+"px Arial";
+			                context.textBaseline = 'middle'; 
+			                context.fillText(text,0,fontsize/2);
+			                var canvasWidth = canvas.width/99;
+			                canvasWidth = context.measureText(text).width;//text字整句文本的宽度
+					var dataUrl = canvas.toDataURL('image/png');
+					return dataUrl;
 			},
-				
+			// 画水印信息
+			drawText(){
+				// +new Date().toLocaleDateString()
+				var text = '103524蒋文强';
+				console.log(text);
+				var shuiyinDiv = document.createElement('div');
+				var style = shuiyinDiv.style;
+				style.position = 'fixed';
+				style.left = '-50%';
+				style.top = '-60%';
+				style.width = '200%';
+				style.height = '200%';
+				style.opacity = '0.1';
+				style.background = "url("+this.textBecomeImg(text,16,"#666")+")";
+				style.zIndex = 9999999991;
+				style.transform = "rotate(-30deg)";
+				style.pointerEvents = "none";//很重要  不然点击不了挡住的其他模块
+				document.body.appendChild(shuiyinDiv);
+			},
+			getModel(){
+				return new Promise((resolve,err)=>{
+						this.$axios({
+							method:"get",
+							url:"/My/GetEmpModel",
+							headers:this.header_token
+						})
+						.then(res=>{
+							resolve(res);
+							console.log(res);
+							if(res.data.code==0){
+								this.grade=res.data.data.ChengHu;
+							}
+						})
+						.catch(error=>{
+							Indicator.close();
+							Toast("网络错误，请稍后再试");
+						})
+				})
+			},
 			goFail(){
 				this.$sensors.track('sc_click_icon', {
 					sc_business_type:'other',
@@ -309,18 +365,19 @@
 			getUser(){
 				Indicator.open();
 				return new Promise((resolve,err)=>{
-						this.$axios({
+					this.$axios({
 							method:"get",
 							url:"/My/GetUserInfoV2?v="+Math.random()*10,
 							headers:this.header_token
 						})
 						.then(res=>{
-							resolve(res);
+							// resolve(res);
 							console.log(res);
 							if(res.data.code==0){
 								this.userInfo=res.data.data;
 								this.cityName=res.data.data.CityName;
 								this.jjrNum=res.data.data.EmpNo;
+								localStorage.setItem("user",JSON.stringify(res.data.data));
 								if(res.data.data.SignMessage){
 									this.myMsg=res.data.data.SignMessage;
 								}
@@ -391,19 +448,19 @@
 	.my{background-color: #F5F5F5;padding-bottom: 2rem;min-height: 100vh;}
 	.myTop{position: relative;height: 3.2rem;width: 100%;background: url(../assets/img/myBj.png) center bottom no-repeat;background-size: 100%;padding: 0.6rem 0.3rem 0.4rem;}
 	.mtSet{width: 0.8rem;height: 0.8rem;background: url(../assets/img/m-set.png) right top no-repeat;background-size: 0.42rem;position: absolute;right: 0.3rem;top: 0.4rem;}
-	.myYb{position: absolute;width: 6.9rem;height: 1.5rem; padding: 0.16rem;background-color: #fff;bottom: -0.9rem;left: 0.3rem;text-align: center;box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);border-radius: 0.1rem;}
+	.myYb{position: absolute;width: 6.9rem;height: 1rem; padding: 0.16rem;background-color: #fff;bottom: -0.5rem;left: 0.3rem;text-align: center;box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);border-radius: 0.1rem;}
 	.mybT .iconY{width: 0.44rem;margin-right: 0.1rem;vertical-align: middle;}
-	.myYb p{font-size: 0.3rem;color: #999;margin: 0.06rem 0;}
-	.mybT{font-size: 0.46rem;color: #F93C32;width: 2.8rem;padding-bottom: 0.1rem;display: inline-block;}
+	.myYb p{font-size: 0.3rem;color: #999;margin: 0;}
+	.mybT{font-size: 0.46rem;color: #F93C32;width: 100%;padding-bottom: 0.1rem;display: inline-block;}
 	.mybT label{font-size: 0.24rem;color: #999;margin-left: 0.1rem;}
-	.mybT span{font-size: 0.46rem;font-weight: 500;}
+	.mybT span{font-size: 0.52rem;font-weight: 520;color: #F93C32;}
 	.mtL{width: 1.3rem;height: 1.3rem;border: 2px solid #fff;position: relative;border-radius: 50%;float: left;}
 	.mtL label{width: 100%;height: 100%;display: block;overflow: hidden;border-radius: 50%;}
 	.mtL img{width: 100%;}
 	.mtR{width: 5.4rem;margin-left: 0.2rem;float: left;}
 	.mtR h3{color: #fff;font-size: 0.4rem;margin-bottom: 0.08rem;font-weight: 550;}
 	.mtR h3 span{font-weight: 350;font-size: 0.26rem;margin-left: 0.1rem;padding: 0 0.15rem;background: url(../assets/img/line-bj.png) left top repeat-x;background-size: 100%;border-radius: 0.3rem;overflow: hidden;}
-	.mtL span img{width: 0.44rem;position: absolute;right: 0;bottom: -0.2rem;}
+	.mtL span img{width: 1.22rem;position: absolute;right: 0.04;bottom: -0.2rem;}
 	.mtR .msecond{color: #fff;margin-bottom: 0.06rem;font-size: 0.24rem;line-height: 0.3rem;}
 	.mtR .msecond label{display: inline-block;max-width: 5rem;min-width: 2.6rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float: left;}
 	.mtR .msecond span{display: inline-block;width: 0.12rem;height: 0.28rem;background: url(../assets/img/m-right.png) center no-repeat;background-size: 100%;margin-left: 0.2rem;}
@@ -411,7 +468,7 @@
 	.lineM span{display: block;height: 100%;background-color: #FFE349;}
 	.lineTip{font-size: 0.2rem;color: #fff;margin-top: 4px;}
 	.line-l{width: 1px;height: 0.8rem;background-color: #ddd;display: inline-block;}
-	.myC{margin-top: 1.2rem;}
+	.myC{margin-top: 0.8rem;}
 	.myLi,.myList{margin: 0.2rem 0;height: 1rem;padding-left: 1rem;padding-right: 0.3rem; background: #fff url(../assets/img/m-icon1.png) 0.3rem center no-repeat;background-size: 0.47rem;line-height: 1rem;}
 	.myList{margin: 0;}
 	.myList2{background: #fff url(../assets/img/m-icon2.png) 0.3rem center no-repeat;background-size: 0.47rem;}
@@ -443,18 +500,23 @@
 	.nineC label:nth-of-type(3){background: url(../assets/img/nine-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;border-right: 1px solid #eee;}
 	.nineC label:nth-of-type(4){background: url(../assets/img/nine-rb.png) center 0.4rem no-repeat;background-size: 0.48rem;}
 	.ninesC label{border:  1px solid #eee;border-top: 0;border-left: 0;}
-	.ninesC label:first-child{background: url(../assets/img/hb-mp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(2){background: url(../assets/img/hb-fy.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(3){background: url(../assets/img/hb-zp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(4){background: url(../assets/img/hb-jr.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(5){background: url(../assets/img/hb-lz.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(6){background: url(../assets/img/hb-app.png) center 0.4rem no-repeat;background-size: 0.34rem;}
-	.ninesC label:nth-of-type(7){background: url(../assets/img/hb-cj.png) center 0.4rem no-repeat;background-size: 0.44rem;}
-	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
-	.ninesC label:nth-of-type(11){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.56rem;}
-	.ninesC label:nth-of-type(12){background: url(../assets/img/m-icon-ts.png) center 0.4rem no-repeat;background-size: 0.36rem;}
+	
+	.ninesC label:nth-of-type(1){background: url(../../public/images/m-icon-wm.png) center 0.4rem no-repeat;background-size: 0.56rem;}
+	.ninesC label:nth-of-type(2){background: url(../assets/img/hb-mp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(3){background: url(../assets/img/hb-fy.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(4){background: url(../assets/img/hb-zp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(5){background: url(../assets/img/hb-jr.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(6){background: url(../assets/img/hb-lz.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(7){background: url(../assets/img/hb-app.png) center 0.4rem no-repeat;background-size: 0.34rem;}
+	.ninesC label:nth-of-type(8){background: url(../assets/img/hb-cj.png) center 0.4rem no-repeat;background-size: 0.44rem;}
+	.ninesC label:nth-of-type(9){background: url(../assets/img/hb-zx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(10){background: url(../assets/img/hb-xx.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(11){background: url(../assets/img/hb-xp.png) center 0.4rem no-repeat;background-size: 0.48rem;}
+	.ninesC label:nth-of-type(12){background: url(../../public/images/hb-za.png) center 0.4rem no-repeat;background-size: 0.56rem;}
+	.ninesC label:nth-of-type(13){background: url(../assets/img/m-icon-ts.png) center 0.4rem no-repeat;background-size: 0.36rem;border-bottom: 0;}
+	
+	
+	.ninesC label:nth-of-type(4n){border-right: 0;}
 	.myIntr{width: 6.2rem;height: 5.4rem;background-color: #fff;border-radius: 0.2rem;}
 	.miTop{height: 1.3rem;background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;}
 	.miContent{padding: 0.3rem;}

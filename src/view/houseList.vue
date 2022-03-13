@@ -12,7 +12,7 @@
 				<div v-if="house.length>0">
 					<div class="clear jjrL" v-for="(item,index) in house" :key="item.ZyHouseOutputDto.AdsNo">
 						<div class="jrl">
-							<img :src="item.ZyHouseOutputDto.FullImagePath" width="100%" @click="shareHouse(item.ZyHouseOutputDto.AdsNo,jjrNum)"/>
+							<img :src="item.ZyHouseOutputDto.FullImagePath | changeImg" width="100%" @click="shareHouse(item.ZyHouseOutputDto.AdsNo,jjrNum)"/>
 						</div>
 						<div class="jrr">
 							<div>
@@ -421,7 +421,19 @@
 		filters:{
 			price(msg){
 				return msg/10000
-			}
+			},
+			changeImg(n){
+				let v=n.split('.jpg')[0];
+				if(n.indexOf('.jpeg')>-1){
+					v=n.split('.jpeg')[0];
+					return v+'_300x210_w.jpeg';
+				}else if(n.indexOf('.png')>-1){
+					v=n.split('.png')[0];
+					return v+'_300x210_w.png';
+				}else{
+					return v+'_300x210_w.jpg';
+				}
+			},
 		},
 		methods:{
 			// 经纪人回馈活动中奖查询

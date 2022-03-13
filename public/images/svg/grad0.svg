@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="129px" height="36px" viewBox="0 0 129 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>1新秀备份</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#CBCBCB" offset="0%"></stop>
+            <stop stop-color="#939391" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#E1E1E1" offset="0%"></stop>
+            <stop stop-color="#9F9F9F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M25,0 L103,0 C106.313708,-6.08718376e-16 109,2.6862915 109,6 L109,32 L109,32 L19,32 L19,6 C19,2.6862915 21.6862915,6.08718376e-16 25,0 Z" id="path-3"></path>
+        <filter x="-3.9%" y="-7.8%" width="107.8%" height="121.9%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <text id="text-5" font-family="FZLTCHJW--GB1-0, FZLanTingHeiS-B-GB" font-size="20" font-weight="normal" letter-spacing="1" fill="#FFFFFF">
+            <tspan x="11" y="18">未评级</tspan>
+        </text>
+        <filter x="-3.2%" y="-4.2%" width="106.3%" height="116.7%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.201663571 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-23.000000, -500.000000)">
+            <g id="1新秀备份" transform="translate(23.000000, 501.000000)">
+                <polygon id="矩形" fill="url(#linearGradient-1)" points="91 7 129 7 117.377132 21 129 35 91 35"></polygon>
+                <path d="M91.0166504,32 C91.3927207,32 97.3871706,33 109,35 L109,32 C96.63503,32 90.6405801,32 91.0166504,32 Z" id="路径-11" fill="#6D6D6D" transform="translate(100.000000, 33.500000) scale(-1, 1) translate(-100.000000, -33.500000) "></path>
+                <polygon id="矩形备份-2" fill="url(#linearGradient-1)" transform="translate(19.000000, 21.000000) scale(-1, 1) translate(-19.000000, -21.000000) " points="0 7 38 7 26.3771324 21 38 35 0 35"></polygon>
+                <g id="矩形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="url(#linearGradient-2)" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+                <g id="编组-5" transform="translate(22.000000, 5.000000)" fill="#FFFFFF">
+                    <g id="未评级" fill-opacity="1">
+                        <use filter="url(#filter-6)" xlink:href="#text-5"></use>
+                        <use xlink:href="#text-5"></use>
+                    </g>
+                    <polygon id="星形" points="5 13.5 2.06107374 15.045085 2.62235871 11.7725425 0.244717419 9.45491503 3.53053687 8.97745751 5 6 6.46946313 8.97745751 9.75528258 9.45491503 7.37764129 11.7725425 7.93892626 15.045085"></polygon>
+                    <polygon id="星形备份" points="80 13.5 77.0610737 15.045085 77.6223587 11.7725425 75.2447174 9.45491503 78.5305369 8.97745751 80 6 81.4694631 8.97745751 84.7552826 9.45491503 82.3776413 11.7725425 82.9389263 15.045085"></polygon>
+                </g>
+                <path d="M19,32 C19.3973306,32 25.730664,33 38,35 L38,32 C24.9360027,32 18.6026694,32 19,32 Z" id="路径-11" fill="#6D6D6D"></path>
+            </g>
+        </g>
+    </g>
+</svg>
