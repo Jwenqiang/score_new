@@ -9,7 +9,7 @@ const LOGIN_PAGE_NAME = "login";
 var router = new Router({
 	mode:"hash",
 	routes:[
-		{path:'/',redirect:'/Custom'},
+		{path:'/',redirect:'/Home'},
 		{
 			path:'/Home',
 			name:"home",

@@ -18,9 +18,9 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
-				<div  class="nut-swiper-slide gray" >
-				    <a @click="goPage('houseList','','houseList','1')"><img src="images/bz/banner317.png"/></a>
-				</div>
+<!-- 				<div  class="nut-swiper-slide gray" >
+				    <a href="https://mp.weixin.qq.com/s/txNyuegIAJ6Y9o5CEgxaQg" @click="goPage('','','https://mp.weixin.qq.com/s/txNyuegIAJ6Y9o5CEgxaQg','2')"><img src="images/banner0117.png"/></a>
+				</div> -->
 				<div  class="nut-swiper-slide gray_1" >
 					<a @click="goPage('days','24','days/24','2')"><img src="images/banner0106.jpg?v=1"/></a>
 				</div>
@@ -39,9 +39,9 @@
 <!-- 				<div  class="nut-swiper-slide gray" >
 				    <a href="https://mp.weixin.qq.com/s/oIL_NKl1OF7qJHoloGYiXg" @click="goPage('','','网络王','6')"><img src="images/banner0917.jpg"/></a>
 				</div> -->
-<!-- 					<div  class="nut-swiper-slide gray" >
+					<div  class="nut-swiper-slide gray" >
 					    <a @click="goPage('houseList','','houseList','4')"><img src="@/assets/static/banner-bz.png"/></a>
-					</div> -->
+					</div>
 				    <div  class="nut-swiper-slide gray" >
 				        <a @click="goPage('days','30','days/30','5')"><img src="@/assets/static/banner0531.png"/></a>
 				    </div>
@@ -251,7 +251,7 @@
 		  <div class="bj" @click="getIder=false"></div>
 			<label class="sclose" @click="getIder=false"></label>
 		  <div class="bRead iderBj" @click="setLocal">
-				<a @click="$router.push({name:'houseList'})" style="width: 100%;height: 100%;display: block;"></a>
+				<a @click="$router.push({name:'hb',query:{'id':3}})" style="width: 100%;height: 100%;display: block;"></a>
 		  </div>
 		</div>
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
@@ -260,16 +260,17 @@
 <!-- 		<div class="fixR1" @click="$router.push({name:'vcj'})" v-if="inApp==false">
 			<img src="../assets/static/icon-rcj.png"/>
 		</div> -->
-<!-- 		<div class="sModel mMsg" v-show="getZ">
-		  <div class="bj" @click="getZ=false"></div>
-			<label class="sclose" @click="getZ=false" v-if="hYb"></label>
-		  <div class="bRead iderYb" @click="lYb" v-show="hYb==false">
-				<a @click="" style="width: 100%;height: 100%;display: block;"></a>
-		  </div>
-			<div class="bRead iderYb1" v-show='hYb'>
-				<a @click="" style="width: 100%;height: 100%;display: block">已成功领取<strong>{{hybNum}}</strong>元宝</a>
-			</div>
-		</div> -->
+		<!-- 回馈活动弹窗 :class="addCar?'animationCar':''"-->
+<!-- 			<div class="hkShow">
+				<div class="hkbj" v-if="moduleNum>-1" @click="moduleNum=-1"></div>
+				<Module :showOn="moduleNum" :prizeName="prizeName" @changeNum="changeModule"></Module>
+			</div> -->
+			<!-- 领取成功弹窗 -->
+<!-- 			<div class="hkShow" :class="addCar?'animationCar':''">
+				<div class="hkbj" v-if="addCarr" @click="addCar=false"></div>
+				<div class="giveMsg" @click="$router.push({'name':'myPrize'})">
+				</div>
+			</div> -->
 	</div>
 </template>
 
@@ -296,9 +297,6 @@
 		name: 'home',
 		data(){
 			return{
-				hYb:false,
-				hybNum:'',
-				getZ:false,
 				publicPath: process.env.BASE_URL,
 				header_token:{"token": uToken()},
 				signList:"",
@@ -329,7 +327,7 @@
 				sucText:"",
 				sucYb:"",
 				disID:"没有值",
-				getIder:true
+				getIder:false
 				// showNew:false
 			}
 		},
@@ -337,9 +335,9 @@
 			...mapState(['hasLogin','userInfo']),//判断是否已经登录
 		},
 		created() {
-			// if(new Date().getDate()==15&& new Date().getHours()>6){
-			// 	this.getIder=true
-			// }
+			if(new Date().getDate()==15&& new Date().getHours()>6){
+				this.getIder=true
+			}
 			if(sessionStorage.getItem('model')){
 				this.getIder=false
 			}
@@ -384,7 +382,7 @@
 			 // if(this.runNum<0.45){
 				//  this.getPrize()
 			 // }
-			 // this.getYB();
+			 
 		},
 		components: {
 		  Foot,
@@ -400,61 +398,6 @@
 
 		},
 		methods:{
-			lYb(){
-				return new Promise((resolve)=>{
-						this.$axios({
-							method:"post",
-							url:"/Activity/ReceiveYuanBao",
-							data:{
-								// istest:1
-							},
-							headers:this.header_token
-						})
-						.then(res=>{
-							console.log(res);
-							resolve(res);
-							if(res.data.code==0){
-								if(res.data.data.code==0){
-									this.hYb=true;
-									this.hybNum=res.data.data.yuanBaoNum;
-								}else{
-									this.$toast.text("领取失败，请稍后再试");
-								}
-								
-							}else{
-									this.$toast.text("领取失败，请稍后再试");
-								}
-						})
-						.catch(error=>{
-							this.$toast.text("网络错误，请稍后再试");
-						})
-				})
-			},
-			getYB(){
-				return new Promise((resolve)=>{
-						this.$axios({
-							method:"get",
-							url:"/Activity/IsReciveYuanBao",
-							params:{
-								// istest:1
-							},
-							headers:this.header_token
-						})
-						.then(res=>{
-							console.log(res);
-							resolve(res);
-							if(res.data.code==0){
-								if(res.data.data.code==0){
-									this.getZ=true;
-								}
-								
-							}
-						})
-						.catch(error=>{
-							this.$toast.text("网络错误，请稍后再试");
-						})
-				})
-			},
 			setLocal(){
 				sessionStorage.setItem('model',"true");
 			},
@@ -1146,33 +1089,10 @@ box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.06);}
 }
 .nut-hor-list-item img{width: 0.65rem;height: 0.8rem;margin-bottom: 0.1rem;}
 .iderBj{
-	background: url(../images/bz/m317.png) center bottom no-repeat;
+	background: url(../images/315.png) center bottom no-repeat;
 	background-size: 5.6rem;
 	margin-top: -4.6rem;
 	padding: 0.5rem 0 3em;
-}
-.iderYb{
-	background: url(../images/m316.png) center bottom no-repeat;
-	background-size: 5.6rem;
-	margin-top: -4.6rem;
-	padding: 0.5rem 0 3em;
-}
-.iderYb1{
-	background: url(../images/m316-1.png) center bottom no-repeat;
-	background-size: 5.6rem;
-	margin-top: -4.6rem;
-	padding: 0.2rem 0 3em;
-}
-.iderYb1 a{
-	color:#fff;
-	font-size:0.36rem;
-}
-.iderYb1 a strong{
-	color:#fee37e;
-	font-size:0.48rem;
-	position:relative;
-	top:2px;
-	margin:0 2px;
 }
 </style>
 
