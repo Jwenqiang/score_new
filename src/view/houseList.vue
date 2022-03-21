@@ -1,4 +1,3 @@
-<!-- 所有包月字段贴换包周 -->
 <template>
 	<div class="house houseList week" style="padding-bottom: 0.2rem;" :class="showModel?'ohide':''">
 		<div class="hBan">
@@ -25,11 +24,11 @@
 									<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'1',item.IsSelf,false)" v-if="item.IsPreAuctionBtnClick&&item.IsSelf">收藏</mt-button>
 									<mt-button type="primary" style="border: 1px solid #999;color: #999;background: none;" v-else>收藏</mt-button>
 									<template v-if="canWeek">
-										<!-- <mt-button type="primary" class="animateWeek" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-if="item.IsAuctionBtnClick&&item.IsSelf&&index==0"></mt-button> -->
-										<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-if="item.IsAuctionBtnClick&&item.IsSelf">包月</mt-button>
-										<mt-button type="primary" style="background: #999;color: #fff;border: 1px solid #999;" v-else>包月</mt-button>
+										<mt-button type="primary" class="animateWeek" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-if="item.IsAuctionBtnClick&&item.IsSelf&&index==0"></mt-button>
+										<mt-button type="primary" @click="payC(item.ZyHouseOutputDto,'0',item.IsSelf,true)" v-else-if="item.IsAuctionBtnClick&&item.IsSelf&&index>0">包周</mt-button>
+										<mt-button type="primary" style="background: #999;color: #fff;border: 1px solid #999;" v-else>包周</mt-button>
 									</template>
-									<mt-button type="primary" style="background: #999;color: #fff;border: 1px solid #999;" @click="weekTip" v-else>包月</mt-button>
+									<mt-button type="primary" style="background: #999;color: #fff;border: 1px solid #999;" @click="weekTip" v-else>包周</mt-button>
 								</p>
 							</div>
 						</div>
@@ -68,7 +67,7 @@
 				<h3>广告位类型</h3>
 				<ul>
 					<li :class="type==1?'on':''" @click="getBan('1')" v-if="!hasWeek">首页广告位</li>
-					<li :class="type==3?'on':''" @click="getBan('3')">区域广告位</li>
+					<li :class="type==3?'on':''" @click="getBan('3')" v-if="!hasWeek">区域广告位</li>
 					<li :class="type==4?'on':''" @click="getBan('4')">小区广告位</li>
 					<li :class="type==2?'on':''" @click="getBan('2')">经纪人广告位</li>
 				</ul>
@@ -129,9 +128,12 @@
 		  			</div>
 		  </div>
 		  <template v-if="pType=='0'">
-			  <template v-if="!hasWeek">
+				<template v-if="isMonth">
+				  <div class="showBtn" style="background: #b5b3b3;">该广告位已参与包月</div>
+				</template>
+			  <template v-else-if="!hasWeek">
 				  <template v-if="isWeek">
-					  <div class="showBtn" style="background: #b5b3b3;">该广告位已参与包月</div>
+					  <div class="showBtn" style="background: #b5b3b3;">该广告位已参与包周</div>
 				  </template>
 				  <template v-else>
 					  <div class="showBtn" style="background: #b5b3b3;" v-if="isMax">立即竞拍</div>
@@ -139,7 +141,7 @@
 				  </template>
 			  </template>
 			  <template v-else>
-				  <div class="showBtn" @click="showC">超值包月 立即竞拍</div>
+				  <div class="showBtn" @click="showC">超值包周 立即竞拍</div>
 			  </template>
 		  </template>
 		  <div class="showBtn" @click="setCar" v-else-if="pType=='1'">加入收藏夹</div>
@@ -214,7 +216,6 @@
 		name: 'houseList',
 		data(){
 			return{
-				canMonth:false,
 				ready:false,
 				header_token:{"token": uToken()},
 				ggw:"0",
@@ -269,6 +270,7 @@
 				isSelf:true,
 				empNo:"",
 				isWeek:false,
+				isMonth:false,
 				showRules:false,
 				hasWeek:false,
 				canWeek:false,
@@ -287,8 +289,7 @@
 			if(this.$route.params.tab){
 				this.type=this.$route.params.tab
 			}
-			// this.getBaoZhouStatus();
-			this.getBaoYueStatus();
+			this.getBaoZhouStatus();
 			this.getHouse();
 			// this.getImgCode();
 			this.getUser();
@@ -514,7 +515,7 @@
 			},
 			
 			weekTip(){
-				Toast("10点准时开抢");
+				Toast("每周四上午10点准时开抢");
 			},
 			scrollT(){
 				this.scrollTop = window.scrollY;
@@ -560,21 +561,6 @@
 						.then(res=>{
 							console.log(res);
 							resolve(res);
-							this.canWeek=res.data.data;
-						})
-				})
-			},
-			getBaoYueStatus(){
-				return new Promise((resolve)=>{
-						this.$axios({
-							method:"get",
-							url:"/AdPosition/GetCanBaoYueStatus",
-							headers:this.header_token
-						})
-						.then(res=>{
-							console.log(res);
-							resolve(res);
-							this.canMonth=res.data.data;
 							this.canWeek=res.data.data;
 						})
 				})
@@ -659,7 +645,7 @@
 							    "AdPositionId": this.adId,
 								"PropId":this.sHouse.PropId,
 								"AdPlace": adplace,
-								"AdTimeType":this.hasWeek?'4':'1'
+								"AdTimeType":this.hasWeek?'2':'1'
 							}
 						})
 						.then(res=>{
@@ -667,8 +653,8 @@
 							if(res.data.code==0){
 								this.currentNum=res.data.data.count;
 								this.myCurrentYb=res.data.data.currentYuanBaoMy;
-								// this.isWeek=res.data.data.weekCoplete;
-								this.isWeek=res.data.data.monthCoplete;
+								this.isWeek=res.data.data.weekCoplete;
+								this.isMonth=res.data.data.monthCoplete;
 								if(res.data.data.currentYuanBao>0){
 									this.nowNum=res.data.data.currentYuanBao;
 									if(this.nowNum==this.maxNum){
@@ -710,17 +696,17 @@
 				let rNum=Math.random();
 				if(week){
 					this.hasWeek=true;
-					this.type=3;
+					this.type=4;
 					this.pName=house.EstateName;
-					// if(rNum<0.6){
-					// 		this.getPrize()
-					// }
+					if(rNum<0.6){
+							this.getPrize()
+					}
 				}else{
 					this.hasWeek=false;
 					this.type=1;
-					// if(rNum<0.4){
-					// 		this.getPrize()
-					// }
+					if(rNum<0.4){
+							this.getPrize()
+					}
 				}
 				this.empNo=house.StaffNo;
 				this.isSelf=isMe;
@@ -741,7 +727,7 @@
 								"AdType": this.type,
 							    "RegionId": this.houseId,
 							    "RegionName":this.pName,
-								"AdTimeType":this.hasWeek?'4':'1'
+								"AdTimeType":this.hasWeek?'2':'1'
 							}
 						})
 						.then(res=>{
@@ -927,7 +913,7 @@
 									"EstateName": EstateName,
 									"VerifyCode":this.pCode,
 									"empNo":this.empNo||'',
-									"AdTimeType":this.hasWeek?'4':'1'  //包周2  包月4
+									"AdTimeType":this.hasWeek?'2':'1'
 							}
 						})
 						.then(res=>{
@@ -955,7 +941,7 @@
 										sc_advertising_type:ggwLx,
 										sc_advertising_name:this.childMsg[0].AdName,
 										sc_advertising_id:this.adId,
-										sc_advertising_cycle:this.hasWeek?'包月':'包日'
+										sc_advertising_cycle:this.hasWeek?'包周':'包日'
 									});
 									
 								}else{
@@ -980,7 +966,7 @@
 										sc_advertising_type:ggwLx,
 										sc_advertising_name:this.childMsg[0].AdName,
 										sc_advertising_id:this.adId,
-										sc_advertising_cycle:this.hasWeek?'包月':'包日'
+										sc_advertising_cycle:this.hasWeek?'包周':'包日'
 									});
 								}
 								this.getChild();
@@ -1153,7 +1139,7 @@
 	.sData p span{color: #333;}
 	.ggList{padding-bottom: 0.25rem;padding-top: 0.3rem;border-bottom: 1px solid #ededed;}
 	.ggList h3{font-size: 0.3rem;margin-bottom: 0.2rem;}
-	.ggList li{min-width: 1.5rem;text-align: center;display: inline-block;padding: 0.08rem 0.1rem;text-align: center;background-color: #eee;margin-right: 0.2rem;font-size: 0.26rem;color: #333;border-radius: 0.1rem;}
+	.ggList li{min-width: 1.5rem;text-align: center;display: inline-block;padding: 0.08rem 0.1rem;text-align: center;background-color: #eee;margin-right: 0.16rem;font-size: 0.26rem;color: #333;border-radius: 0.1rem;}
 	.ggList li:last-child{margin: 0;}
 	.ggList li.on{background-color: #FCE5E7;color: #E60012;border: 1px solid #E60012;}
 	.childList{height: 1.75rem;overflow-y: auto;padding-top: 1px;}
@@ -1244,8 +1230,8 @@
 		.week .mint-loadmore-text{color: #f5f5f5;}
 </style>
 <style scoped>
-	.week{background: linear-gradient(to right,#ccefcb,#94e0da);}
-	.hBan{height: 4.58rem;width: 100%;background: url(../images/bz/hb317.png) center no-repeat;background-size: 100%;position: relative;}
+	.week{background-color: #D13135;}
+	.hBan{height: 4.58rem;width: 100%;background: url(../assets/static/weekT.png) center no-repeat;background-size: 100%;position: relative;}
 	.bBy{
 		display: block;
 		position: absolute;
@@ -1292,7 +1278,7 @@
 	.goT{width: 100%;height: 2rem;}
 	.weekRules{position: absolute;right: 0.2rem;top: 0;display: block;width: 0.58rem;height: 0.67rem;background: url(../assets/static/weekSm.png) center no-repeat;background-size: 0.58rem;}
 	.showMD_msg{
-		background: url(../images/bz/monthRules.png) center no-repeat;
+		background: url(../assets/static/weekRules.png) center no-repeat;
 		background-size: 100%;
 		position: fixed;
 		left: 0.45rem;

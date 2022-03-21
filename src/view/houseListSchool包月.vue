@@ -21,11 +21,17 @@
 										<p class="newTag" v-if="item.Tags"><span v-if="item.Tags[0]">{{item.Tags[0]}}</span><label v-if="item.Tags[1]">{{item.Tags[1]}}</label><label v-if="item.Tags[2]">{{item.Tags[2]}}</label><label v-if="item.Tags[3]">{{item.Tags[3]}}</label></p>
 										<!-- <p class="newAdr" style="border-bottom: 1px solid #ddd;padding-bottom: 0.1rem;">{{item.Address}} </p> -->
 										<p class="newAdr" style="border-top: 1px solid #ddd;padding-top: 0.1rem;">{{item.GscopeName}} | 附近{{item.EstateNumber}}个小区 | {{item.SaleNumber}}套在售 </p>
-										<p class="jrbtn hbhBtn">
+									</div>
+									<div class="clear" style="margin-top: 0.2rem;width: 100%;clear: both;">
+										<p class="jrbtn hbhBtn" style="text-align: center;">
 											<mt-button type="primary" class="hbShare" @click="payCschool(item,'0')" v-if="item.IsAuctionBtnClick">竞拍</mt-button>
 											<mt-button type="primary" style="border-color: #999;color: #999;" v-else>竞拍</mt-button>
 											<mt-button type="primary" class="hbShare" @click="payCschool(item,'1')">收藏</mt-button>
 											<mt-button type="primary" class="hbShare" @click="shareHouse(item.SchoolId,jjrNum)">分享</mt-button>
+											<!-- <mt-button type="primary" class="hbShare" @click="payCschool(item,'0','',true)" v-if="canWeek">包月</mt-button> -->
+											<template v-if="canWeek">
+												<mt-button type="primary" @click="payCschool(item,'0','',true)">包月</mt-button>
+											</template>
 										</p>
 									</div>
 								</div>
@@ -59,22 +65,33 @@
 		  			<div class="payNum p clear">
 		  				<span class="btnL">
 		  					<label>出价(元宝)</label>
-		  					<label class="max" v-if="maxNum>0">封顶价为{{maxNum}}元宝</label>
+		  					<label class="max" v-if="maxNum>0&&!hasWeek">封顶价为{{maxNum}}元宝</label>
+		  					<label class="max" v-else-if="hasWeek">最高价不封顶</label>
 		  				</span>
 		  				<div class="btnR" style="float: right;">
 		  					<span><i @click="minus">-</i><strong>{{mainNum}}</strong><i @click="add">+</i></span>
-		  					<mt-button class="maxBtn" style="font-size: 12px;" @click="mainNum=maxNum" v-if="maxNum>0">出最高价</mt-button> 
+		  					<mt-button class="maxBtn" style="font-size: 12px;" @click="mainNum=maxNum" v-if="maxNum>0&&!hasWeek">出最高价</mt-button> 
 		  				</div>
 		  			</div>
 		  			<div class="bTip">
-		  				<p v-if="currentNum>0">当前广告位已有<span>{{currentNum}}</span>人出价，最高价为<span>{{nowNum}}</span>元宝，<template v-if="myCurrentYb>0">我的出价<span>{{myCurrentYb}}</span>元宝。</template> <template v-else><span>我暂未出价</span>。</template></p>
+		  				<p v-if="currentNum>0">该广告位已有<span>{{currentNum}}</span>人出价，最高为<span>{{nowNum}}</span>元宝，<template v-if="myCurrentYb>0">我的出价<span>{{myCurrentYb}}</span>元宝。</template> <template v-else><span>我暂未出价</span>。</template></p>
 		  				<p v-else>当前广告位暂无经纪人出价，赶快出价吧~</p>
 		  				<p>出价越高成功竞拍的机会越大，竞拍不成功所耗元宝将退回账户</p>
 		  			</div>
 		  </div>
 		  <template v-if="pType=='0'">
-			  <div class="showBtn" style="background: #b5b3b3;" v-if="isMax">立即竞拍</div>
-			  <div class="showBtn" @click="showC" v-else>立即竞拍</div>
+		    <template v-if="!hasWeek">
+		  	  <template v-if="isWeek">
+		  		  <div class="showBtn" style="background: #b5b3b3;">该广告位已参与包月</div>
+		  	  </template>
+		  	  <template v-else>
+		  		  <div class="showBtn" style="background: #b5b3b3;" v-if="isMax">立即竞拍</div>
+		  		  <div class="showBtn" @click="showC" v-else>立即竞拍</div>
+		  	  </template>
+		    </template>
+		    <template v-else>
+		  	  <div class="showBtn" @click="showC">超值包月 立即竞拍</div>
+		    </template>
 		  </template>
 		  <div class="showBtn" @click="setCar" v-else-if="pType=='1'">加入收藏夹</div>
 		</div>
@@ -201,10 +218,16 @@
 				prizeName:"45元礼包",
 				runNum:Math.random(),
 				prizeId:"",
-				myCurrentYb:""
+				myCurrentYb:"",
+				
+				isWeek:false,
+				// showRules:false,
+				hasWeek:false,
+				canWeek:false,
 			}
 		},
 		mounted(){
+			this.getBaoYueStatus();
 			document.title="竞拍学校";
 			if(this.$route.params.tab){
 				this.type=this.$route.params.tab
@@ -259,18 +282,49 @@
 					this.mainNum=50;
 				}
 			},
+			// nowNum(){
+				// console.log(this.nowNum);
+				// if(this.pType=='0'){
+				// 	if(this.nowNum==this.maxNum){
+				// 		this.mainNum=this.maxNum;
+				// 		this.isMax=true;
+				// 	}else{
+				// 		this.isMax=false;
+				// 		if(this.nowNum>0){
+				// 			this.mainNum=Number(this.nowNum)+5
+				// 		}else{
+				// 			this.mainNum=50
+				// 		}
+				// 	}
+				// }
+			// },
 			nowNum(){
-				console.log(this.nowNum);
-				if(this.pType=='0'){
-					if(this.nowNum==this.maxNum){
-						this.mainNum=this.maxNum;
-						this.isMax=true;
-					}else{
-						this.isMax=false;
-						if(this.nowNum>0){
-							this.mainNum=Number(this.nowNum)+5
+				if(this.hasWeek){
+					if(this.pType=='0'){
+						if(this.nowNum==this.maxNum){
+							this.mainNum=this.maxNum;
+							this.isMax=true;
 						}else{
-							this.mainNum=50
+							this.isMax=false;
+							if(this.nowNum>0){
+								this.mainNum=Number(this.nowNum)+50
+							}else{
+								this.mainNum=100
+							}
+						}
+					}
+				}else{
+					if(this.pType=='0'){
+						if(this.nowNum==this.maxNum){
+							this.mainNum=this.maxNum;
+							this.isMax=true;
+						}else{
+							this.isMax=false;
+							if(this.nowNum>0){
+								this.mainNum=Number(this.nowNum)+5
+							}else{
+								this.mainNum=50
+							}
 						}
 					}
 				}
@@ -282,7 +336,11 @@
 			},
 			showModel(){
 				if(this.showModel==false){
-					// this.mainNum=50;
+					if(this.hasWeek){
+						this.mainNum=100;
+					}else{
+						this.mainNum=50;
+					}
 				}
 			},
 			pType(){
@@ -322,6 +380,21 @@
 			}
 		},
 		methods:{
+			getBaoYueStatus(){
+				return new Promise((resolve)=>{
+						this.$axios({
+							method:"get",
+							url:"/AdPosition/GetCanBaoYueStatus",
+							headers:this.header_token
+						})
+						.then(res=>{
+							console.log(res);
+							resolve(res);
+							// this.canMonth=res.data.data;
+							this.canWeek=res.data.data;
+						})
+				})
+			},
 			// 经纪人回馈活动中奖查询
 			getPrize(){
 				return new Promise((resolve)=>{
@@ -400,21 +473,34 @@
 				this.scrollTop = window.scrollY;
 			},
 			minus(){
-				if(this.mainNum<=50){
-					Toast("50个不能再少了哦~");
-				}else if((this.mainNum<=Number(this.nowNum)+5)&&this.pType=='0'){
-					Toast("当前广告位出价不能少于"+this.nowNum);
+				if(this.hasWeek){
+					if(this.mainNum<=100){
+						Toast("100个不能再少了哦~");
+					}else if((this.mainNum<=Number(this.nowNum)+50)&&this.pType=='0'){
+						Toast("当前广告位出价不能少于"+this.nowNum);
+					}else{
+						this.mainNum -=50;
+					}
 				}else{
-					this.mainNum -=5;
+					if(this.mainNum<=50){
+						Toast("50个不能再少了哦~");
+					}else if((this.mainNum<=Number(this.nowNum)+5)&&this.pType=='0'){
+						Toast("当前广告位出价不能少于"+this.nowNum);
+					}else{
+						this.mainNum -=5;
+					}
 				}
 			},			
 			add(){
-				console.log(this.maxNum)
-				if(Number(this.mainNum)>=Number(this.maxNum)){
-					Toast("您已出到最大值！");
-					this.mainNum=this.maxNum;
+				if(this.hasWeek){
+					this.mainNum +=50;
 				}else{
-					this.mainNum +=5;
+					if(Number(this.mainNum)>=Number(this.maxNum)){
+						Toast("您已出到最大值！");
+						this.mainNum=this.maxNum;
+					}else{
+						this.mainNum +=5;
+					}
 				}
 			},
 			getUser(){
@@ -541,11 +627,25 @@
 				this.areaName=house.EstateName;
 				this.getGlist();
 			},
-			payCschool(house,t){
+			payCschool(house,t,isMe,week){
 				let rNum=Math.random();
 				console.log(rNum)
-				if(rNum<0.4){
-						this.getPrize()
+				// if(rNum<0.4){
+				// 		this.getPrize()
+				// }
+				if(week){
+					this.hasWeek=true;
+					this.type=4;
+					this.pName=house.EstateName;
+					// if(rNum<0.6){
+					// 		this.getPrize()
+					// }
+				}else{
+					this.hasWeek=false;
+					this.type=1;
+					// if(rNum<0.4){
+					// 		this.getPrize()
+					// }
 				}
 				this.pType=t;
 				this.type=5;
@@ -567,7 +667,8 @@
 							data:{
 								"AdType": 5,
 							    "RegionId": this.sSchool.SchoolId,
-							    "RegionName":this.sSchool.SchoolName
+							    "RegionName":this.sSchool.SchoolName,
+									"AdTimeType":this.hasWeek?'4':'1'
 							}
 						})
 						.then(res=>{
@@ -597,7 +698,8 @@
 								"AdType": 5,
 							    "AdPositionId": 501,
 								"PropId":"",
-								"AdPlace": this.sSchool.SchoolId
+								"AdPlace": this.sSchool.SchoolId,
+								"AdTimeType":this.hasWeek?'4':'1'
 							}
 						})
 						.then(res=>{
@@ -605,16 +707,25 @@
 							if(res.data.code==0){
 								this.currentNum=res.data.data.count;
 								this.myCurrentYb=res.data.data.currentYuanBaoMy;
+								this.isWeek=res.data.data.monthCoplete;
 								if(res.data.data.currentYuanBao>0){
 									this.nowNum=res.data.data.currentYuanBao;
 									if(this.nowNum==this.maxNum){
 										this.mainNum=this.maxNum;
 									}else{
-										this.mainNum=this.nowNum+5;
+										if(this.hasWeek){
+											this.mainNum=this.nowNum+50;
+										}else{
+											this.mainNum=this.nowNum+5;
+										}
 									}
 								}else{
 									this.nowNum=0;
-									this.mainNum=50;
+									if(this.hasWeek){
+										this.mainNum=100
+									}else{
+										this.mainNum=50;
+									}
 								}
 							}else{
 								Toast(res.data.msg);
@@ -863,7 +974,8 @@
 								    "PostId": "",
 								    "PropUrl": "",
 								    "EstateName": EstateName,
-									"VerifyCode":this.pCode
+									"VerifyCode":this.pCode,
+									"AdTimeType":this.hasWeek?'4':'1'  //包周2  包月4
 							}
 						})
 						.then(res=>{
@@ -1080,7 +1192,8 @@
 		color: #F53A1F;
 	}
 	.jrbtn button:nth-of-type(2){color: #F5A01F;border-color: #F5A01F;}
-	.jrbtn button:last-child{margin-right: 0;color: #1562E7;border-color: #1562E7;}
+	.jrbtn button:nth-of-type(3){color: #1562E7;border-color: #1562E7;}
+	.jrbtn button:last-child{margin-right: 0;color: #04BE02;border-color: #04BE02;}
 	.jrbtn button img{width: 0.26rem;vertical-align: -2px;margin-left: 3px;}
 	.schoolList .jrbtn button{
 		margin-top: 0.2rem;
@@ -1133,7 +1246,7 @@
 	.sData p span{color: #333;}
 	.ggList{padding-bottom: 0.25rem;padding-top: 0.3rem;border-bottom: 1px solid #ededed;}
 	.ggList h3{font-size: 0.3rem;margin-bottom: 0.2rem;}
-	.ggList li{min-width: 1.5rem;text-align: center;display: inline-block;padding: 0.08rem 0.1rem;text-align: center;background-color: #eee;margin-right: 0.2rem;font-size: 0.26rem;color: #333;border-radius: 0.1rem;}
+	.ggList li{min-width: 1.5rem;text-align: center;display: inline-block;padding: 0.08rem 0.1rem;text-align: center;background-color: #eee;margin-right: 0.16rem;font-size: 0.26rem;color: #333;border-radius: 0.1rem;}
 	.ggList li:last-child{margin: 0;}
 	.ggList li.on{background-color: #FCE5E7;color: #E60012;border: 1px solid #E60012;}
 	.childList{height: 1.75rem;overflow-y: auto;}

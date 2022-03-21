@@ -18,9 +18,9 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
-				<div  class="nut-swiper-slide gray" >
+<!-- 				<div  class="nut-swiper-slide gray" >
 				    <a @click="goPage('houseList','','houseList','1')"><img src="images/bz/banner317.png"/></a>
-				</div>
+				</div> -->
 				<div  class="nut-swiper-slide gray_1" >
 					<a @click="goPage('days','24','days/24','2')"><img src="images/banner0106.jpg?v=1"/></a>
 				</div>
@@ -247,13 +247,13 @@
 		  </div>
 		</div>
 		<!-- 图片弹窗 -->
-		<div class="sModel mMsg" v-show="getIder">
+<!-- 		<div class="sModel mMsg" v-show="getIder">
 		  <div class="bj" @click="getIder=false"></div>
 			<label class="sclose" @click="getIder=false"></label>
 		  <div class="bRead iderBj" @click="setLocal">
 				<a @click="$router.push({name:'houseList'})" style="width: 100%;height: 100%;display: block;"></a>
 		  </div>
-		</div>
+		</div> -->
 <!-- 		<div class="fixR" @click="$router.push({name:'houseList'})">
 			<img src="../assets/static/icon-week.png"/>
 		</div> -->
