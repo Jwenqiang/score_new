@@ -1475,7 +1475,11 @@
 		border-radius: 0.06rem;
 	}
  .nhb label img{
-	 min-height: 80%;
+	 /* min-height: 80%; */
+	 width: 100%;
+	 height: 100%;
+	 object-fit: cover;
+	 object-position: center;
  }
 	.nhbR {
 		width: 5.2rem;

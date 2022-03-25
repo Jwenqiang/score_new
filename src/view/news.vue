@@ -1,28 +1,28 @@
 <template>
 	<div>
 		<div class="imgMsg" v-if="id==1">
-			<img src="../assets/img/new1.png" width="100%"/>
+			<img src="images/xs11.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==2">
 			<img src="../assets/img/new2.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==3">
-			<img src="../assets/img/new3.png" width="100%"/>
+			<img src="images/xs16.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==4">
-			<img src="../assets/img/new4.png" width="100%"/>
+			<img src="images/xs12.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==5">
-			<img src="../assets/img/new5.png" width="100%"/>
+			<img src="images/xs14.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==6">
 			<img src="../assets/img/new6.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==7">
-			<img src="../assets/img/new7.png" width="100%"/>
+			<img src="images/xs15.png" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==8">
-			<img src="../assets/img/new8.png" width="100%"/>
+			<img src="images/xs13.png" width="100%"/>
 		</div>
 	</div>
 </template>

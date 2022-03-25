@@ -385,6 +385,24 @@ var router = new Router({
 			component:() =>import ('@/view/custom'),
 			meta:{
 				title:'商机',
+				keepAlive:true
+			}			
+		},
+		{
+			path:'/customHX',
+			name:"customHX",
+			component:() =>import ('@/view/customHX'),
+			meta:{
+				title:'用户画像',
+				keepAlive:false
+			}			
+		},
+		{
+			path:'/customGJ',
+			name:"customGJ",
+			component:() =>import ('@/view/customGJ'),
+			meta:{
+				title:'用户轨迹',
 				keepAlive:false
 			}			
 		},

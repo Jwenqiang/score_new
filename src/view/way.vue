@@ -29,6 +29,23 @@
 					<mt-button type="primary" class="nlBtn" style="opacity: 0.6;"  v-else>已签到</mt-button>
 				</div>
 				<div class="clear newList">
+					<img src="images/way-9.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>中原住建委卖<span>最高+100</span></h4>
+						<label>不限</label><label>首位+100</label><label>非首位+30</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'9'}})">如何完成</mt-button>
+				</div>
+				<div class="clear newList">
+					<img src="images/way-8.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>非中原住建委卖<span>+10</span></h4>
+						<label>每次+10</label><label>每日最多10次</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'8'}})">如何完成</mt-button>
+				</div>
+				
+				<div class="clear newList">
 					<img src="../assets/img/task-wx.png" class="nlT"/>
 					<div class="newM">
 						<h4>转发【深圳中原】文章<span>+20</span> </h4>
@@ -36,22 +53,6 @@
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'33'}})">如何完成</mt-button>
 				</div>
-<!-- 				<div class="clear newList">
-					<img src="../assets/img/mr9.png" class="nlT"/>
-					<div class="newM nDay">
-						<h4>签订业主独家委托<span>最高+200</span></h4>
-						<label>不限次数</label>
-					</div>
-					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'9'}})">如何完成</mt-button>
-				</div>
-				<div class="clear newList">
-					<img src="../assets/img/mr8.png" class="nlT"/>
-					<div class="newM nDay">
-						<h4>签订业主委托<span>最高+150</span></h4>
-						<label>不限次数</label>
-					</div>
-					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'8'}})">如何完成</mt-button>
-				</div> -->
 				<div class="clear newList">
 					<img src="../assets/img/mr7.png" class="nlT"/>
 					<div class="newM nDay">
