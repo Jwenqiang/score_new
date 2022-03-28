@@ -22,10 +22,10 @@
 			<img src="../assets/img/day7.png?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==8">
-			<img src="../assets/img/day8.png?v=1" width="100%"/>
+			<img src="images/mr12.png?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" v-else-if="id==9">
-			<img src="../assets/img/day9.png?v=1" width="100%"/>
+			<img src="images/mr11.png?v=1" width="100%"/>
 		</div>	
 		<div class="imgMsg" v-else-if="id==0">
 			<img src="../assets/img/dayS.png" width="100%"/>
