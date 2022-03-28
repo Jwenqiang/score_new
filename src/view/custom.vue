@@ -509,6 +509,12 @@
 				this.getMyList();
 			}
 			this.getBlack();
+			setTimeout(()=>{
+				console.log('scrollHeight',document.documentElement.scrollHeight);
+				console.log('clientHeight ',document.documentElement.clientHeight);
+				console.log('offsetHeight ',document.documentElement.offsetHeight);
+			},2000)
+			
 		  },
 		  deactivated() {
 		    // 组件消失，解绑scroll事件
@@ -552,6 +558,8 @@
 				var height = document.getElementsByClassName('custom')[0].scrollHeight;
 				let sTop = document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;//滚动的高度
 				let clientHeight=window.screen.height;//屏幕的高度
+				
+				
 
 				setTimeout(()=>{
 					if(newValue == window.scrollY){//延时执行后当newValue等于window.scrollY，代表滚动结束
@@ -1608,7 +1616,7 @@
 			background-color: #f5f5f5;
 			border-radius: 2px;
 			margin-right: 0.1rem;
-			max-width: 5.2rem;
+			max-width: 5.1rem;
 			display: inline-block;
 			white-space: nowrap;
 			overflow: hidden;
@@ -1618,7 +1626,7 @@
 		}
 		span{
 			display: inline-block;
-			padding-left: 0.1rem;
+			padding-left: 2px;
 		}
 	}
 	.tabShow{

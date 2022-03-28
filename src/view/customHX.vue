@@ -120,7 +120,7 @@
 												<span>
 												{{sItem.EstateName}}<template v-if="sItem.RoomCount>0">{{sItem.RoomCount}}室</template>
 												<template v-if="sItem.HallCount>0">{{sItem.HallCount}}厅-</template><template v-if="sItem.Area>0">{{sItem.Area.toFixed(0)}}㎡-</template>
-												<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><template v-if="sItem.EstateName">的房源</template><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
+												<template v-if="sItem.SalePrice>0">{{sItem.SalePrice | price }}万</template><template v-if="sItem.GuidingSalePrice>0">，指导价{{sItem.GuidingSalePrice | price}}万</template><label v-if="sItem.EstateName">的房源</label><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
 												</span>
 											</a>
 											<a :href="'https://sz.centanet.com/xinfang/lp-'+sItem.SourceId" target="_blank" v-else>
@@ -128,7 +128,7 @@
 												<span>
 												{{sItem.EstateName}}<template v-if="sItem.RoomCount>0">{{sItem.RoomCount}}室</template>
 												<template v-if="sItem.HallCount>0">{{sItem.HallCount}}厅-</template><template v-if="sItem.Area>0">{{sItem.Area.toFixed(0)}}㎡-</template>
-												<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><template v-if="sItem.EstateName">的房源</template><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
+												<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><label v-if="sItem.EstateName">的房源</label><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
 												</span>
 											</a>
 										</template>
@@ -138,7 +138,7 @@
 												<span>
 												{{sItem.SourceId}}<template v-if="sItem.RoomCount>0">{{sItem.RoomCount}}室</template>
 												<template v-if="sItem.HallCount>0">{{sItem.HallCount}}厅-</template><template v-if="sItem.Area>0">{{sItem.Area.toFixed(0)}}㎡-</template>
-												<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><template v-if="sItem.EstateName">的房源</template><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
+												<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><label v-if="sItem.EstateName">的房源</label><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
 												</span>
 											</label>
 										</template>
@@ -150,7 +150,7 @@
 											<span>
 											{{sItem.EstateName || sItem.SourceId}}<template v-if="sItem.RoomCount>0">{{sItem.RoomCount}}室</template>
 											<template v-if="sItem.HallCount>0">{{sItem.HallCount}}厅-</template><template v-if="sItem.Area>0">{{sItem.Area.toFixed(0)}}㎡-</template>
-											<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><template v-if="sItem.EstateName">的房源</template><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
+											<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><label v-if="sItem.EstateName">的房源</label><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
 											</span>
 										</a>
 										<label v-else>
@@ -158,7 +158,7 @@
 											<span>
 											{{sItem.SourceId}}<template v-if="sItem.RoomCount>0">{{sItem.RoomCount}}室</template>
 											<template v-if="sItem.HallCount>0">{{sItem.HallCount}}厅-</template><template v-if="sItem.Area>0">{{sItem.Area.toFixed(0)}}㎡-</template>
-											<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><template v-if="sItem.EstateName">的房源</template><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
+											<template v-if="sItem.GuidingSalePrice>0">{{sItem.GuidingSalePrice | price }}万</template><label v-if="sItem.EstateName">的房源</label><strong v-if="sItem.Count>1">{{sItem.Count}}次</strong>
 											</span>
 										</label>
 									</template>
@@ -394,6 +394,7 @@ export default{
 							},500)
 							
 						}else{
+							this.loading.hide();
 							this.$toast.text(res.data.msg);
 						}
 						resolve(res);
@@ -401,6 +402,7 @@ export default{
 						
 					})
 					.catch(error=>{
+						this.loading.hide();
 						this.$toast.text("网络错误，请稍后再试");
 					})
 			})
@@ -915,6 +917,7 @@ export default{
 						margin-bottom: 0.2rem;
 						label{
 							color: #666;
+							margin-left: 0.1rem;
 						}
 						a{
 							span{
