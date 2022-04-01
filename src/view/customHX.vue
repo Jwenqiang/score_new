@@ -1,16 +1,16 @@
 <template>
-	<div class="chxBox" v-show="ready">
+	<div class="chxBox" v-show="ready" id="customHX">
 		<div class="chx-top">
 			<img src="images/custom/t-man.png" v-if="user.Gender==0"/><img src="images/custom/t-man.png" v-else-if="user.Gender==1"/><img src="images/custom/t-woman.png" v-else-if="user.Gender==2"/><img src="images/custom/t-none.png" v-else/>
 			<div class="ccUser">
-				<h4>{{$route.query.name}}</h4>
+				<h4>{{user.UserTitle}}</h4>
 				<p v-if="user.LastCusLevelName"><label v-if="user.Age>0">{{user.Age}}岁</label><label v-if="user.LastCusLevelName">{{user.LastCusLevelName}}</label><label v-if="user.LastCusTitleName">{{user.LastCusTitleName}}</label> </p>
 				<p v-else><label>暂未跟进</label></p>
 			</div>
 		</div>
 		<div class="chx-second">
 			<div class="chxs" v-if="user.LastVisit">
-				<label>最新访问：</label>
+				<label>最新足迹：</label>
 				<p>
 					<span><a v-if="user.LastVisitUrl" style="color: #333;">{{user.LastVisit}}</a> <template v-else>{{user.LastVisit}}</template></span>
 					<i>{{user.LastVisitTime}}</i>
@@ -26,15 +26,15 @@
 		</div>
 		<div class="chx-content">
 			<div class="chxc-tab">
-				<label :class="ccType==1?'on':''" @click="changeTag(1)">画像<span></span></label>
-				<label :class="ccType==2?'on':''" @click="changeTag(2)">轨迹<span></span></label>
+				<label :class="ccType==1?'on':''" @click="changeTag(1)">详情<span></span></label>
+				<label :class="ccType==2?'on':''" @click="changeTag(2)">足迹<span></span></label>
 			</div>
 			<!-- 画像 -->
 			<template v-if="ccType==1">
 				<div class="chxc-list">
-					<p class="title">客户购买意向</p>
+					<p class="title">营销推荐</p>
 					<div class="pli p-qy" v-if="user.FavSubArea&&user.FavSubArea.length>0">
-						<label>区域偏好：</label>
+						<label>推荐区域：</label>
 						<div class="plBox">
 							<span v-if="user.FavSubArea[0]"><i>1</i>{{user.FavSubArea[0]}}</span>
 							<span v-if="user.FavSubArea[1]"><i>2</i>{{user.FavSubArea[1]}}</span>
@@ -42,14 +42,14 @@
 						</div>
 					</div>
 					<div class="pli p-fy" v-if="user.FavBusiness&&user.FavBusiness.length>0">
-						<label>房源偏好：</label>
+						<label>推荐房源：</label>
 						<div class="plBox">
 							<span v-if="user.FavBusiness[0]"><i>1</i>{{user.FavBusiness[0]}}</span>
 							<span v-if="user.FavBusiness[1]"><i>2</i>{{user.FavBusiness[1]}}</span>
 						</div>
 					</div>
 					<div class="pli p-es" v-if="user.FavErShouEstatename&&user.FavErShouEstatename.length>0">
-						<label>二手偏好：</label>
+						<label>推荐二手：</label>
 						<div class="plBox">
 							<span v-if="user.FavErShouEstatename[0]"><i>1</i>{{user.FavErShouEstatename[0]}}</span>
 							<span v-if="user.FavErShouEstatename[1]"><i>2</i>{{user.FavErShouEstatename[1]}}</span>
@@ -57,7 +57,7 @@
 						</div>
 					</div>
 					<div class="pli p-xf" v-if="user.FavXinfangEstatename&&user.FavXinfangEstatename.length>0">
-						<label>新房偏好：</label>
+						<label>推荐新房：</label>
 						<div class="plBox">
 							<span v-if="user.FavXinfangEstatename[0]"><i>1</i>{{user.FavXinfangEstatename[0]}}</span>
 							<span v-if="user.FavXinfangEstatename[1]"><i>2</i>{{user.FavXinfangEstatename[1]}}</span>
@@ -65,7 +65,7 @@
 						</div>
 					</div>
 					<div class="pli p-jg" v-if="user.ErshouPrice&&user.ErshouPrice.length>0">
-						<label>价格偏好：</label>
+						<label>推荐价格：</label>
 						<div class="plBox">
 							<span v-if="user.ErshouPrice[0]"><i>1</i>{{user.ErshouPrice[0]}}</span>
 							<span v-if="user.ErshouPrice[1]"><i>2</i>{{user.ErshouPrice[1]}}</span>
@@ -105,8 +105,8 @@
 					<label :class="gjType==5?'on':''" @click="getGj(5)">商铺</label>
 				</div>
 				<div class="gj-box">
-					<template v-if="houseInfo&&houseInfo.length>0">
-					<div class="gj-day" v-for="(item,index) in houseInfo" :key="index">
+					<template v-if="houseArray&&houseArray.length>0">
+					<div class="gj-day" v-for="(item,index) in houseArray" :key="index">
 						<p class="gj-time">{{item.Day.split(' ')[0]}}</p>
 						<div class="gjd-content">
 							<div class="list" v-for="sItem in (item.arrSon)">
@@ -187,11 +187,14 @@
 								</div>
 							</div>
 
+
 						</div>
 					</div>
 					</template>
+					<p class="noList" v-if="count>pIndex+1">正在加载</p>
+					<p class="noList" v-else-if="count==pIndex+1&&loadOver&&houseArray.length>0"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
 					<!-- 一天 -->
-					<div class="gjNone" v-else>
+					<div class="gjNone"  v-if="this.houseArray.length==0&&loadOver">
 						<!-- <p>暂无历史轨迹</p> -->
 					</div>
 
@@ -255,15 +258,34 @@ export default{
 			gj:"",
 			gjInfo:"",
 			houseInfo:"",
-			hUrl:"https://m.sz.centanet.com/ershoufang/"
+			empNo:"",
+			empName:"",
+			hUrl:"https://m.sz.centanet.com/ershoufang/",
+			inApp:false,
+			pageArray:"",
+			
+			count:-1,
+			pIndex:0,
+			loadOver:false,
+			houseArray:[],
+			scrollTop:0
 		}
 	},
 	mounted() {
+		if(navigator.userAgent.indexOf('aplus') > -1){
+			this.inApp=true
+		}
+		// 全局绑定滚动事件，
+		window.addEventListener("scroll", this.scrollT);
 		this.getData();
 		setTimeout(()=>{
 			this.getCommt();
 		},500)
 		
+	},
+	beforeDestroy() {
+		// 组件消失，解绑scroll事件
+		window.removeEventListener("scroll", this.scrollT);
 	},
 	filters:{
 		price(n){
@@ -271,6 +293,9 @@ export default{
 			return n.toFixed(0);
 		},
 		changeImg(n){
+			if(n.indexOf("_w")>-1||n.indexOf("_c")>-1){
+				return n;
+			}
 			let v=n.split('.jpg')[0];
 			if(n.indexOf('.jpeg')>-1){
 				v=n.split('.jpeg')[0];
@@ -307,20 +332,111 @@ export default{
 			}
 		},
 		gjInfo(n){
+			this.houseArray=[];
+			this.count=-1;
+			this.pIndex=0;
 			if(n&&n.length>0){
-				const arr=n.map((val)=>{
+				const arr=n.map((val,index)=>{
 					return {'BusinessType':val.BusinessType,'SourceId':val.SourceId,'Event':val.Event,'Time':val.Time,'Day':val.Day,'Count':val.Count}
 				})
-				this.getHouseInfo(arr);
+				this.pageArray=this.group(arr, 10);
+				console.log(this.pageArray)
+				this.count=this.pageArray.length;
+				console.log('长度',this.count)
+				// const arr1=arr.filter((val,index)=>{
+				// 	return index<50;
+				// })
+				this.getHouseInfo(this.pageArray[0]);
 				// console.log(arr)
-			}else{
-				this.houseInfo='';
 			}
 		},
+		pIndex(){
+			if(this.pIndex>0){
+				this.getHouseInfo(this.pageArray[this.pIndex]);
+			}
+		},
+		scrollTop(newValue, oldValue) {//滚动分页
+			if(this.ccType==2)
+			var height = document.getElementsByClassName('gj-box')[0].scrollHeight;
+			let sTop = document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;//滚动的高度
+			let clientHeight=window.screen.height;//屏幕的高度
+			if(this.count>this.pIndex+1){
+				if(sTop>0){
+					if(height-50<sTop+clientHeight&&this.loadOver){
+							if(this.pIndex<this.count){
+								console.log(this.pIndex)
+								this.pIndex=Number(this.pIndex)+1; 
+							}
+					 }
+				 }
+			}else{
+				// setTimeout(()=>{
+				// 	this.loadOver=true
+				// },1000)
+			}
+		}
 	},
 	methods:{
+		scrollT(){
+			this.scrollTop = window.scrollY;
+		},
+		// 拆分数组
+		group(array, subGroupLength) {
+			let index = 0;
+			let newArray = [];
+			while(index < array.length) {
+					newArray.push(array.slice(index, index += subGroupLength));
+			}
+			return newArray;
+		  },
+		// 画水印背景
+			textBecomeImg(text,fontsize,fontcolor){
+				var canvas = document.createElement('canvas');
+				var $buHeight = 0;
+				if(fontsize <= 32){ $buHeight = 99; }
+				else if(fontsize > 32 && fontsize <= 60 ){ $buHeight = 2;}
+				else if(fontsize > 60 && fontsize <= 80 ){ $buHeight = 4;}
+				else if(fontsize > 80 && fontsize <= 100 ){ $buHeight = 6;}
+				else if(fontsize > 100 ){ $buHeight = 10;}
+				canvas.height=fontsize + $buHeight ;
+				canvas.padding=30;
+				var context = canvas.getContext('2d');
+				context.clearRect(0, 0, canvas.width*2, canvas.height);
+				context.textAlign = "center";
+		                canvas.width = 200;
+		                canvas.height = 100;
+		                context.fillStyle = fontcolor;
+		                context.font=fontsize+"px Arial";
+		                context.textBaseline = 'middle'; 
+		                context.fillText(text,0,fontsize/2);
+		                var canvasWidth = canvas.width/99;
+		                canvasWidth = context.measureText(text).width;//text字整句文本的宽度
+				var dataUrl = canvas.toDataURL('image/png');
+				return dataUrl;
+		},
+		// 画水印信息
+		drawText(){
+			// +new Date().toLocaleDateString()
+			var text = `${this.empName}${this.empNo}`;
+			console.log(text);
+			var shuiyinDiv = document.createElement('div');
+			shuiyinDiv.id="canvas";
+			var style = shuiyinDiv.style;
+			style.position = 'fixed';
+			style.left = '-50%';
+			style.top = '-60%';
+			style.width = '200%';
+			style.height = '200%';
+			style.opacity = '0.15';
+			style.background = "url("+this.textBecomeImg(text,16,"#666")+")";
+			style.zIndex = 9999999991;
+			style.transform = "rotate(-30deg)";
+			style.pointerEvents = "none";//很重要  不然点击不了挡住的其他模块
+			document.getElementById('customHX').appendChild(shuiyinDiv);
+		},
 		// 获取轨迹房源信息
 		getHouseInfo(arr){
+			this.loadOver=false;
 			this.loading = this.$toast.loading('',{
 			    cover: false
 			});
@@ -337,6 +453,9 @@ export default{
 							this.houseInfo=res.data.data;
 							// 整理数组  把相同的Day整理出来为二维数组
 							this.houseInfo=this.changeArr(this.houseInfo);
+							this.houseArray=this.houseArray.concat(this.houseInfo);
+							console.log('分页数组',this.houseArray)
+							this.loadOver=true;
 							setTimeout(()=>{
 								this.loading.hide();
 							},500)
@@ -382,17 +501,28 @@ export default{
 						url:"/MobileCompete/UserPortrait",
 						headers:this.header_token,
 						params:{
-							detailId:this.$route.query.id
+							detailId:this.$route.query.id,
+							type:this.$route.query.type
 						}
 					})
 					.then(res=>{
 						console.log(res);
 						if(res.data.code==0){
-							this.user=res.data.data
+							this.user=res.data.data;
+							if(this.empName!=res.data.data.EmpCnName){
+								this.empName=res.data.data.EmpCnName;
+								this.empNo=res.data.data.EmpNo;
+								if(!this.inApp){
+									// 清除水印加水印
+									if(document.getElementById('canvas')){
+										document.getElementById('custom').removeChild(document.getElementById('canvas'))
+									}
+									this.drawText();//加水印
+								}
+							}
 							setTimeout(()=>{
 								this.loading.hide();
 							},500)
-							
 						}else{
 							this.loading.hide();
 							this.$toast.text(res.data.msg);
@@ -418,7 +548,8 @@ export default{
 						url:"/MobileCompete/UserTrails",
 						headers:this.header_token,
 						params:{
-							detailId:this.$route.query.id
+							detailId:this.$route.query.id,
+							type:this.$route.query.type
 						}
 					})
 					.then(res=>{
@@ -469,7 +600,7 @@ export default{
 						url:"/mobilecompete/custleveltitle",
 						headers:this.header_token,
 						params:{
-							type:4
+							type:this.$route.query.type
 						}
 					})
 					.then(res=>{
@@ -503,7 +634,7 @@ export default{
 							detailId:this.$route.query.id,
 							cusLevelId:this.md,
 							titleId:this.cmd,
-							type:4
+							type:this.$route.query.type
 						}
 					})
 					.then(res=>{
@@ -627,6 +758,9 @@ export default{
 	.micMsg label{display: inline-block;padding: 0.15rem;font-size: 0.24rem;border-radius: 3px;margin-right: 0.3rem;margin-bottom: 0.3rem;background-color: #fff;color: #666;}
 	.micMsg label:last-child{margin-right: 0;}
 	.micMsg label.on{background-color: #FDE9EA;color: #F42C1D;}
+	
+	.noList{color: #ccc;font-size: 0.26rem;text-align: center;margin-top: 0.8rem;}
+	.noList span{display: inline-block;height: 1px;width: 2rem;background-color: #eee;position: relative;top: -3px;}
 </style>
 <style lang="less" scoped>
 	.chxBox{
@@ -694,7 +828,7 @@ export default{
 				display: flex;
 				margin-bottom: 0.2rem;
 				label{
-					width: 1.44rem;
+					width: 1.46rem;
 				}
 				p{
 					flex: 1;
@@ -861,7 +995,7 @@ export default{
 			.gjNone{
 				height: 5rem;
 				width: 100%;
-				background: url(../images/custom/gj-none.png) center no-repeat;
+				background: url(../images/custom/gj-none.png?v=1) center no-repeat;
 				background-size: 3.4rem;
 				padding-top: 4.2rem;
 				text-align: center;

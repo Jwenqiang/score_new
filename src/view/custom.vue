@@ -1,5 +1,5 @@
 <template>
-	<div class="custom">
+	<div class="custom" id="custom">
 		<div class="hbTab">
 			<a>
 				<label :class="cType==1?'on':''" @click="changeTag(1)">抢商机<span></span></label>
@@ -48,14 +48,14 @@
 									</template>
 									
 									<div class="ccUser">
-										<h4>{{item.UserTitle || item.CallerNumberDisplay}}</h4>
+										<h4>{{item.UserTitle || item.CallerNumberDisplay}}<span class="cc-cty" v-if="item.ChannelType">{{item.ChannelType}}</span></h4>
 										<p>{{item.CreateTime | agoTime}}</p>
 									</div>
 								</label>
 								<span class="more"></span>
 							</div>
 							<div class="pli p-es" v-if="item.fav_ershou_estatename1">
-								<label>二手偏好：</label>
+								<label>推荐二手：</label>
 								<div class="plBox">
 									<span><i>1</i>{{item.fav_ershou_estatename1}}</span>
 									<span v-if="item.fav_ershou_estatename2"><i>2</i>{{item.fav_ershou_estatename2}}</span>
@@ -63,7 +63,7 @@
 								</div>
 							</div>
 							<div class="pli p-xf" v-if="item.fav_xinfang_estatename1">
-								<label>新房偏好：</label>
+								<label>推荐新房：</label>
 								<div class="plBox">
 									<span><i>1</i>{{item.fav_xinfang_estatename1}}</span>
 									<span v-if="item.fav_xinfang_estatename2"><i>2</i>{{item.fav_xinfang_estatename2}}</span>
@@ -71,7 +71,7 @@
 								</div>
 							</div>
 							<div class="pli p-jg" v-if="item.ershouPrice1">
-								<label>价格偏好：</label>
+								<label>推荐价格：</label>
 								<div class="plBox">
 									<span><i>1</i>{{item.ershouPrice1}}</span>
 									<span v-if="item.ershouPrice2"><i>2</i>{{item.ershouPrice2}}</span>
@@ -118,7 +118,7 @@
 							
 						</div>	
 						<div class="pli p-old" v-if="item.LastVisit">
-							<label>最新访问：<a :href="item.LastVisitUrl" v-if="item.LastVisitUrl">{{item.LastVisit}}</a><template v-else>{{item.LastVisit}}</template></label>
+							<label>最新足迹：<a :href="item.LastVisitUrl" v-if="item.LastVisitUrl">{{item.LastVisit}}</a><template v-else>{{item.LastVisit}}</template></label>
 							<span></span>
 						</div>
 						<div class="ccBtom">
@@ -126,7 +126,7 @@
 						</div>
 					</div>
 					<p class="noList" v-if="count>pSize">正在加载</p>
-					<p class="noList" v-else-if="count<=pSize&&loadOver"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
+					<p class="noList" v-else-if="count<=pSize&&loadOver&&cList.length>0"><span></span>&nbsp;我是有底线的&nbsp;<span></span></p>
 				</template>
 				<div v-else-if="cList.length==0&&ready" class="empty-shang-ji-wrap">
 					<img class="empty-shang-ji" src="@/assets/img/empty-shang-ji-public.png" />
@@ -151,78 +151,82 @@
 											<img src="images/custom/t-man1.png" v-if="item.Gender==0"/><img src="images/custom/t-man1.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman1.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none1.png" v-else/>
 										</template>
 										<div class="ccUser">
-											<h4>{{item.UserTitle || item.CallerNumberDisplay}}<i class="cc-edit" @click="setChange(item.Id)" v-if="item.IsRelease!=1"></i></h4>
+											<h4>{{item.UserTitle || item.CallerNumberDisplay}}<span class="cc-cty" v-if="item.ChannelType">{{item.ChannelType}}</span><i class="cc-edit" @click="setChange(item.Id,item.Type)" v-if="item.IsRelease!=1"></i></h4>
 											<p>{{item.CreateTime | agoTime}}</p>
 										</div>
 									</label>
 									<span class="ccRecord" @click="getRecord(item.Id,item.Type)" v-if="item.IsRelease!=1">跟进记录</span>
 								</div>
-								<div class="pli p-es" v-if="item.fav_ershou_estatename1">
-									<label>二手偏好：</label>
-									<div class="plBox">
-										<span><i>1</i>{{item.fav_ershou_estatename1}}</span>
-										<span v-if="item.fav_ershou_estatename2"><i>2</i>{{item.fav_ershou_estatename2}}</span>
-										<span v-if="item.fav_ershou_estatename3"><i>3</i>{{item.fav_ershou_estatename3}}</span>
+								<div class="ccMid" @click="goHX(item.Id,item.Type,item.ShowUserPortrait)">
+									<div class="pli p-es" v-if="item.fav_ershou_estatename1">
+										<label>推荐二手：</label>
+										<div class="plBox">
+											<span><i>1</i>{{item.fav_ershou_estatename1}}</span>
+											<span v-if="item.fav_ershou_estatename2"><i>2</i>{{item.fav_ershou_estatename2}}</span>
+											<span v-if="item.fav_ershou_estatename3"><i>3</i>{{item.fav_ershou_estatename3}}</span>
+										</div>
 									</div>
-								</div>
-								<div class="pli p-xf" v-if="item.fav_xinfang_estatename1">
-									<label>新房偏好：</label>
-									<div class="plBox">
-										<span><i>1</i>{{item.fav_xinfang_estatename1}}</span>
-										<span v-if="item.fav_xinfang_estatename2"><i>2</i>{{item.fav_xinfang_estatename2}}</span>
-										<span v-if="item.fav_xinfang_estatename3"><i>3</i>{{item.fav_xinfang_estatename3}}</span>
+									<div class="pli p-xf" v-if="item.fav_xinfang_estatename1">
+										<label>推荐新房：</label>
+										<div class="plBox">
+											<span><i>1</i>{{item.fav_xinfang_estatename1}}</span>
+											<span v-if="item.fav_xinfang_estatename2"><i>2</i>{{item.fav_xinfang_estatename2}}</span>
+											<span v-if="item.fav_xinfang_estatename3"><i>3</i>{{item.fav_xinfang_estatename3}}</span>
+										</div>
 									</div>
-								</div>
-								<div class="pli p-jg" v-if="item.ershouPrice1">
-									<label>价格偏好：</label>
-									<div class="plBox">
-										<span><i>1</i>{{item.ershouPrice1}}</span>
-										<span v-if="item.ershouPrice2"><i>2</i>{{item.ershouPrice2}}</span>
+									<div class="pli p-jg" v-if="item.ershouPrice1">
+										<label>推荐价格：</label>
+										<div class="plBox">
+											<span><i>1</i>{{item.ershouPrice1}}</span>
+											<span v-if="item.ershouPrice2"><i>2</i>{{item.ershouPrice2}}</span>
+										</div>
 									</div>
-								</div>
-								<!-- 老的数据展示 -->
-								<div class="pli p-qy" v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
-									<label>意向区域：</label>
-									<span><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</span>
-								</div>
-								<div class="pli p-hx" v-if="item.HuXing">
-									<label>偏好户型：</label>
-									<span>{{item.HuXing}}</span>
-								</div>
-								<div class="pli p-fy" v-if="item.EstateName&&item.EstateName!='--'">
-									<label>楼盘名称：</label>
-									<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
-								</div>
-								<div class="pli p-fh" v-if="item.BuildingNo">
-									<label>楼栋房号：</label>
-									<span>{{item.BuildingNo}}</span>
-								</div>
-								<div class="pli p-jg" v-if="item.YuSuanJiaGe">
-									<label>预算范围：</label>
-									<span>{{item.YuSuanJiaGe}}</span>
-								</div>
-								<div class="pli p-wt" v-if="item.SalePrice>0">
-									<label>委托售价：</label>
-									<span>{{item.SalePrice}}万</span>
-								</div>
-								<div class="pli p-wt" v-if="item.RentPrice>0">
-									<label>委托租价：</label>
-									<span>{{item.RentPrice}}元/月</span>
-								</div>
-								<div class="pli p-ly" v-if="item.SourceName">
-									<label>商机来源：</label>
-									<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template></span>
+									<!-- 老的数据展示 -->
+									<div class="pli p-qy" v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
+										<label>意向区域：</label>
+										<span><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</span>
+									</div>
+									<div class="pli p-hx" v-if="item.HuXing">
+										<label>偏好户型：</label>
+										<span>{{item.HuXing}}</span>
+									</div>
+									<div class="pli p-fy" v-if="item.EstateName&&item.EstateName!='--'">
+										<label>楼盘名称：</label>
+										<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
+									</div>
+									<div class="pli p-fh" v-if="item.BuildingNo">
+										<label>楼栋房号：</label>
+										<span>{{item.BuildingNo}}</span>
+									</div>
+									<div class="pli p-jg" v-if="item.YuSuanJiaGe">
+										<label>预算范围：</label>
+										<span>{{item.YuSuanJiaGe}}</span>
+									</div>
+									<div class="pli p-wt" v-if="item.SalePrice>0">
+										<label>委托售价：</label>
+										<span>{{item.SalePrice}}万</span>
+									</div>
+									<div class="pli p-wt" v-if="item.RentPrice>0">
+										<label>委托租价：</label>
+										<span>{{item.RentPrice}}元/月</span>
+									</div>
+									<div class="pli p-ly" v-if="item.SourceName">
+										<label>商机来源：</label>
+										<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template></span>
+									</div>
 								</div>
 							</div>	
 							<div class="pli p-old" v-if="item.LastVisit">
-								<label>最新访问：<a :href="item.LastVisitUrl" v-if="item.LastVisitUrl">{{item.LastVisit}}</a><template v-else>{{item.LastVisit}}</template></label>
+								<label>最新足迹：<a :href="item.LastVisitUrl" v-if="item.LastVisitUrl">{{item.LastVisit}}</a><template v-else>{{item.LastVisit}}</template></label>
 								<span></span>
 							</div>
 							<div class="ccBM">
-								<button class="cb-hx" v-if="item.CompeteType==2" @click="goHX(item.Id,item.Type,item.UserTitle)">画像</button>
-								<button class="cb-hx" style="background-color: #ccc;" @click="hxTip" v-else>画像</button>
+								<button class="cb-hx" v-if="item.ShowUserPortrait" @click="goHX(item.Id,item.Type,item.ShowUserPortrait)">详情</button>
+								<button class="cb-hx" style="background-color: #ccc;" @click="hxTip" v-else>详情</button>
 								<button class="cb-fk" @click="change(item.Id,item.Type)">反馈</button>
-								<button class="cb-dh" @click="getMobile(item.Id,item.Type)" v-if="item.IsMobile==1||item.Type==4">电话</button>
+								<button class="cb-dh" :class="item.load?'buttonLoad':''" @click="getMobile(item.Id,item.Type,index)" v-if="item.IsMobile==1||item.Type==4">
+									<mt-spinner type="double-bounce" color="#fff" :size="20" v-if="item.load"></mt-spinner>电话
+								</button>
 								<button class="cb-dh" v-else><a :href="'tel:'+item.CallerNumberDisplay" @click="setSc">电话</a></button>
 							</div>
 							<div class="cr-record">
@@ -253,7 +257,7 @@
 						<template v-if="jl==1">
 							<template v-if="record.length>0">
 							<div class="ccrInfo ccrInfoS" style="text-align: center;" v-for="item in record" :key="item.Id">
-								<span>{{item.CreateTime}}</span>  <span>拨打客户电话</span> <span v-if="item.Result=='ANSWERED'" style="color: #00CC66;">已接听</span><span style="color: #F42C1D;" v-else>未接听</span>
+								<span>{{item.StartTime||item.CreateTime}}</span>  <span>拨打客户电话</span> <span v-if="item.Result=='ANSWERED'" style="color: #00CC66;">已接听</span><span style="color: #F42C1D;" v-else>未接听</span>
 							</div>
 							</template>
 							<div class="infoNone" v-else>
@@ -362,7 +366,7 @@
 		  <div class="showMsg" style="height: 4rem;width: 6.1rem;">
 		    <label class="modelClose" @click="edit=false"></label>
 			<h3>商机备注</h3>
-			<p class="edName"><input type="text" placeholder="请输入您对用户的备注（12个字以内）" maxlength="12" v-model="editName"/></p>
+			<p class="edName"><input type="text" placeholder="请输入您对客户的备注（12个字以内）" maxlength="12" v-model="editName"/></p>
 			<mt-button type="primary" class="carBtn" @click="changeName">确定</mt-button>
 		  </div>
 		</div>
@@ -460,7 +464,10 @@
 				dhText:"",
 				fkText:"",
 				allLoaded:false,
-				tes:1
+				tes:1,
+				changeType:4,
+				empNo:"",
+				empName:""
 			}
 		},
 		components: {
@@ -485,6 +492,12 @@
 			// // 	this.getPrize()
 			// // }
 			// this.getBlack();
+			if(navigator.userAgent.indexOf('aplus') > -1){
+				this.inApp=true
+			}
+		},
+		mounted() {
+			
 		},
 		// 注意：只有当组件在 <keep-alive> 内被切换，才会有activated 和 deactivated 这两个钩子函数
 		 activated() {//在vue对象存活的情况下，进入当前存在activated()函数的页面时，一进入页面就触发；可用于初始化页面数据等
@@ -498,9 +511,9 @@
 			if(localStorage.getItem('readImg')){
 				this.read=true;
 			}
-			setTimeout(()=>{
-				this.getCommt();
-			},500)
+			// setTimeout(()=>{
+			// 	this.getCommt();
+			// },500)
 			if(this.cType==1){
 				this.pSize=10;
 				this.getcList();
@@ -509,11 +522,6 @@
 				this.getMyList();
 			}
 			this.getBlack();
-			setTimeout(()=>{
-				console.log('scrollHeight',document.documentElement.scrollHeight);
-				console.log('clientHeight ',document.documentElement.clientHeight);
-				console.log('offsetHeight ',document.documentElement.offsetHeight);
-			},2000)
 			
 		  },
 		  deactivated() {
@@ -613,8 +621,53 @@
 			}
 		},
 		methods:{
+			// 画水印背景
+				textBecomeImg(text,fontsize,fontcolor){
+					var canvas = document.createElement('canvas');
+					var $buHeight = 0;
+					if(fontsize <= 32){ $buHeight = 99; }
+					else if(fontsize > 32 && fontsize <= 60 ){ $buHeight = 2;}
+					else if(fontsize > 60 && fontsize <= 80 ){ $buHeight = 4;}
+					else if(fontsize > 80 && fontsize <= 100 ){ $buHeight = 6;}
+					else if(fontsize > 100 ){ $buHeight = 10;}
+					canvas.height=fontsize + $buHeight ;
+					canvas.padding=30;
+					var context = canvas.getContext('2d');
+					context.clearRect(0, 0, canvas.width*2, canvas.height);
+					context.textAlign = "center";
+			                canvas.width = 200;
+			                canvas.height = 100;
+			                context.fillStyle = fontcolor;
+			                context.font=fontsize+"px Arial";
+			                context.textBaseline = 'middle'; 
+			                context.fillText(text,0,fontsize/2);
+			                var canvasWidth = canvas.width/99;
+			                canvasWidth = context.measureText(text).width;//text字整句文本的宽度
+					var dataUrl = canvas.toDataURL('image/png');
+					return dataUrl;
+			},
+			// 画水印信息
+			drawText(){
+				// +new Date().toLocaleDateString()
+				var text = `${this.empName}${this.empNo}`;
+				console.log(text);
+				var shuiyinDiv = document.createElement('div');
+				shuiyinDiv.id="canvas";
+				var style = shuiyinDiv.style;
+				style.position = 'fixed';
+				style.left = '-50%';
+				style.top = '-60%';
+				style.width = '200%';
+				style.height = '200%';
+				style.opacity = '0.15';
+				style.background = "url("+this.textBecomeImg(text,16,"#666")+")";
+				style.zIndex = 9999999991;
+				style.transform = "rotate(-30deg)";
+				style.pointerEvents = "none";//很重要  不然点击不了挡住的其他模块
+				document.getElementById('custom').appendChild(shuiyinDiv);
+			},
 			hxTip(){
-				this.$toast.text("该商机暂无画像");
+				this.$toast.text("该商机暂无详情");
 			},
 			loadTop(){
 				if(this.cType==1){
@@ -632,8 +685,10 @@
 					this.showUp=index;
 				}
 			},
-			goHX(id,type,name){
-				this.$router.push({name:"customHX",query:{id:id,type:type,name:name}});
+			goHX(id,type,can){
+				if(can){
+					this.$router.push({name:"customHX",query:{id:id,type:type}});
+				}
 			},
 			setTab(n){
 				if(this.tabOn==n){
@@ -642,8 +697,9 @@
 					this.tabOn=n;
 				}
 			},
-			setChange(id){
+			setChange(id,type){
 				this.changeId=id;
+				this.changeType=type;
 				this.edit=true;
 			},
 			// 修改备注
@@ -659,7 +715,8 @@
 							headers:this.header_token,
 							data:{
 								"detailId": this.changeId,
-								"userRemark":this.editName
+								"userRemark":this.editName,
+								"type":this.changeType
 							}
 						})
 						.then(res=>{
@@ -914,6 +971,18 @@
 								this.count=res.data.data.totalCount;
 								this.load=true;
 								// this.allLoaded=true;
+								if(this.empName!=res.data.data.empCnName){
+									this.empName=res.data.data.empCnName;
+									this.empNo=res.data.data.empNo;
+									if(!this.inApp){
+										// 清除水印加水印
+										if(document.getElementById('canvas')){
+											document.getElementById('custom').removeChild(document.getElementById('canvas'))
+										}
+										this.drawText();//加水印
+									}
+								}
+
 							}else{
 								this.$toast.text(res.data.msg);
 							}
@@ -954,6 +1023,17 @@
 								this.myList=uList.concat(mList);
 								this.countMy=res.data.data.totalCount;
 								this.load=true;
+								if(this.empName!=res.data.data.empCnName){
+									this.empName=res.data.data.empCnName;
+									this.empNo=res.data.data.empNo;
+									if(!this.inApp){
+										// 清除水印加水印
+										if(document.getElementById('canvas')){
+											document.getElementById('custom').removeChild(document.getElementById('canvas'))
+										}
+										this.drawText();//加水印
+									}
+								}
 							}else{
 								this.$toast.text(res.data.msg);
 							}
@@ -968,7 +1048,9 @@
 						})
 				})
 			},
-			getMobile(id,type){
+			getMobile(id,type,index){
+				// 电话等待动效
+				this.$set(this.myList[index],'load',true);
 				return new Promise((resolve)=>{
 						this.$axios({
 							method:"get",
@@ -985,17 +1067,25 @@
 								if(res.data.data.IsSuccess){
 									this.call=res.data.data.Reamark;
 									setTimeout(()=>{
+										// 电话等待动效
+										this.$set(this.myList[index],'load',false);
 										this.$refs.cphone.click();
 									},100)
 								}else{
+									// 电话等待动效
+									this.$set(this.myList[index],'load',false);
 									this.$toast.text(res.data.data.Reamark);
 								}
 							}else{
+								// 电话等待动效
+								this.$set(this.myList[index],'load',false);
 								this.$toast.text(res.data.msg);
 							}
 							resolve(res);
 						})
 						.catch(error=>{
+							// 电话等待动效
+							this.$set(this.myList[index],'load',false);
 							Indicator.close();
 							this.$toast.text("网络错误，请稍后再试");
 						})
@@ -1273,8 +1363,21 @@
 			position: relative;
 			padding-right: 0.8rem;
 		}
+		.cc-cty{
+			background-color: #DDB950;
+			color: #fff;
+			padding: 3px 5px;
+			display: inline-block;
+			font-size: 0.22rem;
+			border-radius: 2px;
+			margin-left: 0.1rem;
+		}
 		p{
 			font-size: 0.24rem;
+			.cc-cty{
+				margin-left: 0;
+				margin-right: 0.1rem;
+			}
 		}
 	}
 	.p-old{
@@ -1383,9 +1486,20 @@
 		}
 	}
 	.old{
+		pointer-events: none;//元素不能点击
 		.ccBox{
-			background: #ccc url(../images/custom/c-yhs.png) 95% 20% no-repeat;
+			background: #ccc url(../images/custom/c-yhs.png) 95% 0.3rem no-repeat;
 			background-size: 1rem;
+			.pli{
+				i{
+					color: #ccc;
+					border-color: #ccc;
+				}
+			}
+		}
+		.cc-cty{
+			background-color: #fff !important;
+			color: #ccc !important;
 		}
 		.ccBM{
 			button{
@@ -1536,15 +1650,14 @@
 	.ccTop{
 		position: relative;
 		.cc-edit{
-			display: block;
+			display: inline-block;
 			width: 0.29rem;
 			height: 0.28rem;
 			background: url(../images/custom/cc-edit.png) center no-repeat;
 			background-size: 0.29rem;
-			position: absolute;
-			right: 0.2rem;
-			top: 0;
-			z-index: 2;
+			margin-left: 0.2rem;
+			position:relative;
+			top: 2px;
 		}
 		.ccRecord{
 			padding: 0;
@@ -1577,6 +1690,7 @@
 			color: #fff;
 			background-color: #DDB950;
 			margin-right: 0.6rem;
+			transition: all 0.5s ease;
 			&:nth-of-type(1){
 				background: #DDB950 url(../images/custom/cc-user.png) 0.4rem center no-repeat;
 				background-size: 0.25rem;
@@ -1595,6 +1709,22 @@
 			}
 			a{
 				color: #fff;
+			}
+		}
+		.buttonLoad{
+			pointer-events: none;
+			&:last-child{
+				background: #DDB950;
+				background-size: 0.25rem;
+				padding-left: 0.3rem;
+				margin-right: 0;
+				opacity: 0.8;
+				position: relative;
+				span{
+					position: absolute;
+					left: 0.22rem;
+					top: 0.14rem;
+				}
 			}
 		}
 	}
