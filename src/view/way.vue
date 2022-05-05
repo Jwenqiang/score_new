@@ -29,10 +29,6 @@
 					<mt-button type="primary" class="nlBtn" style="opacity: 0.6;"  v-else>已签到</mt-button>
 				</div>
 				<div class="clear newList">
-<<<<<<< HEAD
-					<img src="images/way-9.png" class="nlT"/>
-					<div class="newM nDay">
-=======
 					<img src="images/way-10.png" class="nlT"/>
 					<div class="newM nDay">
 						<h4>租房佣金线上支付<span>+150</span></h4>
@@ -51,7 +47,6 @@
 				<div class="clear newList">
 					<img src="images/way-9.png" class="nlT"/>
 					<div class="newM nDay">
->>>>>>> dev2.0
 						<h4>中原住建委卖<span>最高+100</span></h4>
 						<label>不限</label><label>首位+100</label><label>非首位+30</label>
 					</div>
