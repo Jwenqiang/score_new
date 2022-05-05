@@ -13,7 +13,7 @@
 							<div v-if="houseSchool.length>0">
 								<div class="clear jjrL" v-for="item in houseSchool" :key="item.SchoolId">
 									<div class="jrl">
-										<img :src="item.ImagePath" width="100%"/>
+										<img :src="item.ImagePath | changeImg" width="100%"/>
 									</div>
 									<div class="jrr">
 										<h4 class="jrt">{{item.SchoolName}}</h4>
@@ -323,6 +323,24 @@
 
 		},
 		filters:{
+			changeImg(n){
+				if(n.indexOf("_w")>-1||n.indexOf("_c")>-1){
+					return n;
+				}
+				let v=n.split('.jpg')[0];
+				if(n.indexOf('.jpeg')>-1){
+					v=n.split('.jpeg')[0];
+					return v+'_300x210_w.jpeg';
+				}else if(n.indexOf('.png')>-1){
+					v=n.split('.png')[0];
+					return v+'_300x210_w.png';
+				}else if(n.indexOf('.JPG')>-1){
+					v=n.split('.JPG')[0];
+					return v+'_300x210_w.jpg';
+				}else{
+					return v+'_300x210_w.jpg';
+				}
+			},
 			price(msg){
 				return msg/10000
 			}

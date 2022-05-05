@@ -29,8 +29,29 @@
 					<mt-button type="primary" class="nlBtn" style="opacity: 0.6;"  v-else>已签到</mt-button>
 				</div>
 				<div class="clear newList">
+<<<<<<< HEAD
 					<img src="images/way-9.png" class="nlT"/>
 					<div class="newM nDay">
+=======
+					<img src="images/way-10.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>租房佣金线上支付<span>+150</span></h4>
+						<label>每次+150</label><label>不限次数</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'10'}})">如何完成</mt-button>
+				</div>
+<!-- 				<div class="clear newList">
+					<img src="images/way-11.png" class="nlT"/>
+					<div class="newM nDay">
+						<h4>租/售房源视频上传<span>+30</span></h4>
+						<label>每次+30</label><label>不限次数</label>
+					</div>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'11'}})">如何完成</mt-button>
+				</div> -->
+				<div class="clear newList">
+					<img src="images/way-9.png" class="nlT"/>
+					<div class="newM nDay">
+>>>>>>> dev2.0
 						<h4>中原住建委卖<span>最高+100</span></h4>
 						<label>不限</label><label>首位+100</label><label>非首位+30</label>
 					</div>
@@ -205,7 +226,18 @@
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'32'}})">如何完成</mt-button>
 				</div>
-				<div class="clear newList">
+				<div class="clear newList" v-for="(item,index) in task" :key="item.Sort" v-if="item.Sort!=6&&item.Sort!=7">
+					<img :src="`images/sl${index+1}.png`" class="nlT"/>
+					<div class="newM">
+						<h4>{{item.SecondQuDaoName}}</h4>
+						<p><span>+{{item.YuanBao}}</span></p>
+					</div>
+					<mt-button type="primary" class="nlBtn nlBtns" v-if="item.NewTaskStatus==1" @click="getScore(item.SecondQuDaoCode)">领取奖励</mt-button>
+					<mt-button type="primary" disabled class="nlBtn" v-else-if="item.NewTaskStatus==2">领取成功</mt-button>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:index+1}})" v-else>如何完成</mt-button>
+				</div>
+				
+<!-- 				<div class="clear newList">
 					<img src="../assets/img/sl1.png" class="nlT"/>
 					<div class="newM">
 						<h4>上传头像</h4>
@@ -246,16 +278,6 @@
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:'4'}})" v-else>如何完成</mt-button>
 				</div>
 				<div class="clear newList">
-					<img src="../assets/img/sl8.png" class="nlT"/>
-					<div class="newM">
-						<h4>首次发布门店主打小区房源</h4>
-						<p><span>+30</span></p>
-					</div>
-					<mt-button type="primary" class="nlBtn nlBtns" v-if="task8.NewTaskStatus==1" @click="getScore(task8.SecondQuDaoCode)">领取奖励</mt-button>
-					<mt-button type="primary" disabled class="nlBtn" v-else-if="task8.NewTaskStatus==2">领取成功</mt-button>
-					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:'8'}})" v-else>如何完成</mt-button>
-				</div>	
-				<div class="clear newList">
 					<img src="../assets/img/sl5.png" class="nlT"/>
 					<div class="newM">
 						<h4>首次发布热门成交小区房源</h4>
@@ -265,7 +287,7 @@
 					<mt-button type="primary" disabled class="nlBtn" v-else-if="task5.NewTaskStatus==2">领取成功</mt-button>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:'5'}})" v-else>如何完成</mt-button>
 				</div>
-		<!-- 		<div class="newList">
+				<div class="newList">
 					<img src="../assets/img/sl6.png" class="nlT"/>
 					<div class="newM">
 						<h4>房源第一次被设为中原好房<span>+50</span></h4>
@@ -274,8 +296,8 @@
 					<mt-button type="primary" class="nlBtn nlBtns" v-if="task6.NewTaskStatus==1" @click="getScore(task6.SecondQuDaoCode)">领取奖励</mt-button>
 					<mt-button type="primary" disabled class="nlBtn" v-else-if="task6.NewTaskStatus==2">领取成功</mt-button>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:'6'}})" v-else>如何完成</mt-button>
-				</div> -->
-				<div class="clear newList">
+				</div>
+				<div class="clear newList" v-if="task7">
 					<img src="../assets/img/sl7.png" class="nlT"/>
 					<div class="newM">
 						<h4>发布第一套独家委托房源</h4>
@@ -284,7 +306,17 @@
 					<mt-button type="primary" class="nlBtn nlBtns" v-if="task7.NewTaskStatus==1" @click="getScore(task7.SecondQuDaoCode)">领取奖励</mt-button>
 					<mt-button type="primary" disabled class="nlBtn" v-else-if="task7.NewTaskStatus==2">领取成功</mt-button>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:'7'}})" v-else>如何完成</mt-button>
-				</div>	
+				</div>
+				<div class="clear newList" v-if="task8">
+					<img src="../assets/img/sl8.png" class="nlT"/>
+					<div class="newM">
+						<h4>首次发布门店主打小区房源</h4>
+						<p><span>+30</span></p>
+					</div>
+					<mt-button type="primary" class="nlBtn nlBtns" v-if="task8.NewTaskStatus==1" @click="getScore(task8.SecondQuDaoCode)">领取奖励</mt-button>
+					<mt-button type="primary" disabled class="nlBtn" v-else-if="task8.NewTaskStatus==2">领取成功</mt-button>
+					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'news',params:{id:'8'}})" v-else>如何完成</mt-button>
+				</div>	 -->
 			</div>
 			
 		</div>
@@ -337,6 +369,7 @@
 				task7:"",
 				task8:"",
 				nowSign:false,
+				task:"",
 				
 				addCar:false,
 				moduleNum:-1,
@@ -500,7 +533,8 @@
 							resolve(res);
 							if(res.data.code==0){
 								this.newList=res.data.data
-								if(res.data.data.length>0){
+								this.task=res.data.data
+								if(res.data.data.length>7){
 									this.task1=res.data.data[0]
 									this.task2=res.data.data[1]
 									this.task3=res.data.data[2]
@@ -509,6 +543,14 @@
 									this.task6=res.data.data[5]
 									this.task7=res.data.data[6]
 									this.task8=res.data.data[7]
+								}else if(res.data.data.length>6){
+									this.task1=res.data.data[0]
+									this.task2=res.data.data[1]
+									this.task3=res.data.data[2]
+									this.task4=res.data.data[3]
+									this.task5=res.data.data[4]
+									this.task6=res.data.data[5]
+									this.task8=res.data.data[6]
 								}
 							}else{
 								Toast(res.data.msg);

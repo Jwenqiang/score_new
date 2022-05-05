@@ -2,58 +2,70 @@
 	<div class="custom">
 		<div class="hbTab">
 			<a>
-				<label :class="cType==1?'on':''" @click="changeTag(1)">抢商机<span></span></label>
-				<label :class="cType==2?'on':''" @click="changeTag(2)">我的商机<span></span></label>
+				<label :class="cType==1?'on':''" @click="changeTag(1)">抢商机</label>
+				<label :class="cType==2?'on':''" @click="changeTag(2)">我的商机</label>
 			</a>
-		</div>
-		<div class="cmTab" v-if="cType==2">
-			<label>意向度</label>
-			<label>打电话</label>
-			<label>写反馈</label>
 		</div>
 		<div class="customC">
 			<!-- 抢客户 -->
 			<template v-if="cType==1">
 				<template v-if="cList && cList.length">
-					<div class="ccList" v-for="(item,index) in cList" :class="showUp==index?'hoverBox':''" @click="showUp=index">
-						<div class="ccBox">
-							<div class="ccTop">
-							<label>
-								<img src="images/custom/t-man.png" v-if="item.IsMobile==0"/><img src="images/custom/t-woman1.png" v-if="item.IsMobile==1"/>
-								<div class="ccUser">
-									<h4>客户尾号{{item.CallerNumberDisplay}}</h4>
-									<p>1小时前</p>
-								</div>
-							</label>
-							<span class="more"></span>
+					<div class="ccList" v-for="item in cList">
+						<div class="ccTop">
+							<label><img src="../assets/img/c-call.png" v-if="item.IsMobile==0"/><img src="../assets/img/c-phone.png" v-if="item.IsMobile==1"/>商机：{{item.CallerNumberDisplay}}</label>
+							<span>{{item.ChannelType}}</span>
+						</div>
+						<div class="ccPrice">
+							<div v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
+								<h4><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</h4>
+								<p>区域</p>
 							</div>
-							<div class="pli p-es">
-								<label>二手偏好：</label>
-								<div class="plBox">
-									<span><i>1</i>中海理花园</span>
-									<span><i>2</i>中海理花园</span>
-									<span><i>3</i>中海理花园</span>
-								</div>
+							<span v-if="item.HuXing&&item.EstateRegion2&&item.EstateRegion2!='--'"></span>
+							<div v-if="item.HuXing">
+								<h4>{{item.HuXing}}</h4>
+								<p>户型</p>
 							</div>
-							<div class="pli p-xf">
-								<label>新房偏好：</label>
-								<div class="plBox">
-									<span><i>1</i>理花中海理花园</span>
-									<span><i>2</i>中海理花园</span>
-									<span><i>3</i>中海理花园</span>
-								</div>
+							<span v-if="item.MuDi"></span>
+							<div v-if="item.MuDi">
+								<h4>{{item.MuDi}}</h4>
+								<p>购房目的</p>
 							</div>
-							<div class="pli p-jg">
-								<label>价格偏好：</label>
-								<span>300-500万</span>
-							</div>
-						</div>	
-						<div class="pli p-old" v-if="item.CreateTime">
-							<label>最新访问：卓越皇后道，89平3房2厅二手</label>
-							<span></span>
+						</div>
+						<div class="pli" v-if="item.EstateName&&item.EstateName!='--'">
+							<label>楼盘名称：</label>
+							<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
+						</div>
+						<div class="pli" v-if="item.BuildingNo">
+							<label>楼栋房号：</label>
+							<span>{{item.BuildingNo}}</span>
+						</div>
+						<div class="pli" v-if="item.YuSuanJiaGe">
+							<label>预算范围：</label>
+							<span>{{item.YuSuanJiaGe}}</span>
+						</div>
+						<div class="pli" v-if="item.SalePrice>0">
+							<label>委托售价：</label>
+							<span>{{item.SalePrice}}万</span>
+						</div>
+						<div class="pli" v-if="item.RentPrice>0">
+							<label>委托租价：</label>
+							<span>{{item.RentPrice}}元/月</span>
+						</div>
+						<div class="pli" v-if="item.SourceName">
+							<label>商机来源：</label>
+							<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template></span>
+						</div>
+						<div class="pli" v-if="item.CalledMsg&&item.ChannelType!='经纪人'&&item.Type!=2">
+							<label>呼叫信息：</label>
+							<span>{{item.CalledMsg}}</span>
+						</div>
+						<div class="pli" v-if="item.CreateTime">
+							<label>分发时间：</label>
+							<span>{{item.CreateTime}}</span>
 						</div>
 						<div class="ccBtom">
-							<button @click="buy(item)">{{item.BuyYuanBaoRealNum}}丨立即兑换</button>
+							<label><strong>{{item.BuyYuanBaoRealNum}}</strong>元宝<a>原价:{{item.BuyYuanBaoNum}}元宝</a></label>
+							<button @click="buy(item)">兑换商机</button>
 						</div>
 					</div>
 					<p class="noList" v-if="count>pSize">正在加载</p>
@@ -347,8 +359,7 @@
 				prizeId:"",
 				typeNum:1,
 				isBlack:false,
-				blackText:"您的账号被封禁15天，请及时对商机进行反馈",
-				showUp:0
+				blackText:"您的账号被封禁15天，请及时对商机进行反馈"
 			}
 		},
 		components: {
@@ -860,35 +871,33 @@
 </script>
 
 <style scoped>
-	.custom{background-color: #F5F5F5;min-height: 100vh;padding-top: 1rem; display: flex; flex-direction: column;}
+	.custom{background-color: #F5F5F5;min-height: 100vh;padding-top: 1.6rem; display: flex; flex-direction: column;}
 	.customC { padding: .3rem 0.3rem 1.3rem; display: flex; flex-direction: column; flex: 1 }
-	.ccList{background-color: #fff;box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);margin-bottom: 0.3rem;border-radius: 0.1rem;position: relative;overflow: hidden;}
-	.ccTop{height: 1rem;/* margin-bottom: 0.3rem; */padding: 0.2rem 0;line-height: 0.6rem;}
-	.ccTop label{font-size: 0.3rem;color: #333;float: left;}
-	.ccTop label img{width: 0.6rem;float: left;margin-right: 0.1rem;display: block;}
-	.ccTop .more{position: absolute;right: 0.3rem;top: 0.4rem;color: #666;width: 0.4rem;height: 0.4rem;display: block;background: url(../images/custom/c-down.png) center no-repeat;background-size: 100%;}
-	.hoverBox .ccTop .more{background: url(../images/custom/c-up.png) center no-repeat;background-size: 100%;}
+	.ccList{background-color: #fff;padding: 0.3rem 0.2rem 0;box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);margin-bottom: 0.3rem;border-radius: 0.1rem;position: relative;}
+	.ccTop{height: 0.6rem;line-height: 0.6rem;/* margin-bottom: 0.3rem; */}
+	.ccTop label{font-size: 0.36rem;color: #333;float: left;}
+	.ccTop label img{width: 0.6rem;float: left;margin-right: 0.2rem;}
+	.ccTop span{font-size: 0.22rem;padding: 2px 0.1rem;margin-left: 0.2rem;background-color: #5084DD;border-radius: 0.05rem;color: #fff;}
 	.ccPrice{display: flex;justify-content: space-between;align-items: center;white-space: nowrap;text-align: center;padding: 0 0.2rem;margin-bottom: 0.4rem;margin-top: 0.3rem;}
 	.ccPrice span{width: 1px;height: 0.6rem;background-color: #ddd;}
 	.ccPrice div{flex: 1;}
 	.ccPrice h4{font-size: 0.36rem;margin-bottom: 0.1rem;}
 	.ccPrice p{color: #999;font-size: 0.24rem;}
-	.pli{width: 100%;padding: 0.1rem 0;display: flex;justify-content: flex-start;font-size: 0.28rem;}
-	.pli label{color: #333;}
+	.pli{width: 100%;line-height: 0.85rem;border-top: 1px solid #ddd;display: flex;justify-content: space-between;}
+	.pli label{color: #999;}
 	.pli span{max-width: 5rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 	.pli span a{color: #6089D9;}
-	.ccBtom{line-height: 1.24rem;text-align: right;padding-right: 0.3rem;}
+	.ccBtom{display: flex;justify-content: space-between;align-items: center;line-height: 1.24rem;border-top: 1px solid #ddd;}
 	.ccBtom label{font-size: 0.28rem;padding-left: 0.4rem;background: url(../assets/img/cc-yb.png) left center no-repeat;background-size: 0.36rem;}
 	.ccBtom label strong{font-size: 0.4rem;color: #FF2D19;}
 	.ccBtom label a{margin-left: 0.2rem;font-size: 0.3rem;color: #999;text-decoration: line-through; }
-	.ccBtom button{width: 2.63rem;height: 0.68rem;background: #DDB950 url(../images/custom/b-yb.png) 0.2rem center no-repeat;background-size: 0.3rem;color: #fff;font-size: 0.28rem;border-radius: 0.1rem;padding-left: 0.4rem;}
+	.ccBtom button{width: 2rem;height: 0.65rem;background: linear-gradient(180deg, #7BACEE 0%, #6089D9 100%);color: #fff;font-size: 0.32rem;border-radius: 0.3rem;}
 	.hbY{background-color: #fff;}
-	.hbTab { text-align: center; padding: 0.15rem 0; font-size: 0.32rem; color: #333; position: fixed; top: 0; left: 0;width: 100%;z-index: 7; /* box-shadow: 0px 2px 6px 2px rgb(0 0 0 / 6%); */ background-color: #fff; }
-	.hbTab a{display: inline-block;background-color: #fff;}
-	.hbTab label{display: inline-block;width: 1.8rem;height: 0.7rem;margin: 0 0.2rem 0 0;line-height: 0.7rem;color: #333;position: relative;transition: all 0.5s linear; }
+	.hbTab { text-align: center; padding: 0.4rem 0; font-size: 0.32rem; color: #333; position: fixed; top: 0; left: 0;width: 100%;z-index: 7; box-shadow: 0px 2px 6px 2px rgb(0 0 0 / 6%); background-color: #fff; }
+	.hbTab a{display: inline-block;background-color: #fff;border-radius: 0.35rem;box-shadow: 0 0 2px #ccc;}
+	.hbTab label{display: inline-block;width: 1.8rem;height: 0.7rem;margin: 0 0.2rem 0 0;line-height: 0.7rem;color: #333;}
 	.hbTab label:last-child{margin: 0;}
-	.hbTab label.on{color: #5084DD;}
-	.hbTab label.on span{display: inline-block;width: 1rem;height: 3px;background-color: #5084DD;position: absolute;bottom: -0.14rem;left: 0.4rem;border-radius:  3px 3px 0 0;}
+	.hbTab label.on{background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);color: #fff;border-radius: 0.35rem;}
 	.myIntr{width: 6.9rem;min-height: 6rem;background-color: #fff;border-radius: 0.2rem;}
 	.myIntr h4{text-align: center;font-size: 0.36rem;color: #333;border: 0;font-weight: 550;}
 	.miTop{height: 1.3rem;line-height: 1.3rem;text-align: center;font-size: 0.4rem;font-weight: 600;color: #fff;margin-top: -1rem;color: #F42C1D;font-size: 0.4rem;}
@@ -979,147 +988,5 @@
 		.carBtn{width: 2.8rem;height: 0.8rem;margin: 0.5rem auto 0;display: block;line-height: 0.8rem;
 	background: linear-gradient(134deg, #FB6F52 0%, #F3240A 100%);border-radius: 3px;font-size: 0.32rem;}
 		.modelClose{position: absolute;right: 0rem;top: 0rem;cursor: pointer;width: 0.8rem;height: 0.8rem;display: block;background: url(../assets/img/close.png) center no-repeat;background-size: 0.27rem;}
-</style>
-<style lang="less" scoped>
-	@color:#fff;
-	@bjColor:#5084DD;
-	.ccBox{
-		padding: 0.2rem;
-	}
-	.ccUser{
-		float: left;
-		h4,p{
-			line-height: 1;
-		}
-		h4{
-			font-weight: 500;
-			font-size: 0.3rem;
-			margin-bottom: 0.06rem;
-		}
-		p{
-			font-size: 0.24rem;
-		}
-	}
-	.hoverBox{
-		.p-old{
-			height: 0.6rem;
-		}
-		.ccBox{
-			background: @bjColor;
-			color: @color;
-			.ccTop{
-				label{
-					color: @color;
-				}
-			}
-		 .pli{
-			 label{
-					color: @color;
-				}
-		 }
-			.p-jg{
-				background: url(../images/custom/l-jg.png) 0.18rem 0.15rem no-repeat;
-				background-size: 0.24rem;
-			}
-			.p-xf{
-				background: url(../images/custom/l-xf.png) 0.18rem 0.15rem no-repeat;
-				background-size: 0.24rem;
-				span{
-					margin-right: 0;
-				}
-			}
-			.p-es{
-				background: url(../images/custom/l-es.png) 0.18rem 0.15rem no-repeat;
-				background-size: 0.24rem;
-			} 
-		}
-	}
-	.ccBox{
-		.pli{
-			padding-left: 0.7rem;
-			i{
-				font-style: normal;
-				font-size: 0.24rem;
-				color: @bjColor;
-				display: inline-block;
-				width: 0.28rem;
-				height: 0.28rem;
-				text-align: center;
-				line-height: 0.22rem;
-				background-color: @color;
-				border-radius: 50%;
-				margin-right: 0.1rem;
-				border: 1px solid @bjColor;
-			}
-			.plBox{
-				width: 4.3rem;
-				span{
-					display: block;
-					max-width: 2.15rem;
-					float: left;
-					margin-right: 0.15rem;
-					margin-bottom: 0.1rem;
-				}
-			}
-		} 
-		.p-jg{
-			background: url(../images/custom/l-jg1.png) 0.18rem 0.15rem no-repeat;
-			background-size: 0.24rem;
-		}
-		.p-xf{
-			background: url(../images/custom/l-xf1.png) 0.18rem 0.15rem no-repeat;
-			background-size: 0.24rem;
-			span{
-				margin-right: 0;
-			}
-		}
-		.p-es{
-			background: url(../images/custom/l-es1.png) 0.18rem 0.15rem no-repeat;
-			background-size: 0.24rem;
-		}
-	}
-	.p-old{
-		transition: all 0.2s linear;
-		height: 0;
-		overflow: hidden;
-		padding-left: 0.8rem;
-		background: url(../images/custom/l-zj.png) 0.38rem 0.15rem no-repeat;
-		background-size: 0.24rem;
-		position: relative;
-		label{
-			color: @bjColor;
-			width: 5.2rem;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-		span{
-			display: block;
-			width: 0.13rem;
-			height: 0.24rem;
-			background: url(../images/custom/l-right.png) center no-repeat;
-			background-size: 0.13rem;
-			position: absolute;
-			right: 0.3rem;
-			top: 0.18rem;
-		}
-	}
-	.cmTab{
-		padding: 0 0.3rem;
-		width: 100%;
-		display: flex;
-		height: 0.7rem;
-		background-color: #fff;
-		color: #333;
-		label{
-			flex: 1;
-			text-align: center;
-			&:nth-of-type(1){
-				text-align: left;
-			}
-			&:nth-of-type(3){
-				text-align: right;
-			}
-		}
-	}
+	
 </style>

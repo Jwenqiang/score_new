@@ -26,12 +26,15 @@
 		</div>
 		<div class="imgMsg" v-else-if="id==9">
 			<img src="images/mr11.png?v=1" width="100%"/>
+		</div>
+		<div class="imgMsg" v-else-if="id==10">
+			<img src="images/mr10.png?v=1" width="100%"/>
 		</div>	
 		<div class="imgMsg" v-else-if="id==0">
 			<img src="../assets/img/dayS.png" width="100%"/>
 		</div>	
 		<div class="imgMsg" v-else-if="id==11">
-			<img src="../assets/img/day11.png" width="100%"/>
+			<img src="images/mr11s.png?v=2" width="100%"/>
 		</div>	
 		<div class="imgMsg" v-else-if="id==12">
 			<img src="../assets/img/day12.png" width="100%"/>
@@ -85,10 +88,10 @@
 			<img src="../assets/img/days31.png" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==32">
-			<img src="../assets/img/days32.jpg" width="100%"/>
+			<img src="images/days-gz.jpg" width="100%" @click="jumpUrl"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==33">
-			<img src="../assets/img/days33.jpg?v=1" width="100%"/>
+			<img src="images/days-share.jpg" width="100%" @click="jumpUrl"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==34">
 			<img src="../assets/img/days34.jpg?v=1" width="100%"/>
@@ -101,6 +104,9 @@
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==322">
 			<img src="images/days-y.jpg?v=1" width="100%"/>
+		</div>
+		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==426">
+			<img src="images/days-gzh.jpg" width="100%" @click="jumpUrl"/>
 		</div>
 	</div>
 </template>
@@ -130,6 +136,9 @@
 			this.setLog();
 		},
 		methods:{
+			jumpUrl(){
+				window.location.href="http://centaline.mikecrm.com/CVj3I7f";
+			},
 			setLog(){
 				return new Promise((resolve)=>{
 						this.$axios({

@@ -86,7 +86,9 @@
 								}else{//登录成功
 									var storage={
 										token:res.data.data.Token,
-										date:res.data.data.ExpireTime
+										date:res.data.data.ExpireTime,
+										empName:res.data.data.CnName,
+										empNo:res.data.data.EmpNo
 									}
 									this.login(storage);//等价于this.$store.dispatch('login',storage);
 									if(sessionStorage.getItem('toName')){

@@ -71,7 +71,7 @@
 
 		methods:{
 			logOut(){
-				  this.$store.dispatch("logout");
+				  this.$store.dispatch("logout",'no');
 				  document.title='登录'
 				  this.$router.push({name:"login"})
 			},

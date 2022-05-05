@@ -18,9 +18,9 @@
 					:autoPlay="4000"
 					 @slideChangeEnd="handleChange"
 				>
-<!-- 				<div  class="nut-swiper-slide gray" >
-				    <a @click="goPage('houseList','','houseList','1')"><img src="images/bz/banner317.png"/></a>
-				</div> -->
+				<div  class="nut-swiper-slide gray" >
+				    <a @click="goPage('days','426','days','1')"><img src="images/banner0426.jpg"/></a>
+				</div>
 				<div  class="nut-swiper-slide gray_1" >
 					<a @click="goPage('days','24','days/24','2')"><img src="images/banner0106.jpg?v=1"/></a>
 				</div>
@@ -51,6 +51,7 @@
 				</nut-swiper>
 			</div>
 		</div>
+		
 		<div class="hTag">
 			<div class="htL" @click="goIcon('houseList','竞拍房源Icon','(1,1)')">
 				<p><img src="../assets/img/h-fy.png"/></p>

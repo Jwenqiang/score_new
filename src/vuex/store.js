@@ -33,8 +33,10 @@ const store = new Vuex.Store({
 			state.hasLogin = false;
 			state.userInfo = {};
 			localStorage.removeItem("userInfo");
-			var oldUrl=window.location.href;
-			sessionStorage.setItem('toName',oldUrl);
+			if(data!='no'){
+				var oldUrl=window.location.href;
+				sessionStorage.setItem('toName',oldUrl);
+			}
 		},
 		changeNew(state) {
 			state.isNew = false;
