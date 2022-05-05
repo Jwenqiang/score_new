@@ -21,7 +21,7 @@
 			</div>
 			<div class="searchResult" v-show="tagList">
 				<ul>
-					<li v-for="(item,index) in tagList" :key="index" @click="search(item.Tag)"><label>{{item.Tag}}</label><span v-if="hType=='S'">约{{item.SNum}}套</span><span v-else><i>{{item.AvgPrice}}</i></span></li>
+					<li v-for="(item,index) in tagList" :key="index" @click="search(item)"><label>{{item.Tag}}</label><span v-if="hType=='S'">约{{item.SNum}}套</span><span v-else><i>{{item.AvgPrice}}</i></span></li>
 				</ul>
 			</div>
 		</div>
@@ -377,8 +377,8 @@
 			},
 			search(n){
 				this.load=false;
-				if(n){
-					this.content=n.split("　")[0];
+				if(n&&n.Tag){
+					this.content=n.Tag.split("　")[0];
 				}
 				// 神策
 				let id=this.content.length>17;
@@ -399,7 +399,11 @@
 								headers:this.header_token,
 								params:{
 									keyword :this.content,
-									pageSize:this.pSize
+									pageSize:this.pSize,
+									tagCode: n.TagCode||"",
+									tagCategory: n.TagCategory||"",
+									postType: this.hType,
+									isNew:0
 								}
 							})
 							.then(res=>{
