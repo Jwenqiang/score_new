@@ -1,0 +1,138 @@
+{
+	"imgBase": "https://static.centanet.com/assets/imgs",
+	"everyDay": {
+		"list": [{
+			"contentTex": "租房佣金线上支付",
+			"WingNumber": "+150",
+			"tags": ["每次+150", "不限次数"],
+			"icon": "202204/1650880074671.png",
+			"guidImg": "202204/1650880074549.png"
+		}, 
+			{
+			"contentTex": "中原住建委卖",
+			"WingNumber": "最高+100",
+			"tags": ["不限", "首位+100", "非首位+30"],
+			"icon": "202203/1648604839668.png",
+			"guidImg": "202203/1648554966534.png"
+		}, {
+			"contentTex": "非中原住建委卖",
+			"WingNumber": "+10",
+			"tags": ["每次+10", "每日最多10次"],
+			"icon": "202203/1648604839667.png",
+			"guidImg": "202203/1648554966504.png"
+		}, {
+			"contentTex": "转发【深圳中原】文章",
+			"WingNumber": "+20",
+			"tags": ["每日一次", "每月x6次"],
+			"icon": "202203/1648544497874.png",
+			"guidImg": "202204/1650883180697.jpg",
+			"isCheck":true
+		}, {
+			"contentTex": "签订业主独家委托",
+			"WingNumber": "最高+200",
+			"tags": ["不限次数"],
+			"icon": "202203/1648610724874.png",
+			"guidImg": "202203/1648611903322.png"
+		}, {
+			"contentTex": "签订业主委托",
+			"WingNumber": "最高+150",
+			"tags": ["不限次数"],
+			"icon": "202203/1648610728828.png",
+			"guidImg": "202203/1648611903600.png"
+		}, {
+			"contentTex": "成功约拍房源VR实勘",
+			"WingNumber": "最高+100",
+			"tags": ["不限次数"],
+			"icon": "202203/1648610725114.png",
+			"guidImg": "202203/1648611903592.png"
+		}, {
+			"contentTex": "成功发布新房点评",
+			"WingNumber": "+5",
+			"tags": ["每日1次"],
+			"icon": "202203/1648610725761.png",
+			"guidImg": "202203/1648611903479.png"
+		}, {
+			"contentTex": "开盘",
+			"WingNumber": "+10",
+			"tags": ["每日x3次", "每月x15次"],
+			"icon": "202203/1648610723276.png",
+			"guidImg": "202203/1648611903859.png"
+		}, {
+			"contentTex": "成功约拍房源图片实勘",
+			"WingNumber": "+15",
+			"tags": ["不限次数"],
+			"icon": "202203/1648610723648.png",
+			"guidImg": "202203/1648611903713.png"
+		}, {
+			"contentTex": "成功录入客源",
+			"WingNumber": "+10",
+			"tags": ["每日x3次", "每月x15次"],
+			"icon": "202203/1648610723336.png",
+			"guidImg": "202203/1648611903538.png"
+		}, {
+			"contentTex": "成功带客户看房",
+			"WingNumber": "+10",
+			"tags": ["每日x3次", "每月x15次"],
+			"icon": "202203/1648610728584.png",
+			"guidImg": "202203/1648611903999.png"
+		}]
+	},
+	"new": {
+		"name": "新手任务",
+		"key": "newList",
+		"insertTaskList": [{
+			"SecondQuDaoCode": "EXT_GZGZH",
+			"SecondQuDaoName": "关注公众号",
+			"JiFen": 5,
+			"YuanBao": 30,
+			"Sort": 0,
+			"NewTaskStatus": 0,
+			"isCheck":true
+		}],
+		"list": {
+			"XSRW_SCTX": {
+				"iconImg": "202203/1648544384423.png",
+				"guidImg": "202204/1650880075674.png"
+			},
+			"XSRW_DPZL": {
+				"iconImg": "202203/1648544384424.png",
+				"guidImg": "202204/1650880079804.png"
+			},
+			"XSRW_FIRSTZF": {
+				"iconImg": "202203/1648544384425.png",
+				"guidImg": "202204/1650880072635.png"
+			},
+			"XSRW_FIRSTERSF": {
+				"iconImg": "202203/1648544384426.png",
+				"guidImg": "202204/1650880072027.png"
+			},
+			"XSRW_FIRSTHOTF": {
+				"iconImg": "202203/1648544384427.png",
+				"guidImg": "202204/1650880072732.png",
+				"overTitle": "发布第一套热门成交小区房源"
+			},
+			"XSRW_FIRSTZYGOOD": {
+				"hide": true,
+				"iconImg": "202203/1648544384428.png",
+				"guidImg": "202203/1648543003174.png"
+			},
+			"XSRW_FIRSTWTF": {
+				"hide": true,
+				"iconImg": "202203/1648544384429.png",
+				"guidImg": "202204/1650880071652.png"
+			},
+			"XSRW_FIRSTMDZD": {
+				"iconImg": "202203/1648544384430.png",
+				"guidImg": "202204/1650880072879.png"
+			},
+			"XSRW_FIRSTZYZJWTFY": {
+				"iconImg": "202203/1648604839667.png",
+				"guidImg": "202204/1650880071652.png"
+			},
+			"EXT_GZGZH": {
+				"iconImg": "202203/1648544497874.png",
+				"guidImg": "202204/1650883180698.jpg"
+			}
+		}
+	}
+}
