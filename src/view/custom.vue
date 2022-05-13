@@ -36,7 +36,7 @@
 			<!-- 抢客户 -->
 			<template v-if="cType==1">
 				<template v-if="cList && cList.length">
-					<div class="ccList" v-for="(item,index) in cList" :class="showUp==index?'hoverBox':''">
+					<div class="ccList" v-for="(item,index) in cList" :class="showUp==index?'hoverBox':''" v-if="item.RegionName!='精选客户'">
 						<div class="ccBox" @click="toggle(index)">
 							<div class="ccTop">
 								<label>
@@ -141,97 +141,190 @@
 					<a :href="'tel:'+call" ref="cphone" style="display: none;" @click="setSc"></a>
 						<!--  -->
 						<div class="ccList hoverBox" :class="item.IsRelease==1?'old':''" v-for="(item,index) in myList" :key="index">
-							<div class="ccBox">
-								<div class="ccTop">
-									<label>
-										<template v-if="item.IsRelease==1">
-											<img src="images/custom/t-man2.png" v-if="item.Gender==0"/><img src="images/custom/t-man2.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman2.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none2.png" v-else/>
-										</template>
-										<template v-else>
-											<img src="images/custom/t-man1.png" v-if="item.Gender==0"/><img src="images/custom/t-man1.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman1.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none1.png" v-else/>
-										</template>
-										<div class="ccUser">
-											<h4>{{item.UserTitle || item.CallerNumberDisplay}}<span class="cc-cty" v-if="item.ChannelType">{{item.ChannelType}}</span><i class="cc-edit" @click="setChange(item.Id,item.Type)" v-if="item.IsRelease!=1"></i></h4>
-											<p>{{item.CreateTime | agoTime}}</p>
+							<template v-if="item.RegionName=='精选客户'">
+								<div class="ccBox">
+									<div class="ccTop">
+										<label>
+											<template v-if="item.IsRelease==1">
+												<img src="images/custom/t-man2.png" v-if="item.Gender==0"/><img src="images/custom/t-man2.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman2.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none2.png" v-else/>
+											</template>
+											<template v-else>
+												<img src="images/custom/t-man1.png" v-if="item.Gender==0"/><img src="images/custom/t-man1.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman1.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none1.png" v-else/>
+											</template>
+											<div class="ccUser">
+												<h4>{{item.UserTitle | changeMain}}<i class="cc-edit" @click="setChange(item.Id,item.Type)" v-if="item.IsRelease!=1"></i></h4>
+												<p>{{item.CreateTime | agoTime}}</p>
+											</div>
+										</label>
+										<span class="ccRecord" @click="getRecord(item.Id,item.Type)" v-if="item.IsRelease!=1">跟进记录</span>
+									</div>
+									<div class="ccMid" @click="goHX(item.Id,item.Type,item.ShowUserPortrait,'1')">
+										<div class="pli p-es" v-if="item.fav_ershou_estatename1">
+											<label>推荐二手：</label>
+											<div class="plBox">
+												<span><i>1</i>{{item.fav_ershou_estatename1}}</span>
+												<span v-if="item.fav_ershou_estatename2"><i>2</i>{{item.fav_ershou_estatename2}}</span>
+												<span v-if="item.fav_ershou_estatename3"><i>3</i>{{item.fav_ershou_estatename3}}</span>
+											</div>
 										</div>
-									</label>
-									<span class="ccRecord" @click="getRecord(item.Id,item.Type)" v-if="item.IsRelease!=1">跟进记录</span>
+										<div class="pli p-xf" v-if="item.fav_xinfang_estatename1">
+											<label>推荐新房：</label>
+											<div class="plBox">
+												<span><i>1</i>{{item.fav_xinfang_estatename1}}</span>
+												<span v-if="item.fav_xinfang_estatename2"><i>2</i>{{item.fav_xinfang_estatename2}}</span>
+												<span v-if="item.fav_xinfang_estatename3"><i>3</i>{{item.fav_xinfang_estatename3}}</span>
+											</div>
+										</div>
+										<div class="pli p-jg" v-if="item.ershouPrice1">
+											<label>推荐价格：</label>
+											<div class="plBox">
+												<span><i>1</i>{{item.ershouPrice1}}</span>
+												<span v-if="item.ershouPrice2"><i>2</i>{{item.ershouPrice2}}</span>
+											</div>
+										</div>
+										<!-- 老的数据展示 -->
+										<div class="pli p-qy" v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
+											<label>意向区域：</label>
+											<span><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</span>
+										</div>
+										<div class="pli p-hx" v-if="item.HuXing">
+											<label>偏好户型：</label>
+											<span>{{item.HuXing}}</span>
+										</div>
+										<div class="pli p-fy" v-if="item.EstateName&&item.EstateName!='--'">
+											<label>楼盘名称：</label>
+											<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
+										</div>
+										<div class="pli p-fh" v-if="item.BuildingNo">
+											<label>楼栋房号：</label>
+											<span>{{item.BuildingNo}}</span>
+										</div>
+										<div class="pli p-jg" v-if="item.YuSuanJiaGe">
+											<label>预算范围：</label>
+											<span>{{item.YuSuanJiaGe}}</span>
+										</div>
+										<div class="pli p-wt" v-if="item.SalePrice>0">
+											<label>委托售价：</label>
+											<span>{{item.SalePrice}}万</span>
+										</div>
+										<div class="pli p-wt" v-if="item.RentPrice>0">
+											<label>委托租价：</label>
+											<span>{{item.RentPrice}}元/月</span>
+										</div>
+										<div class="pli p-ly" v-if="item.SourceName">
+											<label>商机来源：</label>
+											<span>环中区提供客户</span>
+										</div>
+									</div>
+								</div>	
+								<div class="ccBM">
+									<button class="cb-hx" v-if="item.ShowUserPortrait" @click="goHX(item.Id,item.Type,item.ShowUserPortrait,'1')">详情</button>
+									<button class="cb-hx" style="background-color: #ccc;" @click="hxTip" v-else>详情</button>
+									<button class="cb-fk" @click="change(item.Id,item.Type,'精选客户')">反馈</button>
+									<button class="cb-dh" :class="item.load?'buttonLoad':''" @click="getMobile(item.Id,item.Type,index)" v-if="item.IsMobile==1||item.Type==4">
+										<mt-spinner type="double-bounce" color="#fff" :size="20" v-if="item.load"></mt-spinner>电话
+									</button>
+									<button class="cb-dh" v-else><a :href="'tel:'+item.CallerNumberDisplay" @click="setSc">电话</a></button>
 								</div>
-								<div class="ccMid" @click="goHX(item.Id,item.Type,item.ShowUserPortrait)">
-									<div class="pli p-es" v-if="item.fav_ershou_estatename1">
-										<label>推荐二手：</label>
-										<div class="plBox">
-											<span><i>1</i>{{item.fav_ershou_estatename1}}</span>
-											<span v-if="item.fav_ershou_estatename2"><i>2</i>{{item.fav_ershou_estatename2}}</span>
-											<span v-if="item.fav_ershou_estatename3"><i>3</i>{{item.fav_ershou_estatename3}}</span>
-										</div>
-									</div>
-									<div class="pli p-xf" v-if="item.fav_xinfang_estatename1">
-										<label>推荐新房：</label>
-										<div class="plBox">
-											<span><i>1</i>{{item.fav_xinfang_estatename1}}</span>
-											<span v-if="item.fav_xinfang_estatename2"><i>2</i>{{item.fav_xinfang_estatename2}}</span>
-											<span v-if="item.fav_xinfang_estatename3"><i>3</i>{{item.fav_xinfang_estatename3}}</span>
-										</div>
-									</div>
-									<div class="pli p-jg" v-if="item.ershouPrice1">
-										<label>推荐价格：</label>
-										<div class="plBox">
-											<span><i>1</i>{{item.ershouPrice1}}</span>
-											<span v-if="item.ershouPrice2"><i>2</i>{{item.ershouPrice2}}</span>
-										</div>
-									</div>
-									<!-- 老的数据展示 -->
-									<div class="pli p-qy" v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
-										<label>意向区域：</label>
-										<span><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</span>
-									</div>
-									<div class="pli p-hx" v-if="item.HuXing">
-										<label>偏好户型：</label>
-										<span>{{item.HuXing}}</span>
-									</div>
-									<div class="pli p-fy" v-if="item.EstateName&&item.EstateName!='--'">
-										<label>楼盘名称：</label>
-										<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
-									</div>
-									<div class="pli p-fh" v-if="item.BuildingNo">
-										<label>楼栋房号：</label>
-										<span>{{item.BuildingNo}}</span>
-									</div>
-									<div class="pli p-jg" v-if="item.YuSuanJiaGe">
-										<label>预算范围：</label>
-										<span>{{item.YuSuanJiaGe}}</span>
-									</div>
-									<div class="pli p-wt" v-if="item.SalePrice>0">
-										<label>委托售价：</label>
-										<span>{{item.SalePrice}}万</span>
-									</div>
-									<div class="pli p-wt" v-if="item.RentPrice>0">
-										<label>委托租价：</label>
-										<span>{{item.RentPrice}}元/月</span>
-									</div>
-									<div class="pli p-ly" v-if="item.SourceName">
-										<label>商机来源：</label>
-										<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template></span>
-									</div>
+								<div class="cr-record">
+									<p><label v-if="item.LastCusLevelName">{{item.LastCusLevelName}}</label><label v-if="item.LastCusTitleName">{{item.LastCusTitleName}}</label>
+									<label v-if="item.Remark">{{item.Remark}}</label>
+									<span v-if="item.LastReviewTime">最近反馈：{{item.LastReviewTime}}</span></p>
 								</div>
-							</div>	
-							<div class="pli p-old" v-if="item.LastVisit">
-								<label>最新足迹：<a :href="item.LastVisitUrl" v-if="item.LastVisitUrl">{{item.LastVisit}}</a><template v-else>{{item.LastVisit}}</template></label>
-								<span></span>
-							</div>
-							<div class="ccBM">
-								<button class="cb-hx" v-if="item.ShowUserPortrait" @click="goHX(item.Id,item.Type,item.ShowUserPortrait)">详情</button>
-								<button class="cb-hx" style="background-color: #ccc;" @click="hxTip" v-else>详情</button>
-								<button class="cb-fk" @click="change(item.Id,item.Type)">反馈</button>
-								<button class="cb-dh" :class="item.load?'buttonLoad':''" @click="getMobile(item.Id,item.Type,index)" v-if="item.IsMobile==1||item.Type==4">
-									<mt-spinner type="double-bounce" color="#fff" :size="20" v-if="item.load"></mt-spinner>电话
-								</button>
-								<button class="cb-dh" v-else><a :href="'tel:'+item.CallerNumberDisplay" @click="setSc">电话</a></button>
-							</div>
-							<div class="cr-record">
-								<p><label v-if="item.LastCusLevelName">{{item.LastCusLevelName}}</label><label v-if="item.LastCusTitleName">{{item.LastCusTitleName}}</label><span v-if="item.LastReviewTime">最近反馈：{{item.LastReviewTime}}</span></p>
-							</div>
+							</template>
+							<template v-else>
+								<div class="ccBox">
+									<div class="ccTop">
+										<label>
+											<template v-if="item.IsRelease==1">
+												<img src="images/custom/t-man2.png" v-if="item.Gender==0"/><img src="images/custom/t-man2.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman2.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none2.png" v-else/>
+											</template>
+											<template v-else>
+												<img src="images/custom/t-man1.png" v-if="item.Gender==0"/><img src="images/custom/t-man1.png" v-else-if="item.Gender==1"/><img src="images/custom/t-woman1.png" v-else-if="item.Gender==2"/><img src="images/custom/t-none1.png" v-else/>
+											</template>
+											<div class="ccUser">
+												<h4>{{item.UserTitle || item.CallerNumberDisplay}}<span class="cc-cty" v-if="item.ChannelType">{{item.ChannelType}}</span><i class="cc-edit" @click="setChange(item.Id,item.Type)" v-if="item.IsRelease!=1"></i></h4>
+												<p>{{item.CreateTime | agoTime}}</p>
+											</div>
+										</label>
+										<span class="ccRecord" @click="getRecord(item.Id,item.Type)" v-if="item.IsRelease!=1">跟进记录</span>
+									</div>
+									<div class="ccMid" @click="goHX(item.Id,item.Type,item.ShowUserPortrait)">
+										<div class="pli p-es" v-if="item.fav_ershou_estatename1">
+											<label>推荐二手：</label>
+											<div class="plBox">
+												<span><i>1</i>{{item.fav_ershou_estatename1}}</span>
+												<span v-if="item.fav_ershou_estatename2"><i>2</i>{{item.fav_ershou_estatename2}}</span>
+												<span v-if="item.fav_ershou_estatename3"><i>3</i>{{item.fav_ershou_estatename3}}</span>
+											</div>
+										</div>
+										<div class="pli p-xf" v-if="item.fav_xinfang_estatename1">
+											<label>推荐新房：</label>
+											<div class="plBox">
+												<span><i>1</i>{{item.fav_xinfang_estatename1}}</span>
+												<span v-if="item.fav_xinfang_estatename2"><i>2</i>{{item.fav_xinfang_estatename2}}</span>
+												<span v-if="item.fav_xinfang_estatename3"><i>3</i>{{item.fav_xinfang_estatename3}}</span>
+											</div>
+										</div>
+										<div class="pli p-jg" v-if="item.ershouPrice1">
+											<label>推荐价格：</label>
+											<div class="plBox">
+												<span><i>1</i>{{item.ershouPrice1}}</span>
+												<span v-if="item.ershouPrice2"><i>2</i>{{item.ershouPrice2}}</span>
+											</div>
+										</div>
+										<!-- 老的数据展示 -->
+										<div class="pli p-qy" v-if="item.EstateRegion2&&item.EstateRegion2!='--'">
+											<label>意向区域：</label>
+											<span><template v-if="item.EstateRegion1&&item.Type==2">{{item.EstateRegion1}}-</template>{{item.EstateRegion2}}</span>
+										</div>
+										<div class="pli p-hx" v-if="item.HuXing">
+											<label>偏好户型：</label>
+											<span>{{item.HuXing}}</span>
+										</div>
+										<div class="pli p-fy" v-if="item.EstateName&&item.EstateName!='--'">
+											<label>楼盘名称：</label>
+											<span><template v-if="item.EstateName=='定制找房'">{{item.SubSourceName}}</template><template v-else><a :href="item.LinkUrl" v-if="item.LinkUrl">{{item.EstateName}}</a><template v-else>{{item.EstateName}}</template></template></span>
+										</div>
+										<div class="pli p-fh" v-if="item.BuildingNo">
+											<label>楼栋房号：</label>
+											<span>{{item.BuildingNo}}</span>
+										</div>
+										<div class="pli p-jg" v-if="item.YuSuanJiaGe">
+											<label>预算范围：</label>
+											<span>{{item.YuSuanJiaGe}}</span>
+										</div>
+										<div class="pli p-wt" v-if="item.SalePrice>0">
+											<label>委托售价：</label>
+											<span>{{item.SalePrice}}万</span>
+										</div>
+										<div class="pli p-wt" v-if="item.RentPrice>0">
+											<label>委托租价：</label>
+											<span>{{item.RentPrice}}元/月</span>
+										</div>
+										<div class="pli p-ly" v-if="item.SourceName">
+											<label>商机来源：</label>
+											<span>{{item.SourceName}}<template v-if="item.SubSourceName">-{{item.SubSourceName}}</template></span>
+										</div>
+									</div>
+								</div>	
+								<div class="pli p-old" v-if="item.LastVisit">
+									<label>最新足迹：<a :href="item.LastVisitUrl" v-if="item.LastVisitUrl">{{item.LastVisit}}</a><template v-else>{{item.LastVisit}}</template></label>
+									<span></span>
+								</div>
+								<div class="ccBM">
+									<button class="cb-hx" v-if="item.ShowUserPortrait" @click="goHX(item.Id,item.Type,item.ShowUserPortrait)">详情</button>
+									<button class="cb-hx" style="background-color: #ccc;" @click="hxTip" v-else>详情</button>
+									<button class="cb-fk" @click="change(item.Id,item.Type)">反馈</button>
+									<button class="cb-dh" :class="item.load?'buttonLoad':''" @click="getMobile(item.Id,item.Type,index)" v-if="item.IsMobile==1||item.Type==4">
+										<mt-spinner type="double-bounce" color="#fff" :size="20" v-if="item.load"></mt-spinner>电话
+									</button>
+									<button class="cb-dh" v-else><a :href="'tel:'+item.CallerNumberDisplay" @click="setSc">电话</a></button>
+								</div>
+								<div class="cr-record">
+									<p><label v-if="item.LastCusLevelName">{{item.LastCusLevelName}}</label><label v-if="item.LastCusTitleName">{{item.LastCusTitleName}}</label><span v-if="item.LastReviewTime">最近反馈：{{item.LastReviewTime}}</span></p>
+								</div>
+							</template>
 						</div>
 						<!--  -->
 					<p class="noList" v-if="countMy>pSizeMy">正在加载</p>
@@ -331,6 +424,18 @@
 						<template v-if="md==4">
 							<label :class="uTag.id==9?'on':''" @click="setCommt(9,'有事在忙/没时间/无人接听，待反馈')">有事在忙/没时间/无人接听，待反馈</label>
 						</template> -->
+					</div>
+					<!-- 精选客户 -->
+					<div class="mainUser" v-if="mainUser">
+						<div style="font-size: 0.3rem;color: #333;line-height: 0.8rem;font-weight: 600;">备注</div>
+						<div class="mainTab">
+							<label :class="mainText.indexOf('已加微')>-1?'on':''" @click="setMain('已加微')">已加微</label>
+							<label :class="mainText.indexOf('已约看')>-1?'on':''" @click="setMain('已约看')">已约看</label>
+							<label :class="mainText.indexOf('已带看')>-1?'on':''" @click="setMain('已带看')">已带看</label>
+							<label :class="mainText.indexOf('已成交')>-1?'on':''" @click="setMain('已成交')">已成交</label>
+							<label :class="mainText.indexOf('是微商/广告')>-1?'on':''" @click="setMain('是微商/广告')">是微商/广告</label>
+						</div>
+						
 					</div>
 					<div class="miBtn">
 						<label @click="commitC()">提交</label>
@@ -467,7 +572,9 @@
 				tes:1,
 				changeType:4,
 				empNo:"",
-				empName:""
+				empName:"",
+				mainUser:false,
+				mainText:[]
 			}
 		},
 		components: {
@@ -537,6 +644,14 @@
 				const t=dayjs(time).fromNow();
 				return t;
 			},
+			changeMain(v){
+				if(v.indexOf('尾号')>-1){
+					return v.replace('尾号','环中客户');
+				}else{
+					return '环中客户'+v;
+				}
+				
+			}
 		},
 		watch:{
 			md(){
@@ -685,9 +800,15 @@
 					this.showUp=index;
 				}
 			},
-			goHX(id,type,can){
-				if(can){
-					this.$router.push({name:"customHX",query:{id:id,type:type}});
+			goHX(id,type,can,main){
+				if(main){
+					if(can){
+						this.$router.push({name:"customHX",query:{id:id,type:type,main:main}});
+					}
+				}else{
+					if(can){
+						this.$router.push({name:"customHX",query:{id:id,type:type}});
+					}
 				}
 			},
 			setTab(n){
@@ -910,7 +1031,8 @@
 								detailId:this.cId,
 								cusLevelId:this.md,
 								titleId:this.cmd,
-								type:this.typeNum
+								type:this.typeNum,
+								remark:this.mainText.join()
 							}
 						})
 						.then(res=>{
@@ -1169,7 +1291,14 @@
 						})
 				})
 			},
-			change(id,type){
+			change(id,type,main){
+				//精选客户类型
+				this.mainText=[];
+				if(main){//精选客户类型
+					this.mainUser=true;
+				}else{
+					this.mainUser=false;
+				}
 				this.showMd=true;
 				this.cId=id;
 				this.typeNum=type;
@@ -1210,7 +1339,13 @@
 						})
 				})
 			},
-
+			setMain(t){
+				if(this.mainText.indexOf(t)<0){
+					this.mainText.push(t);
+				}else{
+					this.mainText.splice(this.mainText.indexOf(t),1);
+				}
+			}
 		}
 	}
 </script>
@@ -1813,6 +1948,30 @@
 			border: 0;
 			text-align: center;
 			font-size: 0.28rem;
+		}
+	}
+	.mainTab{
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		label{
+			background-color: #d1d1d1;
+			border-radius: 0.08rem;
+			color: #fff;
+			display: block;
+			width: 1.4rem;
+			height: 0.6rem;
+			line-height: 0.6rem;
+			text-align: center;
+			&:last-child{
+				width: 2rem;
+				margin-top: 0.2rem;
+			}
+			&.on{
+				background-color: #FDE9EA;
+				 color: #F42C1D;
+			}
 		}
 	}
 </style>

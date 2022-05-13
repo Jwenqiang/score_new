@@ -217,7 +217,7 @@
 					<img src="../assets/img/task-wx.png" class="nlT"/>
 					<div class="newM">
 						<h4>关注公众号</h4>
-						<p><span>+30</span></p>
+						<p><span>+50</span></p>
 					</div>
 					<mt-button type="primary" class="nlBtn" @click="$router.push({name:'days',params:{id:'32'}})">如何完成</mt-button>
 				</div>

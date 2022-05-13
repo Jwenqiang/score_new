@@ -88,7 +88,7 @@
 			<img src="../assets/img/days31.png" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==32">
-			<img src="images/days-gz.jpg" width="100%" @click="jumpUrl"/>
+			<img src="images/days-gz.jpg?v=2" width="100%" @click="jumpUrl"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==33">
 			<img src="images/days-share.jpg" width="100%" @click="jumpUrl"/>
@@ -106,7 +106,7 @@
 			<img src="images/days-y.jpg?v=1" width="100%"/>
 		</div>
 		<div class="imgMsg" :class="id>14?'imgMsg1':''" v-else-if="id==426">
-			<img src="images/days-gzh.jpg" width="100%" @click="jumpUrl"/>
+			<img src="images/days-gzh.jpg?v=2" width="100%" @click="jumpUrl"/>
 		</div>
 	</div>
 </template>

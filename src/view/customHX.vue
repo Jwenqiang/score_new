@@ -3,12 +3,14 @@
 		<div class="chx-top">
 			<img src="images/custom/t-man.png" v-if="user.Gender==0"/><img src="images/custom/t-man.png" v-else-if="user.Gender==1"/><img src="images/custom/t-woman.png" v-else-if="user.Gender==2"/><img src="images/custom/t-none.png" v-else/>
 			<div class="ccUser">
-				<h4>{{user.UserTitle}}</h4>
-				<p v-if="user.LastCusLevelName"><label v-if="user.Age>0">{{user.Age}}岁</label><label v-if="user.LastCusLevelName">{{user.LastCusLevelName}}</label><label v-if="user.LastCusTitleName">{{user.LastCusTitleName}}</label> </p>
+				<h4>{{user.UserTitle | changeMain}}</h4>
+				<p v-if="user.LastCusLevelName"><label v-if="user.Age>0">{{user.Age}}岁</label><label v-if="user.LastCusLevelName">{{user.LastCusLevelName}}</label><label v-if="user.LastCusTitleName">{{user.LastCusTitleName}}</label>
+				<label v-if="user.Remark">{{user.Remark}}</label>
+				</p>
 				<p v-else><label>暂未跟进</label></p>
 			</div>
 		</div>
-		<div class="chx-second">
+		<div class="chx-second" v-if="!main">
 			<div class="chxs" v-if="user.LastVisit">
 				<label>最新足迹：</label>
 				<p>
@@ -16,7 +18,7 @@
 					<i>{{user.LastVisitTime}}</i>
 				</p>
 			</div>
-			<div class="chxs">
+			<div class="chxs" v-if="!main">
 				<label>推荐回访：</label>
 				<p v-if="user.VisitWeek&&user.VisitWeek.length>0||user.VisitTime&&user.VisitTime.length>0">
 					<template v-if="user.VisitWeek&&user.VisitWeek.length>0">{{user.VisitWeek.join('/')}}，</template><template v-if="user.VisitTime&&user.VisitTime.length>0">{{user.VisitTime.join('/')}}</template>
@@ -25,7 +27,7 @@
 			</div>
 		</div>
 		<div class="chx-content">
-			<div class="chxc-tab">
+			<div class="chxc-tab" v-if="!main">
 				<label :class="ccType==1?'on':''" @click="changeTag(1)">详情<span></span></label>
 				<label :class="ccType==2?'on':''" @click="changeTag(2)">足迹<span></span></label>
 			</div>
@@ -33,6 +35,7 @@
 			<template v-if="ccType==1">
 				<div class="chxc-list">
 					<p class="title">营销推荐</p>
+					<p style="font-size: 0.24rem;color: #ffeb3b;font-weight: 600;margin-bottom: 0.1rem;">根据外部用户在找房历史浏览记录推荐，因数据量级较少，<br/> &nbsp;&nbsp;&nbsp;仅作为参考</p>
 					<div class="pli p-qy" v-if="user.FavSubArea&&user.FavSubArea.length>0">
 						<label>推荐区域：</label>
 						<div class="plBox">
@@ -41,7 +44,7 @@
 							<span v-if="user.FavSubArea[2]"><i>3</i>{{user.FavSubArea[2]}}</span>
 						</div>
 					</div>
-					<div class="pli p-fy" v-if="user.FavBusiness&&user.FavBusiness.length>0">
+					<div class="pli p-fy" v-if="user.FavBusiness&&user.FavBusiness.length>0&&!main">
 						<label>推荐房源：</label>
 						<div class="plBox">
 							<span v-if="user.FavBusiness[0]"><i>1</i>{{user.FavBusiness[0]}}</span>
@@ -79,7 +82,7 @@
 						<label>面积偏好：</label>
 						<span>80-100平</span>
 					</div> -->
-					<div class="pli p-xx" v-if="user.FavSchool&&user.FavSchool.length>0">
+					<div class="pli p-xx" v-if="user.FavSchool&&user.FavSchool.length>0&&!main">
 						<label>学校偏好：</label>
 						<div class="plBox">
 							<span v-if="user.FavSchool[0]"><i>1</i>{{user.FavSchool[0]}}</span>
@@ -89,10 +92,11 @@
 					</div>
 				</div>
 				<div class="chx-bottom">
-					<p v-if="user.PlatformType">来源渠道：{{user.PlatformType}}</p>
-					<p v-if="user.Model">设备型号：{{user.Model}}</p>
-					<p v-if="user.RegisterTime">注册时间：{{user.RegisterTime}}</p>
-					<p v-if="user.LastStartTime">最近访问：{{user.LastStartTime}}</p>
+					<p v-if="user.PlatformType&&!main">来源渠道：{{user.PlatformType}}</p>
+					<p v-if="main">来源渠道：环中区提供客户</p>
+					<p v-if="user.Model&&!main">设备型号：{{user.Model}}</p>
+					<p v-if="user.RegisterTime&&!main">注册时间：{{user.RegisterTime}}</p>
+					<p v-if="user.LastStartTime&&!main">最近访问：{{user.LastStartTime}}</p>
 				</div>
 			</template>
 			<!-- 轨迹 -->
@@ -220,6 +224,18 @@
 							<label :class="cItem.TitleId==cmd?'on':''" @click="cmd=cItem.TitleId" v-for="cItem in item.Titles" v-if="md==item.CusLevelId">{{cItem.TitleName}}</label>
 						</div>
 					</div>
+					<!-- 精选客户 -->
+					<div class="mainUser" v-if="main">
+						<div style="font-size: 0.3rem;color: #333;line-height: 0.8rem;font-weight: 600;">备注</div>
+						<div class="mainTab">
+							<label :class="mainText.indexOf('已加微')>-1?'on':''" @click="setMain('已加微')">已加微</label>
+							<label :class="mainText.indexOf('已约看')>-1?'on':''" @click="setMain('已约看')">已约看</label>
+							<label :class="mainText.indexOf('已带看')>-1?'on':''" @click="setMain('已带看')">已带看</label>
+							<label :class="mainText.indexOf('已成交')>-1?'on':''" @click="setMain('已成交')">已成交</label>
+							<label :class="mainText.indexOf('是微商/广告')>-1?'on':''" @click="setMain('是微商/广告')">是微商/广告</label>
+						</div>
+						
+					</div>
 					<div class="miBtn">
 						<label @click="commitC()">提交</label>
 					</div>
@@ -268,7 +284,10 @@ export default{
 			pIndex:0,
 			loadOver:false,
 			houseArray:[],
-			scrollTop:0
+			scrollTop:0,
+			main:false,
+			mainUser:false,
+			mainText:[]
 		}
 	},
 	mounted() {
@@ -281,6 +300,11 @@ export default{
 		setTimeout(()=>{
 			this.getCommt();
 		},500)
+		if(this.$route.query.main){
+			this.main=true;
+		}else{
+			this.main=false;
+		}
 		
 	},
 	beforeDestroy() {
@@ -288,6 +312,13 @@ export default{
 		window.removeEventListener("scroll", this.scrollT);
 	},
 	filters:{
+		changeMain(v){
+			console.log(v);
+			if(v){
+				return v.replace('尾号','环中客户');
+			}
+			
+		},
 		price(n){
 			n=n/10000;
 			return n.toFixed(0);
@@ -634,7 +665,8 @@ export default{
 							detailId:this.$route.query.id,
 							cusLevelId:this.md,
 							titleId:this.cmd,
-							type:this.$route.query.type
+							type:this.$route.query.type,
+							remark:this.mainText.join()
 						}
 					})
 					.then(res=>{
@@ -730,6 +762,13 @@ export default{
 					})
 			})
 		},
+		setMain(t){
+			if(this.mainText.indexOf(t)<0){
+				this.mainText.push(t);
+			}else{
+				this.mainText.splice(this.mainText.indexOf(t),1);
+			}
+		}
 	}
 	
 }
@@ -779,6 +818,7 @@ export default{
 			}
 			.ccUser{
 				float: left;
+				width: 6rem;
 				h4{
 						font-weight: 500;
 						font-size: 0.3rem;
@@ -1103,6 +1143,30 @@ export default{
 						}
 					}
 				}
+			}
+		}
+	}
+	.mainTab{
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		label{
+			background-color: #d1d1d1;
+			border-radius: 0.08rem;
+			color: #fff;
+			display: block;
+			width: 1.4rem;
+			height: 0.6rem;
+			line-height: 0.6rem;
+			text-align: center;
+			&:last-child{
+				width: 2rem;
+				margin-top: 0.2rem;
+			}
+			&.on{
+				background-color: #FDE9EA;
+				 color: #F42C1D;
 			}
 		}
 	}

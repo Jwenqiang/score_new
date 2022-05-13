@@ -393,7 +393,7 @@ var router = new Router({
 			name:"customHX",
 			component:() =>import ('@/view/customHX'),
 			meta:{
-				title:'用户画像',
+				title:'用户详情',
 				keepAlive:false
 			}			
 		},

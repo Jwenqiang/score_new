@@ -1,0 +1,538 @@
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Microsoft Yahei', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  #app {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .justify-start {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .justify-center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .justify-end {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .justify-evenly {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .justify-around {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .justify-between {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .items-start {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .items-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .items-end {
+    display: flex;
+    align-items: flex-end;
+  }
+  .group_22 {
+    height: 42.5px;
+  }
+  .image_19 {
+    width: 27px;
+    height: 27px;
+  }
+  .image_6 {
+    width: 15px;
+    height: 15px;
+  }
+  .list_2 {
+    margin-top: 10px;
+    padding: 0 10px 15px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+  }
+  .image_9 {
+    width: 12px;
+    height: 12px;
+  }
+  .list-item_2 {
+    padding: 15px 0 10.5px;
+  }
+  .list-item_3 {
+    padding: 15px 0 10.5px;
+  }
+  .text-wrapper_1 {
+    color: rgb(102, 102, 102);
+    font-size: 13px;
+    line-height: 18.5px;
+    white-space: nowrap;
+    padding: 3.5px 0 4px;
+    background-color: rgb(242, 242, 242);
+    border-radius: 13px;
+    width: 60px;
+    height: 25.5px;
+  }
+  .list-item_1 {
+    padding: 15px 0 10.5px;
+  }
+  .image_15 {
+    margin-top: 5px;
+    border-radius: 2.5px;
+    width: 30px;
+    height: 30px;
+  }
+  .right-group_1 {
+    margin-left: 10px;
+  }
+  .image_17 {
+    margin-top: 5px;
+    border-radius: 2.5px;
+    width: 30px;
+    height: 30px;
+  }
+  .right-group_2 {
+    margin-left: 10px;
+  }
+  .image_13 {
+    margin-top: 5px;
+    border-radius: 2.5px;
+    width: 30px;
+    height: 30px;
+  }
+  .right-group {
+    margin-left: 10px;
+  }
+  .text_28 {
+    color: rgb(102, 102, 102);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .bottom-group {
+    color: rgb(102, 102, 102);
+    font-size: 12px;
+    line-height: 16.5px;
+    white-space: nowrap;
+  }
+  .text_37 {
+    margin-top: 1.5px;
+  }
+  .text_23 {
+    margin-left: 10px;
+  }
+  .page {
+    background-color: rgb(242, 242, 242);
+    width: 100%;
+    overflow-y: auto;
+    height: 100%;
+  }
+  .header {
+    padding: 14.5px 14.5px 12px 15px;
+    background-image: url('https://codesign-v2-1258344706.cos.ap-guangzhou.myqcloud.com/codefun/16522396945176844463.png');
+    background-position: 0px 0px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    height: 81px;
+  }
+  .group_4 {
+    padding-bottom: 42px;
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+  .tab-bar {
+    padding: 6.5px 28.5px 6.5px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 10px 10px 0px 0px;
+  }
+  .group {
+    padding-left: 9.5px;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    line-height: 17.5px;
+    letter-spacing: -0.24px;
+    white-space: nowrap;
+  }
+  .group_3 {
+    margin-top: 13.5px;
+    color: rgb(240, 245, 250);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 24px;
+    white-space: nowrap;
+    position: relative;
+  }
+  .section_1 {
+    padding: 15px 0 67.5px;
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    line-height: 20px;
+    white-space: nowrap;
+    background-image: url('https://codesign-v2-1258344706.cos.ap-guangzhou.myqcloud.com/codefun/16522396951981178767.png');
+    background-position: 0px 0px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .group_5 {
+    margin-top: -52.5px;
+    padding: 0 15px;
+    position: relative;
+  }
+  .view_8 {
+    color: rgb(153, 153, 153);
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .view_9 {
+    color: rgb(239, 81, 81);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .view_10 {
+    color: rgb(153, 153, 153);
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .view_11 {
+    color: rgb(153, 153, 153);
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .group_2 {
+    margin: 3px 0 2.5px;
+  }
+  .image_4 {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+  }
+  .image_5 {
+    position: absolute;
+    right: 4.5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 23px;
+  }
+  .search {
+    margin: 0 15px;
+    padding: 10px 16px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+  }
+  .list {
+    margin-top: 15.5px;
+  }
+  .text_36 {
+    margin-top: 32px;
+    align-self: center;
+    color: rgb(153, 153, 153);
+    font-size: 13px;
+    line-height: 18.5px;
+    white-space: nowrap;
+  }
+  .image {
+    margin: 4.5px 0 2px 4.5px;
+    width: 10.5px;
+    height: 10.5px;
+  }
+  .image_1 {
+    width: 17.5px;
+    height: 10.5px;
+  }
+  .image_2 {
+    margin-left: 5px;
+    width: 15px;
+    height: 10.5px;
+  }
+  .image_3 {
+    margin-left: 5px;
+    width: 24.5px;
+    height: 11.5px;
+  }
+  .image_7 {
+    margin: 2.5px 0;
+  }
+  .text_2 {
+    margin-left: 10px;
+  }
+  .section_2 {
+    padding-top: 15px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 12.5px;
+  }
+  .group_9 {
+    padding-top: 15px;
+    height: 31px;
+  }
+  .list-item {
+    padding: 0 10px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+  }
+  .group_7 {
+    padding: 0 85px;
+  }
+  .image_8 {
+    margin-top: 5px;
+    align-self: center;
+    width: 25px;
+    height: 6px;
+  }
+  .group_8 {
+    margin-top: 3.5px;
+    padding: 10.5px 15px 14px;
+    border-top: solid 1px rgb(237, 237, 237);
+  }
+  .image_11 {
+    margin-right: 31.5px;
+    margin-top: -13.5px;
+    align-self: flex-end;
+  }
+  .group_12 {
+    padding: 10px 5px 10px 6px;
+    color: rgb(51, 51, 51);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+    border-bottom: solid 1px rgb(204, 204, 204);
+  }
+  .list_1 {
+    padding: 1px 0 13px;
+  }
+  .list-item_2:first-of-type {
+    border-bottom: solid 1px rgb(204, 204, 204);
+  }
+  .group_19 {
+    padding: initial;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .list-item_2:last-of-type {
+    margin-top: 10px;
+  }
+  .list-item_3:first-of-type {
+    border-bottom: solid 1px rgb(204, 204, 204);
+  }
+  .group_21 {
+    padding: initial;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .list-item_3:last-of-type {
+    margin-top: 10px;
+  }
+  .text_3 {
+    color: rgb(80, 132, 221);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 21px;
+    white-space: nowrap;
+  }
+  .text_4 {
+    color: rgb(102, 102, 102);
+    font-size: 15px;
+    line-height: 21px;
+    white-space: nowrap;
+  }
+  .text-wrapper {
+    padding: 4px 0;
+    color: rgb(80, 132, 221);
+    font-size: 13px;
+    line-height: 18.5px;
+    white-space: nowrap;
+    background-color: rgba(80, 132, 221, 0.1);
+    border-radius: 13px;
+    width: 60px;
+    height: 26px;
+  }
+  .group_11 {
+    color: rgb(102, 102, 102);
+    font-size: 12px;
+    line-height: 16.5px;
+    white-space: nowrap;
+  }
+  .text_10 {
+    color: rgb(51, 51, 51);
+    font-size: 12px;
+    line-height: 16.5px;
+    white-space: nowrap;
+  }
+  .image_12 {
+    margin: 1.5px 0 3.5px;
+  }
+  .list-item_1:first-of-type {
+    border-bottom: solid 1px rgb(204, 204, 204);
+  }
+  .group_16 {
+    padding: initial;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+  .list-item_1:last-of-type {
+    margin-top: 12.5px;
+  }
+  .text_26 {
+    margin-top: initial;
+    border-radius: initial;
+    width: initial;
+    height: initial;
+    color: rgb(102, 102, 102);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .text_27 {
+    margin-left: initial;
+    color: rgb(240, 79, 82);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .text_33 {
+    margin-top: initial;
+    border-radius: initial;
+    width: initial;
+    height: initial;
+    color: rgb(102, 102, 102);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .text_34 {
+    margin-left: initial;
+    color: rgb(240, 79, 82);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .image_10 {
+    margin: 2.5px 0 1.5px;
+  }
+  .text_17 {
+    margin-top: initial;
+    border-radius: initial;
+    width: initial;
+    height: initial;
+    color: rgb(102, 102, 102);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .text_18 {
+    margin-left: initial;
+    color: rgb(240, 79, 82);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .text_19 {
+    color: rgb(102, 102, 102);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .text_30 {
+    color: rgb(51, 51, 51);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+  .group_15 {
+    color: rgb(102, 102, 102);
+    font-size: 12px;
+    line-height: 16.5px;
+    white-space: nowrap;
+  }
+  .text_20 {
+    color: rgb(51, 51, 51);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+  .text-wrapper_3 {
+    margin: 2.5px 0 2.5px 3px;
+    color: rgb(80, 132, 221);
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+    border-radius: 2.5px;
+    height: 15px;
+    border: solid 1px rgb(80, 132, 221);
+  }
+  .text_25 {
+    margin-left: 10px;
+  }
+  .text_12 {
+    color: rgb(51, 51, 51);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+  .text-wrapper_2 {
+    margin: 2.5px 0 2.5px 3px;
+    color: rgb(80, 132, 221);
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+    border-radius: 2.5px;
+    height: 15px;
+    border: solid 1px rgb(80, 132, 221);
+  }
+  .text_15 {
+    margin-left: 10px;
+  }
+  .text_16 {
+    margin-left: 10px;
+  }
+  .text_21 {
+    margin-left: 1.5px;
+    margin-right: 2.5px;
+  }
+  .text_13 {
+    margin-left: 1.5px;
+    margin-right: 2.5px;
+  }
